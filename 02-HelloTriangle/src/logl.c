@@ -13,7 +13,7 @@ void loglProcessInput(GLFWwindow *window) {
         pressed0 = GL_TRUE;
     } else if (GLFW_RELEASE == glfwGetKey(window, GLFW_KEY_0) && GL_TRUE == pressed0) {
         GLint pmode[2];
-        glGetIntegerv(GL_POLYGON_MODE, &pmode);
+        glGetIntegerv(GL_POLYGON_MODE, pmode);
 
         if (GL_POINT == pmode[1]) {
             printf("[INFO] Fill mode\n");
