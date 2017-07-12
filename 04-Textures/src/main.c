@@ -83,9 +83,15 @@ int main() {
     }
 
     // Load texture image data
-    GLchar *texdata = NULL;
-    GLuint texw, texh;
-    if (GL_FALSE == loglLoadPNG("assets/texture.png", &texdata, &texw, &texh)) {
+    GLchar *texdata0 = NULL;
+    GLuint texw0, texh0;
+    if (GL_FALSE == loglLoadPNG("assets/texture0.png", &texdata0, &texw0, &texh0)) {
+        excode = 1; goto finalize;
+    }
+
+    GLchar *texdata1 = NULL;
+    GLuint texw1, texh1;
+    if (GL_FALSE == loglLoadPNG("assets/texture1.png", &texdata1, &texw1, &texh1)) {
         excode = 1; goto finalize;
     }
 
@@ -117,16 +123,22 @@ int main() {
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
         glEnableVertexAttribArray(2);
 
-        // Create texture
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        // Create textures
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texw, texh, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdata);
+        GLuint texture0;
+        glGenTextures(1, &texture0);
+        glBindTexture(GL_TEXTURE_2D, texture0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texw0, texh0, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdata0);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        GLuint texture1;
+        glGenTextures(1, &texture1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texw1, texh1, 0, GL_RGBA, GL_UNSIGNED_BYTE, texdata1);
         glGenerateMipmap(GL_TEXTURE_2D);
     glBindVertexArray(0);
 
@@ -141,10 +153,19 @@ int main() {
 
         // Draw figure
         glBindVertexArray(vboFigure);
-            // Use loaded texture
-            glBindTexture(GL_TEXTURE_2D, texture);
             // Use the specified shaderProgram
             glUseProgram(shaderProgram);
+
+            // Use loaded texture0
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture0);
+            glUniform1i(glGetUniformLocation(shaderProgram, "tex0"), 0);
+
+            // Use loaded texture1
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, texture1);
+            glUniform1i(glGetUniformLocation(shaderProgram, "tex1"), 1);
+
             // Draw the object
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             // Forget texture
@@ -174,8 +195,11 @@ finalize:
     if (fSource != 0)
         loglUnloadText(fSource);
 
-    if (texdata != 0)
-        loglUnloadPNG(texdata);
+    if (texdata0 != 0)
+        loglUnloadPNG(texdata0);
+
+    if (texdata1 != 0)
+        loglUnloadPNG(texdata1);
 
     glfwTerminate();
     return excode;
