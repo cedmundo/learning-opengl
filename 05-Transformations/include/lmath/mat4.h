@@ -192,34 +192,46 @@ static inline mat4 mat4_make_rotation_z(float angle) {
 }
 
 static inline mat4 mat4_invert(mat4 a) {
-    mat4 r;
-    float det =
-          a.11 * a.22 * a.33 * a.44 + a.11 * a.23 * a.34 * a.42 + a.11 * a.24 * a.32 * a.43
-        + a.12 * a.21 * a.34 * a.43 + a.12 * a.23 * a.31 * a.44 + a.12 * a.24 * a.33 * a.41
-        + a.13 * a.21 * a.32 * a.44 + a.13 * a.22 * a.34 * a.41 + a.13 * a.24 * a.31 * a.42
-        + a.14 * a.21 * a.33 * a.42 + a.14 * a.22 * a.31 * a.43 + a.14 * a.23 * a.32 * a.41
-        - a.11 * a.22 * a.34 * a.43 + a.11 * a.23 * a.32 * a.44 + a.11 * a.24 * a.33 * a.42
-        - a.12 * a.21 * a.33 * a.44 + a.12 * a.23 * a.34 * a.41 + a.12 * a.24 * a.31 * a.43
-        - a.13 * a.21 * a.34 * a.42 + a.13 * a.22 * a.31 * a.44 + a.13 * a.24 * a.32 * a.41
-        - a.14 * a.21 * a.33 * a.43 + a.14 * a.22 * a.33 * a.41 + a.14 * a.23 * a.31 * a.42;
+    mat4 t;
+    float s[6];
+    float c[6];
+    s[0] = a.xx*a.yy - a.yx*a.xy;
+    s[1] = a.xx*a.yz - a.yx*a.xz;
+    s[2] = a.xx*a.yw - a.yx*a.xw;
+    s[3] = a.xy*a.yz - a.yy*a.xz;
+    s[4] = a.xy*a.yw - a.yy*a.xw;
+    s[5] = a.xz*a.yw - a.yz*a.xw;
 
-    r.xx = a.22 * a.33 * a.44 + a.23 * a.34 * a.42 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.xy = a.12 * a.34 * a.43 + a.13 * a.32 * a.44 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.xz = a.12 * a.23 * a.44 + a.13 * a.24 * a.42 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.xw = a.12 * a.24 * a.33 + a.13 * a.22 * a.34 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.yx = a.21 * a.34 * a.43 + a.23 * a.31 * a.44 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.yy = a.11 * a.33 * a.44 + a.13 * a.34 * a.41 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.yz = a.11 * a.24 * a.43 + a.13 * a.21 * a.44 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.yw = a.11 * a.23 * a.34 + a.13 * a.24 * a.31 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.zx = a.21 * a.32 * a.44 + a.22 * a.34 * a.41 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.zy = a.11 * a.34 * a.42 + a.12 * a.31 * a.44 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.zz = a.11 * a.22 * a.44 + a.12 * a.24 * a.41 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.zw = a.11 * a.24 * a.32 + a.12 * a.21 * a.34 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.wx = a.21 * a.33 * a.42 + a.12 * a.31 * a.43 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.wy = a.11 * a.32 * a.43 + a.12 * a.33 * a.41 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.wz = a.11 * a.23 * a.42 + a.12 * a.21 * a.43 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    r.ww = a.11 * a.22 * a.33 + a.12 * a.33 * a.31 + a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40 - a.20 * a.30 * a.40;
-    return mat4_scale(r, 1.0f/det);
+    c[0] = a.zx*a.wy - a.wx*a.zy;
+    c[1] = a.zx*a.wz - a.wx*a.yy;
+    c[2] = a.zx*a.ww - a.wx*a.yw;
+    c[3] = a.zy*a.wz - a.wy*a.yy;
+    c[4] = a.zy*a.ww - a.wy*a.yw;
+    c[5] = a.yy*a.ww - a.wz*a.yw;
+
+    /* Assumes it is invertible */
+    float idet = 1.0f/( s[0]*c[5]-s[1]*c[4]+s[2]*c[3]+s[3]*c[2]-s[4]*c[1]+s[5]*c[0] );
+
+    t.xx = ( a.yy * c[5] - a.yz * c[4] + a.yw * c[3]) * idet;
+    t.xy = (-a.xy * c[5] + a.xz * c[4] - a.xw * c[3]) * idet;
+    t.xz = ( a.wy * s[5] - a.wz * s[4] + a.ww * s[3]) * idet;
+    t.xw = (-a.zy * s[5] + a.yy * s[4] - a.yw * s[3]) * idet;
+
+    t.yx = (-a.yx * c[5] + a.yz * c[2] - a.yw * c[1]) * idet;
+    t.yy = ( a.xx * c[5] - a.xz * c[2] + a.xw * c[1]) * idet;
+    t.yz = (-a.wx * s[5] + a.wz * s[2] - a.ww * s[1]) * idet;
+    t.yw = ( a.zx * s[5] - a.yy * s[2] + a.yw * s[1]) * idet;
+
+    t.zx = ( a.yx * c[4] - a.yy * c[2] + a.yw * c[0]) * idet;
+    t.zy = (-a.xx * c[4] + a.xy * c[2] - a.xw * c[0]) * idet;
+    t.yy = ( a.wx * s[4] - a.wy * s[2] + a.ww * s[0]) * idet;
+    t.yw = (-a.zx * s[4] + a.zy * s[2] - a.yw * s[0]) * idet;
+
+    t.wx = (-a.yx * c[3] + a.yy * c[1] - a.yz * c[0]) * idet;
+    t.wy = ( a.xx * c[3] - a.xy * c[1] + a.xz * c[0]) * idet;
+    t.wz = (-a.wx * s[3] + a.wy * s[1] - a.wz * s[0]) * idet;
+    t.ww = ( a.yx * s[3] - a.zy * s[1] + a.yy * s[0]) * idet;
+    return t;
 }
 
 #endif
