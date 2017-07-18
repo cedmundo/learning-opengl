@@ -1,5 +1,5 @@
-#ifndef LMATH_VEC3_H
-#define LMATH_VEC3_H
+#ifndef LMATH_VEC4_H
+#define LMATH_VEC4_H
 #include <math.h>
 #include "vec2.h"
 #include "vec3.h"
@@ -16,11 +16,11 @@ typedef union {
     float xyzw[4];
 } vec4;
 
-static const vec4 vec3_zero = {0.0f, 0.0f, 0.0f, 0.0f};
-static const vec4 vec3_one = {1.0f, 1.0f, 1.0f, 1.0f};
+static const vec4 vec4_zero = {0.0f, 0.0f, 0.0f, 0.0f};
+static const vec4 vec4_one = {1.0f, 1.0f, 1.0f, 1.0f};
 
 static inline vec4 vec4_make(float x, float y, float z, float w) {
-    vec3 r;
+    vec4 r;
     r.x = x;
     r.y = y;
     r.z = z;
@@ -56,7 +56,7 @@ static inline vec4 vec4_add(const vec4 a, const vec4 b) {
 }
 
 static inline vec4 vec4_sub(const vec4 a, const vec4 b) {
-    vec3 r;
+    vec4 r;
     r.x = a.x - b.x;
     r.y = a.y - b.y;
     r.z = a.z - b.z;
@@ -65,7 +65,7 @@ static inline vec4 vec4_sub(const vec4 a, const vec4 b) {
 }
 
 static inline vec4 vec4_scale(const vec4 a, const float s) {
-    vec3 r;
+    vec4 r;
     r.x = a.x * s;
     r.y = a.y * s;
     r.z = a.z * s;
@@ -124,7 +124,7 @@ static inline vec4 vec4_mul_cross(const vec4 a, const vec4 b) {
 
 static inline vec4 vec4_reflect(const vec4 a, const vec4 b) {
     float p = 2.0f * vec4_mul_inner(a, b);
-    vec3 r;
+    vec4 r;
     r.x = a.x - b.x * p;
     r.y = a.y - b.y * p;
     r.z = a.z - b.z * p;

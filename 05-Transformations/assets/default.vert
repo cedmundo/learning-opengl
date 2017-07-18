@@ -6,8 +6,10 @@ layout (location = 2) in vec2 aTex; // Attribute 2: Texture coordinates
 out vec3 oCol;
 out vec2 oTex;
 
+uniform mat4 transform;
+
 void main() {
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = transform * vec4(aPos, 1.0);
     oCol = aCol;
     oTex = aTex;
 }

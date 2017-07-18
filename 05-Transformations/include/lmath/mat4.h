@@ -1,7 +1,6 @@
 #ifndef LMATH_MAT4_H
 #define LMATH_MAT4_H
 #include <math.h>
-#include "vec3.h"
 #include "vec4.h"
 
 typedef union _mat4 {
@@ -11,7 +10,7 @@ typedef union _mat4 {
         float zx, zy, zz, zw;
         float wx, wy, wz, ww;
     };
-    float[16] raw;
+    float raw[16];
 } mat4;
 
 static const mat4 mat4_zero = {
@@ -118,6 +117,14 @@ static inline vec4 mat4_mul_vec4(const mat4 a, const vec4 b) {
     r.z = a.zx * b.x + a.zy * b.y + a.zz * b.z + a.zw * b.w;
     r.w = a.wx * b.x + a.wy * b.y + a.wz * b.z + a.ww * b.w;
 
+    return r;
+}
+
+static inline mat4 mat4_make_scale(vec3 u) {
+    mat4 r = mat4_identity;
+    r.xx = u.x;
+    r.yy = u.y;
+    r.zz = u.z;
     return r;
 }
 

@@ -15,7 +15,7 @@ find_package(PNG REQUIRED)
 include_directories(include)
 
 # Sources and headers
-set(SOURCES src/glad.c src/main.c src/logl.c)
+set(SOURCES src/glad.c src/main.c src/logl.c src/transform.c)
 set(HEADERS include/glad/glad.h include/KHR/khrplatform.h include/logl.h)
 
 add_executable(${CMAKE_PROJECT_NAME} ${HEADERS} ${SOURCES})

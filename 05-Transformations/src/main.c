@@ -4,6 +4,7 @@
 #include <logl.h>
 #include <math.h>
 #include <lmath/lmath.h>
+#include <transform.h>
 
 int main() {
     GLint excode = 0;
@@ -96,6 +97,11 @@ int main() {
         excode = 1; goto finalize;
     }
 
+    loglTransform transform;
+    transform.pos = vec3_make(0.0f, 0.0f, 0.0f);
+    transform.rot = vec3_make(0.0f, 0.0f, 0.0f);
+    transform.sca = vec3_make(1.0f, 1.0f, 1.0f);
+
     // Our figure vertex buffer object
     GLuint vboFigure;
     glGenBuffers(1, &vboFigure);
@@ -156,6 +162,17 @@ int main() {
         glBindVertexArray(vboFigure);
             // Use the specified shaderProgram
             glUseProgram(shaderProgram);
+
+            // Update the transform
+            float time = (float) glfwGetTime();
+            transform.rot.x = time;
+            transform.rot.y = time;
+            transform.rot.z = time;
+            transform.pos.x = sinf(time) * 0.5;
+            transform.pos.y = cosf(time) * 0.5;
+            //transform.sca.x = cosf(time) * 0.2 + 1.0;
+            //transform.sca.y = cosf(time) * 0.2 + 1.0;
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, logl_transform_get_model(&transform).raw);
 
             // Use loaded texture0
             glActiveTexture(GL_TEXTURE0);
