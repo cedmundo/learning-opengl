@@ -9,7 +9,7 @@ mat4 logl_transform_get_model(loglTransform *transform) {
     rx = mat4_make_rotation_x(transform->rot.x);
     ry = mat4_make_rotation_y(transform->rot.y);
     rz = mat4_make_rotation_z(transform->rot.z);
-    r = mat4_mul(mat4_mul(ry, rx), rz);
+    r = mat4_mul(rx, mat4_mul(ry, rz));
 
-    return mat4_mul(t, mat4_mul(r, s));
+    return mat4_mul(r, mat4_mul(t, s));
 }

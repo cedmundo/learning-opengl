@@ -10,6 +10,7 @@ set(CMAKE_MODULE_PATH
 find_package(GLFW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)
+find_package(GLM REQUIRED)
 
 # Local include
 include_directories(include)
