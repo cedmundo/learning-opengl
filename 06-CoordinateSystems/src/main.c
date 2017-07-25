@@ -6,9 +6,6 @@
 #include <lmath/lmath.h>
 #include <transform.h>
 
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <iostream>
-
 int main() {
     GLint excode = 0;
 
@@ -100,21 +97,10 @@ int main() {
         excode = 1; goto finalize;
     }
 
-    mat4 view = mat4_make_translation(vec3_make(-0.2f, 0.0f, -0.2f));
-    mat4 projection = mat4_make_ortho(0.0f, LOGL_WINDOW_WIDTH, LOGL_WINDOW_HEIGHT, 0.0f, 0.1f, 1000.0f);
-    printf("%f\t%f\t%f\t%f\t\n", projection.xx, projection.xy, projection.xz, projection.xw);
-    printf("%f\t%f\t%f\t%f\t\n", projection.yx, projection.yy, projection.yz, projection.yw);
-    printf("%f\t%f\t%f\t%f\t\n", projection.zx, projection.zy, projection.zz, projection.zw);
-    printf("%f\t%f\t%f\t%f\t\n", projection.wx, projection.wy, projection.wz, projection.ww);
-
-    glm::mat4 mat = glm::ortho(0.0f, LOGL_WINDOW_WIDTH, LOGL_WINDOW_HEIGHT, 0.0f, 0.1f, 1000.0f);
-    std::cout<<glm::to_string(test)<<std::endl;
-
-
     loglTransform transform;
     transform.pos = vec3_make(0.0f, 0.0f, 0.0f);
     transform.rot = vec3_make(0.0f, 0.0f, 0.0f);
-    transform.sca = vec3_make(0.5f, 0.5f, 0.5f);
+    transform.sca = vec3_make(1.0f, 1.0f, 1.0f);
 
     // Our figure vertex buffer object
     GLuint vboFigure;
@@ -179,12 +165,14 @@ int main() {
 
             // Update the transform
             float time = (float) glfwGetTime();
-            //transform.rot.x = time;
-            //transform.rot.y = time;
+            transform.rot.x = time;
+            transform.rot.y = time;
             transform.rot.z = time;
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.raw);
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, view.raw);
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, logl_transform_get_model(&transform).raw);
+            transform.pos.x = sinf(time) * 0.5;
+            transform.pos.y = cosf(time) * 0.5;
+            //transform.sca.x = cosf(time) * 0.2 + 1.0;
+            //transform.sca.y = cosf(time) * 0.2 + 1.0;
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, logl_transform_get_model(&transform).raw);
 
             // Use loaded texture0
             glActiveTexture(GL_TEXTURE0);

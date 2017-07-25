@@ -241,19 +241,4 @@ static inline mat4 mat4_invert(mat4 a) {
     return t;
 }
 
-static inline mat4 mat4_make_ortho(float l, float r, float b, float t, float n, float f){
-    mat4 m = mat4_zero;
-
-    m.xx = 2.0f/(r-l);
-    m.yy = 2.0f/(t-b);
-    m.zz = -2.0f/(f-n);
-
-    m.wx = -(r+l)/(r-l);
-    m.wy = -(t+b)/(t-b);
-    m.wz = -(f+n)/(f-n);
-    m.ww = 1.0f;
-
-    return m;
-}
-
 #endif
