@@ -195,7 +195,7 @@ int main() {
             float time = (float) glfwGetTime();
             transform.rot.y = time;
             transform.rot.x = time;
-            transform.rot.z = -time;
+            transform.rot.z = time;
 
             mat4 model = loglTransformGetModel(&transform);
             mat4 view = mat4_make_translation(vec3_make(0.0f, 0.0f, -3.0f));
