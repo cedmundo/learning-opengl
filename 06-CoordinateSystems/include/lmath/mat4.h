@@ -256,4 +256,32 @@ static inline mat4 mat4_make_ortho(float l, float r, float b, float t, float n, 
     return m;
 }
 
+static inline mat4 mat4_make_perspective(float yfov, float aspect, float n, float f) {
+    mat4 m = mat4_zero;
+
+    // Note: use radians intead degrees
+    float const a = 1.0f / tan(yfov / 2.0f);
+
+    m.xx = a / aspect;
+    m.xy = 0.0f;
+    m.xz = 0.0f;
+    m.xw = 0.0f;
+
+    m.yx = 0.0f;
+    m.yy = a;
+    m.yz = 0.0f;
+    m.yw = 0.0f;
+
+    m.zx = 0.0f;
+    m.zy = 0.0f;
+    m.zz = -((f + n) / (f - n));
+    m.zw = -1.0f;
+
+    m.wx = 0.0f;
+    m.wy = 0.0f;
+    m.wz = -((2.0f * f * n) / (f - n));
+    m.ww = 0.0f;
+    return m;
+}
+
 #endif

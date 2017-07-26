@@ -97,6 +97,7 @@ int main() {
         excode = 1; goto finalize;
     }
 
+    // Our figure transform
     loglTransform transform;
     transform.pos = vec3_make(0.0f, 0.0f, 0.0f);
     transform.rot = vec3_make(0.0f, 0.0f, 0.0f);
@@ -163,16 +164,19 @@ int main() {
             // Use the specified shaderProgram
             glUseProgram(shaderProgram);
 
-            // Update the transform
+            // Rotate transform
             float time = (float) glfwGetTime();
             transform.rot.x = time;
             transform.rot.y = time;
-            transform.rot.z = time;
-            transform.pos.x = sinf(time) * 0.5;
-            transform.pos.y = cosf(time) * 0.5;
-            //transform.sca.x = cosf(time) * 0.2 + 1.0;
-            //transform.sca.y = cosf(time) * 0.2 + 1.0;
-            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, logl_transform_get_model(&transform).raw);
+
+            mat4 model = loglTransformGetModel(&transform);
+            mat4 view = mat4_make_translation(vec3_make(0.0f, 0.0f, -3.0f));
+            mat4 projection = mat4_make_perspective(45.0f * 0.01745329252f, (float)LOGL_WINDOW_WIDTH / (float)LOGL_WINDOW_HEIGHT, 0.1f, 100.0f);
+
+            // Update the transform
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.raw);
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, view.raw);
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.raw);
 
             // Use loaded texture0
             glActiveTexture(GL_TEXTURE0);

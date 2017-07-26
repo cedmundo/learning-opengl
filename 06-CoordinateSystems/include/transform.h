@@ -9,6 +9,6 @@ typedef struct _loglTransform {
     vec3 rot;
 } loglTransform;
 
-mat4 logl_transform_get_model(loglTransform *);
+mat4 loglTransformGetModel(loglTransform *);
 
 #endif
