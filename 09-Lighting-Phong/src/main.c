@@ -45,48 +45,48 @@ int main() {
 
     // Pre-processing
     GLfloat vertices[] = {
-        /* Positions */
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        /* Positions */       /* Normals */
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
 
     // Compile vertex shader
@@ -166,8 +166,12 @@ int main() {
         glBindBuffer(GL_ARRAY_BUFFER, vboCube);
 
         // Set vertex positions attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*) 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*) 0);
         glEnableVertexAttribArray(0);
+
+        // Set normals attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*) (3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 
     // Our lamp vertex array object, reuse vboCube
@@ -179,7 +183,7 @@ int main() {
         glBindBuffer(GL_ARRAY_BUFFER, vboCube);
 
         // Set vertex positions attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*) 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*) 0);
         glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
@@ -230,9 +234,28 @@ int main() {
             view = loglCameraGetView(&camera);
             projection = loglCameraGetProjection(&camera);
 
+            // Update lamp position
+            float radius = 2.0f;
+            float lampx = sin(currentFrame) * radius;
+            float lampy = 0.25f;
+            float lampz = cos(currentFrame) * radius;
+            lampTransform.pos = vec3_make(lampx, lampy, lampz);
+
+            // Update box scale (review normals issue)
+            //
+            if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * 2.f));
+            if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * -2.f));
+            //figureTransform.sca.y = sin(currentFrame) + 1.2f;
+            //figureTransform.rot.x = sin(currentFrame);
+            //figureTransform.rot.z = cos(currentFrame);
+
             // Get model for figure
             model = loglTransformGetModel(&figureTransform);
-            float ambientLightStrength = 0.2f;
+            float ambientLightStrength = 0.1f;
+            float spectacularStrength = 0.5f;
+            float figureShiness = 256.f;
 
             // Use the specified lightingShader
             glUseProgram(lightingShader);
@@ -240,9 +263,13 @@ int main() {
             glUniformMatrix4fv(glGetUniformLocation(lightingShader, "view"), 1, GL_FALSE, view.raw);
             glUniformMatrix4fv(glGetUniformLocation(lightingShader, "projection"), 1, GL_FALSE, projection.raw);
 
+            glUniform1fv(glGetUniformLocation(lightingShader, "objectShiness"), 1, &figureShiness);
             glUniform3fv(glGetUniformLocation(lightingShader, "objectColor"), 1, vec3_make(1.0f, 0.5f, 0.31f).xyz);
+            glUniform3fv(glGetUniformLocation(lightingShader, "viewPos"), 1, camera.transform.pos.xyz);
+            glUniform3fv(glGetUniformLocation(lightingShader, "lightPos"), 1, lampTransform.pos.xyz);
             glUniform3fv(glGetUniformLocation(lightingShader, "lightColor"), 1, vec3_make(1.0f, 1.0f, 1.0f).xyz);
             glUniform1fv(glGetUniformLocation(lightingShader, "ambientLightStrength"), 1, &ambientLightStrength);
+            glUniform1fv(glGetUniformLocation(lightingShader, "spectacularStrength"), 1, &spectacularStrength);
 
             // Draw the object
             glDrawArrays(GL_TRIANGLES, 0, 36);

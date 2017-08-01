@@ -7,6 +7,7 @@
 
 void loglProcessInput(GLFWwindow *window) {
     static GLboolean pressed0 = GL_FALSE;
+    static GLboolean pressed1 = GL_FALSE;
 
     if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE))
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -29,6 +30,18 @@ void loglProcessInput(GLFWwindow *window) {
         }
 
         pressed0 = GL_FALSE;
+    }
+
+    if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_1)) {
+        pressed1 = GL_TRUE;
+    } else if (GLFW_RELEASE == glfwGetKey(window, GLFW_KEY_1) && GL_TRUE == pressed1) {
+        GLint value = glfwGetInputMode(window, GLFW_CURSOR);
+        if (GLFW_CURSOR_NORMAL == value) {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        } else {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        pressed1 = GL_FALSE;
     }
 }
 
