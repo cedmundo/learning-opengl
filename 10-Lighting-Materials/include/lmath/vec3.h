@@ -14,8 +14,14 @@ typedef union {
         float pitch;
         float roll;
     };
+    struct {
+        float r;
+        float g;
+        float b;
+    };
     float xy[2];
     float xyz[3];
+    float rgb[3];
 } vec3;
 
 static const vec3 vec3_zero = {0.0f, 0.0f, 0.0f};

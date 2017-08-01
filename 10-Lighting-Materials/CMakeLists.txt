@@ -23,4 +23,4 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_gl_LIBRARY} ${GLFW_LIBRARIE
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${PNG_INCLUDE_DIRS})
 
 # Copy assets directory
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+file(INSTALL assets DESTINATION ${CMAKE_BINARY_DIR})

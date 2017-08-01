@@ -241,21 +241,29 @@ int main() {
             float lampz = cos(currentFrame) * radius;
             lampTransform.pos = vec3_make(lampx, lampy, lampz);
 
+            vec3 lightColor = vec3_zero;
+            lightColor.x = sin(currentFrame * 2.0f);
+            lightColor.y = sin(currentFrame * 0.7f);
+            lightColor.z = sin(currentFrame * 1.3f);
+            vec3 diffuseColor = vec3_mul_cross(lightColor, vec3_make(0.5f, 0.5f, 0.5f)); // decrease influence
+            vec3 ambientColor = vec3_mul_cross(diffuseColor, vec3_make(0.2f, 0.2f, 0.2f)); // low influence
+
             // Update box scale (review normals issue)
-            //
             if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
                 figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * 2.f));
             if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
                 figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * -2.f));
+            if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(0.f, 0.f, 1.f), deltaTime * -2.f));
+            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(0.f, 0.f, 1.f), deltaTime * 2.f));
             //figureTransform.sca.y = sin(currentFrame) + 1.2f;
             //figureTransform.rot.x = sin(currentFrame);
             //figureTransform.rot.z = cos(currentFrame);
 
             // Get model for figure
             model = loglTransformGetModel(&figureTransform);
-            float ambientLightStrength = 0.1f;
-            float spectacularStrength = 0.5f;
-            float figureShiness = 256.f;
+            float figureShininess = 32.f;
 
             // Use the specified lightingShader
             glUseProgram(lightingShader);
@@ -263,13 +271,19 @@ int main() {
             glUniformMatrix4fv(glGetUniformLocation(lightingShader, "view"), 1, GL_FALSE, view.raw);
             glUniformMatrix4fv(glGetUniformLocation(lightingShader, "projection"), 1, GL_FALSE, projection.raw);
 
-            glUniform1fv(glGetUniformLocation(lightingShader, "objectShiness"), 1, &figureShiness);
-            glUniform3fv(glGetUniformLocation(lightingShader, "objectColor"), 1, vec3_make(1.0f, 0.5f, 0.31f).xyz);
             glUniform3fv(glGetUniformLocation(lightingShader, "viewPos"), 1, camera.transform.pos.xyz);
-            glUniform3fv(glGetUniformLocation(lightingShader, "lightPos"), 1, lampTransform.pos.xyz);
-            glUniform3fv(glGetUniformLocation(lightingShader, "lightColor"), 1, vec3_make(1.0f, 1.0f, 1.0f).xyz);
-            glUniform1fv(glGetUniformLocation(lightingShader, "ambientLightStrength"), 1, &ambientLightStrength);
-            glUniform1fv(glGetUniformLocation(lightingShader, "spectacularStrength"), 1, &spectacularStrength);
+
+            // Set light uniforms
+            glUniform3fv(glGetUniformLocation(lightingShader, "light.position"), 1, lampTransform.pos.xyz);
+            glUniform3fv(glGetUniformLocation(lightingShader, "light.ambient"), 1, ambientColor.rgb);
+            glUniform3fv(glGetUniformLocation(lightingShader, "light.diffuse"), 1, diffuseColor.rgb);
+            glUniform3fv(glGetUniformLocation(lightingShader, "light.specular"), 1, vec3_make(1.0f, 1.0f, 1.0f).rgb);
+
+            // Set material uniforms
+            glUniform3fv(glGetUniformLocation(lightingShader, "material.ambient"), 1, vec3_make(1.0f, 0.5f, 0.31f).rgb);
+            glUniform3fv(glGetUniformLocation(lightingShader, "material.diffuse"), 1, vec3_make(1.0f, 0.5f, 0.31f).rgb);
+            glUniform3fv(glGetUniformLocation(lightingShader, "material.specular"), 1, vec3_make(0.5f, 0.5f, 0.5f).rgb);
+            glUniform1fv(glGetUniformLocation(lightingShader, "material.shininess"), 1, &figureShininess);
 
             // Draw the object
             glDrawArrays(GL_TRIANGLES, 0, 36);
