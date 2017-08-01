@@ -5,4 +5,9 @@
 #include "vec4.h"
 #include "mat4.h"
 
+static inline float lmath_radians(float value) {
+    return value * 0.01745329252f;
+
+}
+
 #endif

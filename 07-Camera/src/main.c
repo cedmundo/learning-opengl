@@ -5,6 +5,7 @@
 #include <math.h>
 #include <lmath/lmath.h>
 #include <transform.h>
+#include <camera.h>
 
 int main() {
     GLint excode = 0;
@@ -189,10 +190,25 @@ int main() {
         {-1.3f,  1.0f, -1.5f}
     };
 
+    loglCamera camera;
+    loglCameraInit(&camera, window);
+
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
+    float currentFrame = 0.0f;
+
     // Render loop
     while(GL_FALSE == glfwWindowShouldClose(window)) {
+        // Time stuff
+        currentFrame = (float) glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         // Input processing
         loglProcessInput(window);
+
+        // Update camera stuff
+        loglCameraUpdate(&camera, deltaTime);
 
         // Rendering commands
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -204,18 +220,13 @@ int main() {
             // Use the specified shaderProgram
             glUseProgram(shaderProgram);
 
-            // Rotate transform
-            float time = (float) glfwGetTime();
-            float radius = 10.0f;
-            float camX = sin(time) * radius;
-            float camZ = cos(time) * radius;
+            // Get VP matrices
+            mat4 view = loglCameraGetView(&camera);
+            mat4 projection = loglCameraGetProjection(&camera);
 
-            vec3 camPos = vec3_make(camX, 0.0f, camZ);
-            mat4 view = mat4_look_at(camPos, vec3_zero, vec3_up);
-            mat4 projection = mat4_make_perspective(45.0f * 0.01745329252f, (float)LOGL_WINDOW_WIDTH / (float)LOGL_WINDOW_HEIGHT, 0.1f, 100.0f);
-
+            // Spawn 10 cubes
             for (int i=0;i<10;i++) {
-                float factor = 20.0f * i * 0.01745329252f;
+                float factor = lmath_radians(20.0f * i);
                 transform.rot = vec3_make(factor, factor * 0.3f, factor * 0.5f);
                 transform.pos = cubePositions[i];
                 mat4 model = loglTransformGetModel(&transform);

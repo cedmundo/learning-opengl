@@ -9,6 +9,11 @@ typedef union {
         float y;
         float z;
     };
+    struct {
+        float yaw;
+        float pitch;
+        float roll;
+    };
     float xy[2];
     float xyz[3];
 } vec3;

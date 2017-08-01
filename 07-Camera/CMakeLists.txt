@@ -15,8 +15,8 @@ find_package(PNG REQUIRED)
 include_directories(include)
 
 # Sources and headers
-set(SOURCES src/glad.c src/main.c src/logl.c src/transform.c)
-set(HEADERS include/glad/glad.h include/KHR/khrplatform.h include/logl.h)
+set(SOURCES src/glad.c src/main.c src/logl.c src/transform.c src/camera.c)
+set(HEADERS include/glad/glad.h include/KHR/khrplatform.h include/logl.h include/camera.h)
 
 add_executable(${CMAKE_PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_gl_LIBRARY} ${GLFW_LIBRARIES} ${CMAKE_DL_LIBS} ${PNG_LIBRARIES} m)
