@@ -115,6 +115,13 @@ int main() {
     }
     loglShaderAddTexture(phongShader, &specular);
 
+    // Emission texture
+    loglTexture emission;
+    if (GL_FALSE == loglTextureLoad(&emission, "emission", "material.emission")) {
+        excode = 1; goto finalize;
+    }
+    loglShaderAddTexture(phongShader, &emission);
+
     // Our cube vertex buffer object
     GLuint vboCube;
     glGenBuffers(1, &vboCube);
@@ -148,6 +155,7 @@ int main() {
 
         loglTextureBind(&diffuse);
         loglTextureBind(&specular);
+        loglTextureBind(&emission);
     glBindVertexArray(0);
 
     // Our lamp vertex array object, reuse vboCube
@@ -236,6 +244,7 @@ int main() {
             // Get model for figure
             model = loglTransformGetModel(&figureTransform);
             float figureShininess = 32.f;
+            float emitStrength = sin(currentFrame) + 0.4f;
 
             // Use the specified lightingShader
             loglShaderUse(phongShader);
@@ -252,6 +261,7 @@ int main() {
 
             // Set material uniforms
             loglShaderSetFloat(phongShader, "material.shininess", figureShininess);
+            loglShaderSetFloat(phongShader, "material.emitStrength", emitStrength);
             loglShaderSetTextures(phongShader);
 
             // Draw the object
