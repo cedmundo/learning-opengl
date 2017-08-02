@@ -8,7 +8,7 @@
 typedef struct _loglShader {
     GLuint id;
     const GLchar *name;
-    loglTextureList textures;
+    loglTextureList *textures;
 } loglShader;
 
 GLboolean loglShaderLoad(loglShader *shader, const GLchar *name);

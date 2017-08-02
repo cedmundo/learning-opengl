@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-GLboolean loglTextureLoad(loglTexture *tex, const GLchar *name) {
+GLboolean loglTextureLoad(loglTexture *tex, const GLchar *name, const GLchar *sampler) {
     const GLchar *basename = "assets/%s.png";
     const size_t basesize = strlen(basename)-2;
     const size_t namesize = strlen(name);
@@ -25,6 +25,7 @@ GLboolean loglTextureLoad(loglTexture *tex, const GLchar *name) {
     tex->data = texdata;
     tex->width = texw;
     tex->height = texh;
+    tex->sampler = sampler;
     return GL_TRUE;
 }
 
@@ -68,7 +69,11 @@ GLuint loglTextureListAdd(loglTextureList *list, loglTexture *tex) {
     new->next = NULL;
     new->prev = last;
 
-    last->next = new;
+    if (last != NULL)
+        last->next = new;
+    else
+        list->first = new;
+
     list->last = new;
     list->count++;
 }

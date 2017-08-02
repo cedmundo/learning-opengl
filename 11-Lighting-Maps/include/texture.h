@@ -8,6 +8,7 @@ typedef struct _loglTexture {
     GLuint height;
     GLchar *data;
     const GLchar *name;
+    const GLchar *sampler;
 } loglTexture;
 
 typedef struct _loglTexNode {
@@ -22,7 +23,7 @@ typedef struct _loglTexList {
     GLuint count;
 } loglTextureList;
 
-GLboolean loglTextureLoad(loglTexture *tex, const GLchar *name);
+GLboolean loglTextureLoad(loglTexture *tex, const GLchar *name, const GLchar *sampler);
 void loglTextureBind(loglTexture *tex);
 void loglTextureUnload(loglTexture *tex);
 

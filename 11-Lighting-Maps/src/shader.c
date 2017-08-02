@@ -50,7 +50,8 @@ GLboolean loglShaderLoad(loglShader *shader, const GLchar *name) {
 
     shader->id = shaderProgram;
     shader->name = name;
-    loglTextureListInit(&shader->textures);
+    shader->textures = malloc(sizeof(loglTextureList));
+    loglTextureListInit(shader->textures);
 
 finalize:
     if (vertname != 0)
@@ -75,7 +76,7 @@ finalize:
 }
 
 void loglShaderUnload(loglShader *shader) {
-    loglTextureListUnload(&shader->textures);
+    loglTextureListUnload(shader->textures);
 }
 
 void loglShaderUse(loglShader shader) {
@@ -99,22 +100,22 @@ void loglShaderSetFloat(loglShader shader, const GLchar *name, GLfloat value) {
 }
 
 GLuint loglShaderAddTexture(loglShader shader, loglTexture *tex) {
-    return loglTextureListAdd(&shader.textures, tex);
+    return loglTextureListAdd(shader.textures, tex);
 }
 
 void loglShaderDelTexture(loglShader shader, GLuint unit) {
-    loglTextureListDel(&shader.textures, unit);
+    loglTextureListDel(shader.textures, unit);
 }
 
 void loglShaderSetTextures(loglShader shader) {
-    loglTextureNode *node = shader.textures.first;
-    for(unsigned int i=0;i<shader.textures.count && node != NULL;i++) {
+    loglTextureNode *node = shader.textures->first;
+    for(unsigned int i=0;i<shader.textures->count && node != NULL;i++) {
         if (node->tex == NULL)
             continue;
 
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, node->tex->id);
-        glUniform1i(glGetUniformLocation(shader.id, node->tex->name), i);
+        glUniform1i(glGetUniformLocation(shader.id, node->tex->sampler), i);
         node = node->next;
     }
 }
