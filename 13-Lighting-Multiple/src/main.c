@@ -205,6 +205,20 @@ int main() {
         {-1.3f,  1.0f, -1.5f}
     };
 
+    vec3 pointLightPositions[] = {
+        { 0.7f,  0.2f,  2.0f},
+        { 2.3f, -3.3f, -4.0f},
+        {-4.0f,  2.0f, -12.0f},
+        { 0.0f,  0.0f, -3.0f}
+    };
+
+    vec3 pointLightColors[] = {
+        {0.1f, 0.0f, 0.1f},
+        {0.0f, 0.1f, 0.0f},
+        {0.1f, 0.0f, 0.1f},
+        {0.0f, 0.1f, 0.0f}
+    };
+
     // Render loop
     while(GL_FALSE == glfwWindowShouldClose(window)) {
         // Time stuff
@@ -231,10 +245,6 @@ int main() {
             view = loglCameraGetView(&camera);
             projection = loglCameraGetProjection(&camera);
 
-            // Update lamp position
-            vec3 diffuseColor = vec3_make(1.0f, 1.0f, 1.0f); // decrease influence
-            vec3 ambientColor = vec3_make(0.2f, 0.2f, 0.2f); // low influence
-
             // Change some stuff
             if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
                 cubePositions[0] = vec3_add(cubePositions[0], vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * 2.f));
@@ -252,7 +262,6 @@ int main() {
                 figureTransform.pos = cubePositions[i];
                 model = loglTransformGetModel(&figureTransform);
 
-                int lightSource = 2;
                 float figureShininess = 32.f;
                 float emitStrength = 0; // sin(currentFrame) + 0.4f;
 
@@ -262,22 +271,23 @@ int main() {
                 loglShaderSetMat4(phongShader, "view", view);
                 loglShaderSetMat4(phongShader, "projection", projection);
                 loglShaderSetVec3(phongShader, "viewPos", camera.transform.pos);
-                loglShaderSetInt(phongShader, "lightSource", lightSource);
 
                 // DirectionalLight
                 loglShaderSetVec3(phongShader, "dLight.direction", vec3_make(-0.2f, -1.0f, -0.3f));
-                loglShaderSetVec3(phongShader, "dLight.ambient", ambientColor);
-                loglShaderSetVec3(phongShader, "dLight.diffuse", diffuseColor);
+                loglShaderSetVec3(phongShader, "dLight.ambient", vec3_make(0.1f, 0.1f, 0.1f));
+                loglShaderSetVec3(phongShader, "dLight.diffuse", vec3_make(0.2f, 0.2f, 0.2f));
                 loglShaderSetVec3(phongShader, "dLight.specular", vec3_make(1.0f, 1.0f, 1.0f));
 
                 // PointLight
-                loglShaderSetVec3(phongShader, "pLight.position", vec3_make(0.0f, 0.0f, 0.0f));
-                loglShaderSetVec3(phongShader, "pLight.ambient", vec3_make(0.3f, 0.3f, 0.3f));
-                loglShaderSetVec3(phongShader, "pLight.diffuse", vec3_make(sinf(currentFrame) + 0.3f, sinf(currentFrame) + 0.2f, cosf(currentFrame) + 0.2f));
-                loglShaderSetVec3(phongShader, "pLight.specular", vec3_make(1.0f, 1.0f, 1.0f));
-                loglShaderSetFloat(phongShader, "pLight.constant", 1.0f);
-                loglShaderSetFloat(phongShader, "pLight.linear", 0.09f);
-                loglShaderSetFloat(phongShader, "pLight.quadratic", 0.032f);
+                for (int j=0;j<4;j++) {
+                    loglShaderSetfVec3(phongShader, "pLights[%d].position", pointLightPositions[j], i);
+                    loglShaderSetfVec3(phongShader, "pLights[%d].ambient", vec3_make(0.1f, 0.1f, 0.1f), i);
+                    loglShaderSetfVec3(phongShader, "pLights[%d].diffuse", pointLightColors[j], i);
+                    loglShaderSetfVec3(phongShader, "pLights[%d].specular", vec3_make(1.0f, 1.0f, 1.0f), i);
+                    loglShaderSetfFloat(phongShader, "pLights[%d].constant", 1.0f, i);
+                    loglShaderSetfFloat(phongShader, "pLights[%d].linear", 0.09f, i);
+                    loglShaderSetfFloat(phongShader, "pLights[%d].quadratic", 0.052f, i);
+                }
 
                 // SpotLight
                 loglShaderSetVec3(phongShader, "sLight.position", camera.transform.pos);

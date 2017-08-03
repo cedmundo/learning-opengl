@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <glad/glad.h>
 #include <logl.h>
 #include <shader.h>
@@ -87,7 +88,27 @@ void loglShaderSetMat4(loglShader shader, const GLchar *name, mat4 mat) {
     glUniformMatrix4fv(glGetUniformLocation(shader.id, name), 1, GL_FALSE, mat.raw);
 }
 
+void loglShaderSetfMat4(loglShader shader, const GLchar *fmt, mat4 mat, ...) {
+    char name[LOGL_SHADER_NAME_MAXLEN];
+    va_list args;
+    va_start(args, mat);
+    vsprintf(name, fmt, args);
+    va_end(args);
+
+    glUniformMatrix4fv(glGetUniformLocation(shader.id, name), 1, GL_FALSE, mat.raw);
+}
+
 void loglShaderSetVec3(loglShader shader, const GLchar *name, vec3 vec) {
+    glUniform3fv(glGetUniformLocation(shader.id, name), 1, vec.xyz);
+}
+
+void loglShaderSetfVec3(loglShader shader, const GLchar *fmt, vec3 vec, ...) {
+    char name[LOGL_SHADER_NAME_MAXLEN];
+    va_list args;
+    va_start(args, vec);
+    vsprintf(name, fmt, args);
+    va_end(args);
+
     glUniform3fv(glGetUniformLocation(shader.id, name), 1, vec.xyz);
 }
 
@@ -95,11 +116,41 @@ void loglShaderSetVec2(loglShader shader, const GLchar *name, vec2 vec) {
     glUniform2fv(glGetUniformLocation(shader.id, name), 1, vec.xy);
 }
 
+void loglShaderSetfVec2(loglShader shader, const GLchar *fmt, vec2 vec, ...) {
+    char name[LOGL_SHADER_NAME_MAXLEN];
+    va_list args;
+    va_start(args, vec);
+    vsprintf(name, fmt, args);
+    va_end(args);
+
+    glUniform2fv(glGetUniformLocation(shader.id, name), 1, vec.xy);
+}
+
 void loglShaderSetFloat(loglShader shader, const GLchar *name, GLfloat value) {
     glUniform1fv(glGetUniformLocation(shader.id, name), 1, &value);
 }
 
+void loglShaderSetfFloat(loglShader shader, const GLchar *fmt, GLfloat value, ...) {
+    char name[LOGL_SHADER_NAME_MAXLEN];
+    va_list args;
+    va_start(args, value);
+    vsprintf(name, fmt, args);
+    va_end(args);
+
+    glUniform1fv(glGetUniformLocation(shader.id, name), 1, &value);
+}
+
 void loglShaderSetInt(loglShader shader, const GLchar *name, GLint value) {
+    glUniform1iv(glGetUniformLocation(shader.id, name), 1, &value);
+}
+
+void loglShaderSetfInt(loglShader shader, const GLchar *fmt, GLint value, ...) {
+    char name[LOGL_SHADER_NAME_MAXLEN];
+    va_list args;
+    va_start(args, value);
+    vsprintf(name, fmt, args);
+    va_end(args);
+
     glUniform1iv(glGetUniformLocation(shader.id, name), 1, &value);
 }
 
