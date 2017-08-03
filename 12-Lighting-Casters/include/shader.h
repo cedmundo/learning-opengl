@@ -19,6 +19,7 @@ void loglShaderSetMat4(loglShader shader, const GLchar *name, mat4 mat);
 void loglShaderSetVec3(loglShader shader, const GLchar *name, vec3 vec);
 void loglShaderSetVec2(loglShader shader, const GLchar *name, vec2 vec);
 void loglShaderSetFloat(loglShader shader, const GLchar *name, GLfloat value);
+void loglShaderSetInt(loglShader shader, const GLchar *name, GLint value);
 
 GLuint loglShaderAddTexture(loglShader shader, loglTexture *tex);
 void loglShaderDelTexture(loglShader shader, GLuint);

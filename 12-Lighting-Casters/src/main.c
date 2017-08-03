@@ -192,6 +192,19 @@ int main() {
     float lastFrame = 0.0f;
     float currentFrame = 0.0f;
 
+    vec3 cubePositions[] = {
+        { 0.0f,  0.0f,  0.0f},
+        { 2.0f,  5.0f, -15.0f},
+        {-1.5f, -2.2f, -2.5f},
+        {-3.8f, -2.0f, -12.3f},
+        { 2.4f, -0.4f, -3.5f},
+        {-1.7f,  3.0f, -7.5f},
+        { 1.3f, -2.0f, -2.5f},
+        { 1.5f,  2.0f, -2.5f},
+        { 1.5f,  0.2f, -1.5f},
+        {-1.3f,  1.0f, -1.5f}
+    };
+
     // Render loop
     while(GL_FALSE == glfwWindowShouldClose(window)) {
         // Time stuff
@@ -219,65 +232,73 @@ int main() {
             projection = loglCameraGetProjection(&camera);
 
             // Update lamp position
-            float radius = 2.0f;
-            float lampx = sin(currentFrame) * radius;
-            float lampy = 0.25f;
-            float lampz = cos(currentFrame) * radius;
-            lampTransform.pos = vec3_make(lampx, lampy, lampz);
-
             vec3 diffuseColor = vec3_make(1.0f, 1.0f, 1.0f); // decrease influence
             vec3 ambientColor = vec3_make(0.2f, 0.2f, 0.2f); // low influence
 
-            // Update box scale (review normals issue)
+            // Change some stuff
             if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * 2.f));
+                cubePositions[0] = vec3_add(cubePositions[0], vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * 2.f));
             if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * -2.f));
+                cubePositions[0] = vec3_add(cubePositions[0], vec3_scale(vec3_make(1.f, 0.f, 0.f), deltaTime * -2.f));
             if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(0.f, 0.f, 1.f), deltaTime * -2.f));
+                cubePositions[0] = vec3_add(cubePositions[0], vec3_scale(vec3_make(0.f, 0.f, 1.f), deltaTime * -2.f));
             if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-                figureTransform.pos = vec3_add(figureTransform.pos, vec3_scale(vec3_make(0.f, 0.f, 1.f), deltaTime * 2.f));
-            //figureTransform.sca.y = sin(currentFrame) + 1.2f;
-            //figureTransform.rot.x = sin(currentFrame);
-            //figureTransform.rot.z = cos(currentFrame);
+                cubePositions[0] = vec3_add(cubePositions[0], vec3_scale(vec3_make(0.f, 0.f, 1.f), deltaTime * 2.f));
 
             // Get model for figure
-            model = loglTransformGetModel(&figureTransform);
-            float figureShininess = 32.f;
-            float emitStrength = sin(currentFrame) + 0.4f;
+            for (int i=0;i<10;i++) {
+                float factor = lmath_radians(20.0f * i);
+                figureTransform.rot = vec3_make(factor, factor * 0.3f, factor * 0.5f);
+                figureTransform.pos = cubePositions[i];
+                model = loglTransformGetModel(&figureTransform);
 
-            // Use the specified lightingShader
-            loglShaderUse(phongShader);
-            loglShaderSetMat4(phongShader, "model", model);
-            loglShaderSetMat4(phongShader, "view", view);
-            loglShaderSetMat4(phongShader, "projection", projection);
-            loglShaderSetVec3(phongShader, "viewPos", camera.transform.pos);
+                int lightSource = 2;
+                float figureShininess = 32.f;
+                float emitStrength = 0; // sin(currentFrame) + 0.4f;
 
-            // Set light uniforms
-            loglShaderSetVec3(phongShader, "light.position", lampTransform.pos);
-            loglShaderSetVec3(phongShader, "light.ambient", ambientColor);
-            loglShaderSetVec3(phongShader, "light.diffuse", diffuseColor);
-            loglShaderSetVec3(phongShader, "light.specular", vec3_make(1.0f, 1.0f, 1.0f));
+                // Use the specified lightingShader
+                loglShaderUse(phongShader);
+                loglShaderSetMat4(phongShader, "model", model);
+                loglShaderSetMat4(phongShader, "view", view);
+                loglShaderSetMat4(phongShader, "projection", projection);
+                loglShaderSetVec3(phongShader, "viewPos", camera.transform.pos);
+                loglShaderSetInt(phongShader, "lightSource", lightSource);
 
-            // Set material uniforms
-            loglShaderSetFloat(phongShader, "material.shininess", figureShininess);
-            loglShaderSetFloat(phongShader, "material.emitStrength", emitStrength);
-            loglShaderSetTextures(phongShader);
+                // DirectionalLight
+                loglShaderSetVec3(phongShader, "dLight.direction", vec3_make(-0.2f, -1.0f, -0.3f));
+                loglShaderSetVec3(phongShader, "dLight.ambient", ambientColor);
+                loglShaderSetVec3(phongShader, "dLight.diffuse", diffuseColor);
+                loglShaderSetVec3(phongShader, "dLight.specular", vec3_make(1.0f, 1.0f, 1.0f));
 
-            // Draw the object
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+                // PointLight
+                loglShaderSetVec3(phongShader, "pLight.position", vec3_make(0.0f, 0.0f, 0.0f));
+                loglShaderSetVec3(phongShader, "pLight.ambient", vec3_make(0.3f, 0.3f, 0.3f));
+                loglShaderSetVec3(phongShader, "pLight.diffuse", vec3_make(sinf(currentFrame) + 0.3f, sinf(currentFrame) + 0.2f, cosf(currentFrame) + 0.2f));
+                loglShaderSetVec3(phongShader, "pLight.specular", vec3_make(1.0f, 1.0f, 1.0f));
+                loglShaderSetFloat(phongShader, "pLight.constant", 1.0f);
+                loglShaderSetFloat(phongShader, "pLight.linear", 0.09f);
+                loglShaderSetFloat(phongShader, "pLight.quadratic", 0.032f);
 
-            // Get model for lamp
-            model = loglTransformGetModel(&lampTransform);
+                // SpotLight
+                loglShaderSetVec3(phongShader, "sLight.position", camera.transform.pos);
+                loglShaderSetVec3(phongShader, "sLight.direction", camera.front);
+                loglShaderSetVec3(phongShader, "sLight.ambient", vec3_make(0.1f, 0.1f, 0.1f));
+                loglShaderSetVec3(phongShader, "sLight.diffuse", vec3_make(0.8f, 0.8f, 0.8f));
+                loglShaderSetVec3(phongShader, "sLight.specular", vec3_make(1.0f, 1.0f, 1.0f));
+                loglShaderSetFloat(phongShader, "sLight.cutOff", lmath_radians(60.f));
+                loglShaderSetFloat(phongShader, "sLight.outerCutOff", lmath_radians(55.f));
+                loglShaderSetFloat(phongShader, "sLight.constant", 1.0f);
+                loglShaderSetFloat(phongShader, "sLight.linear", 0.09f);
+                loglShaderSetFloat(phongShader, "sLight.quadratic", 0.032f);
 
-            // Use the specified lightingShader
-            loglShaderUse(lampShader);
-            loglShaderSetMat4(lampShader, "model", model);
-            loglShaderSetMat4(lampShader, "view", view);
-            loglShaderSetMat4(lampShader, "projection", projection);
+                // Set material uniforms
+                loglShaderSetFloat(phongShader, "material.shininess", figureShininess);
+                loglShaderSetFloat(phongShader, "material.emitStrength", emitStrength);
+                loglShaderSetTextures(phongShader);
 
-            // Draw the object
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+                // Draw the object
+                glDrawArrays(GL_TRIANGLES, 0, 36);
+            }
         glBindVertexArray(0);
 
         GLenum err;

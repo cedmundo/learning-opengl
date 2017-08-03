@@ -99,6 +99,10 @@ void loglShaderSetFloat(loglShader shader, const GLchar *name, GLfloat value) {
     glUniform1fv(glGetUniformLocation(shader.id, name), 1, &value);
 }
 
+void loglShaderSetInt(loglShader shader, const GLchar *name, GLint value) {
+    glUniform1iv(glGetUniformLocation(shader.id, name), 1, &value);
+}
+
 GLuint loglShaderAddTexture(loglShader shader, loglTexture *tex) {
     return loglTextureListAdd(shader.textures, tex);
 }
