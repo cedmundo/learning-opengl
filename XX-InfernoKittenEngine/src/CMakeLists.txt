@@ -14,3 +14,4 @@ install(TARGETS ike
     ARCHIVE DESTINATION lib)
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/ike.h DESTINATION include)
+
