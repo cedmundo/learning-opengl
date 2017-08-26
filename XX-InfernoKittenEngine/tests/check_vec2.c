@@ -89,40 +89,85 @@ START_TEST(test_vec2_mul_inner)
     float c = vec2_mul_inner(a, b);
     ck_assert(c == e);
 
-    // TODO: Negative cases
+    a = vec2_make(-2.f, 10.f);
+    b = vec2_make(3.f, 2.f);
+    e = 14.f;
+    c = vec2_mul_inner(a, b);
+    ck_assert(c == e);
+
+    a = vec2_make(2.f, -10.f);
+    b = vec2_make(3.f, 2.f);
+    e = -14.f;
+    c = vec2_mul_inner(a, b);
+    ck_assert(c == e);
 }
 END_TEST
 
 START_TEST(test_vec2_sqr_len)
 {
-    vec2 a = vec2_make(2.f, 2.f);
     float e = 8.f;
+
+    vec2 a = vec2_make(2.f, 2.f);
     float c = vec2_sqr_len(a);
     ck_assert(c == e);
 
-    // TODO: Negative cases
+    a = vec2_make(-2.f, -2.f);
+    c = vec2_sqr_len(a);
+    ck_assert(c == e);
+
+    a = vec2_make(2.f, -2.f);
+    c = vec2_sqr_len(a);
+    ck_assert(c == e);
+
+    a = vec2_make(-2.f, 2.f);
+    c = vec2_sqr_len(a);
+    ck_assert(c == e);
 }
 END_TEST
 
 START_TEST(test_vec2_len)
 {
-    vec2 a = vec2_make(2.f, 2.f);
     float e = sqrtf(8.f);
+
+    vec2 a = vec2_make(2.f, 2.f);
     float c = vec2_len(a);
     ck_assert(c == e);
 
-    // TODO: Negative cases
+    a = vec2_make(-2.f, -2.f);
+    c = vec2_len(a);
+    ck_assert(c == e);
+
+    a = vec2_make(2.f, -2.f);
+    c = vec2_len(a);
+    ck_assert(c == e);
+
+    a = vec2_make(-2.f, 2.f);
+    c = vec2_len(a);
+    ck_assert(c == e);
 }
 END_TEST
 
 START_TEST(test_vec2_norm)
 {
-    vec2 a = vec2_make(1.f, 1.f);
-    vec2 e = vec2_make(1.f, 1.f);
+    vec2 a = vec2_make(2.f, 2.f);
+    vec2 e = vec2_make(1.f/sqrtf(2.f), 1.f/sqrtf(2.f));
     vec2 c = vec2_norm(a);
     ck_assert_vec2_eq(c, e);
 
-    // TODO: Negative cases
+    a = vec2_make(-2.f, -2.f);
+    e = vec2_make(-1.f/sqrtf(2.f), -1.f/sqrtf(2.f));
+    c = vec2_norm(a);
+    ck_assert_vec2_eq(c, e);
+
+    a = vec2_make(2.f, -2.f);
+    e = vec2_make(1.f/sqrtf(2.f), -1.f/sqrtf(2.f));
+    c = vec2_norm(a);
+    ck_assert_vec2_eq(c, e);
+
+    a = vec2_make(-2.f, 2.f);
+    e = vec2_make(-1.f/sqrtf(2.f), 1.f/sqrtf(2.f));
+    c = vec2_norm(a);
+    ck_assert_vec2_eq(c, e);
 }
 END_TEST
 
@@ -134,7 +179,23 @@ START_TEST(test_vec2_min)
     vec2 c = vec2_min(a, b);
     ck_assert_vec2_eq(c, e);
 
-    // TODO: Negative cases
+    a = vec2_make(-3.f, 6.f);
+    b = vec2_make(2.f, 8.f);
+    e = vec2_make(-3.f, 6.f);
+    c = vec2_min(a, b);
+    ck_assert_vec2_eq(c, e);
+
+    a = vec2_make(3.f, -6.f);
+    b = vec2_make(2.f, 8.f);
+    e = vec2_make(2.f, -6.f);
+    c = vec2_min(a, b);
+    ck_assert_vec2_eq(c, e);
+
+    a = vec2_make(3.f, -6.f);
+    b = vec2_make(2.f, -8.f);
+    e = vec2_make(2.f, -8.f);
+    c = vec2_min(a, b);
+    ck_assert_vec2_eq(c, e);
 }
 END_TEST
 
@@ -146,7 +207,23 @@ START_TEST(test_vec2_max)
     vec2 c = vec2_max(a, b);
     ck_assert_vec2_eq(c, e);
 
-    // TODO: Negative cases
+    a = vec2_make(-3.f, 6.f);
+    b = vec2_make(2.f, 8.f);
+    e = vec2_make(2.f, 8.f);
+    c = vec2_max(a, b);
+    ck_assert_vec2_eq(c, e);
+
+    a = vec2_make(2.f, -6.f);
+    b = vec2_make(4.f, 8.f);
+    e = vec2_make(4.f, 8.f);
+    c = vec2_max(a, b);
+    ck_assert_vec2_eq(c, e);
+
+    a = vec2_make(3.f, -6.f);
+    b = vec2_make(2.f, -8.f);
+    e = vec2_make(3.f, -6.f);
+    c = vec2_max(a, b);
+    ck_assert_vec2_eq(c, e);
 }
 END_TEST
 
