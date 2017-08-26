@@ -72,4 +72,5 @@ add_subdirectory(tests)
 # Unit tests
 enable_testing()
 add_test(NAME check_vec2 COMMAND check_vec2)
+add_test(NAME check_vec3 COMMAND check_vec3)
 

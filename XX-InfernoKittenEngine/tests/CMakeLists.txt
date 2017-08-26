@@ -10,9 +10,8 @@ find_package(Check REQUIRED)
 find_package(Threads REQUIRED)
 include_directories(${CHECK_INCLUDE_DIRS})
 
-set(TEST_SOURCES
-  check_vec2.c
-)
-
-add_executable(check_vec2 ${TEST_SOURCES})
+add_executable(check_vec2 check_vec2.c)
 target_link_libraries(check_vec2 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(check_vec3 check_vec3.c)
+target_link_libraries(check_vec3 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
