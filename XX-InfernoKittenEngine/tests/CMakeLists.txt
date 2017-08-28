@@ -15,3 +15,6 @@ target_link_libraries(check_vec2 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT
 
 add_executable(check_vec3 check_vec3.c)
 target_link_libraries(check_vec3 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(check_vec4 check_vec4.c)
+target_link_libraries(check_vec4 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
