@@ -18,3 +18,6 @@ target_link_libraries(check_vec3 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT
 
 add_executable(check_vec4 check_vec4.c)
 target_link_libraries(check_vec4 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(check_mat4 check_mat4.c)
+target_link_libraries(check_mat4 ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
