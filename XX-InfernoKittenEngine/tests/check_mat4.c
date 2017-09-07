@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <check.h>
 #include <ike/mat4.h>
+#include <ike/mathutil.h>
 #include "mat4_helper.h"
 #include "vec4_helper.h"
 
@@ -276,11 +277,37 @@ START_TEST(test_mat4_make_scale)
 }
 END_TEST
 
+START_TEST(test_mat4_make_rotation)
+{
+    vec3 a = vec3_make(1, 0, 2);
+    float b = 90.0f;
+    mat4 e = {
+        0.2f, 0.894427f, 0.4f, 0.f,
+        -0.894427f, -0., 0.447214f, 0.f,
+        0.4f, -0.447214f, 0.8f, 0.f,
+        0.f, 0.f, 0.f, 1.f
+    };
+
+    mat4 c = mat4_make_rotation(a, b);
+    printf("e: \n");
+    printf("%f\t%f\t%f\t%f\n", e.xx, e.xy, e.xz, e.xw);
+    printf("%f\t%f\t%f\t%f\n", e.yx, e.yy, e.yz, e.yw);
+    printf("%f\t%f\t%f\t%f\n", e.zx, e.zy, e.zz, e.zw);
+    printf("%f\t%f\t%f\t%f\n", e.wx, e.wy, e.wz, e.ww);
+
+    printf("c: \n");
+    printf("%f\t%f\t%f\t%f\n", c.xx, c.xy, c.xz, c.xw);
+    printf("%f\t%f\t%f\t%f\n", c.yx, c.yy, c.yz, c.yw);
+    printf("%f\t%f\t%f\t%f\n", c.zx, c.zy, c.zz, c.zw);
+    printf("%f\t%f\t%f\t%f\n", c.wx, c.wy, c.wz, c.ww);
+    ck_assert_msg(mat4_is_aprox(c, e) == 1, "Wrong rotation model matrix");
+}
+END_TEST
 
 Suite *mat4_suite(void)
 {
     Suite *s;
-    TCase *tc_arithm, *tc_access;
+    TCase *tc_arithm, *tc_access, *tc_model;
 
     s = suite_create("ike/mat4");
 
@@ -300,6 +327,10 @@ Suite *mat4_suite(void)
     tcase_add_test(tc_arithm, test_mat4_mul_vec4);
     suite_add_tcase(s, tc_arithm);
 
+    tc_model = tcase_create("model");
+    tcase_add_test(tc_model, test_mat4_make_scale);
+    tcase_add_test(tc_model, test_mat4_make_rotation);
+    suite_add_tcase(s, tc_model);
     return s;
 }
 

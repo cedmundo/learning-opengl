@@ -193,5 +193,34 @@ static inline mat4 mat4_make_scale(vec3 u) {
     return r;
 }
 
+/**
+ * \brief Makes a new model rotation matrix.
+ *
+ * \param vec3 u the rotation axis to apply angle.
+ * \param float angle the angle to rotate.
+ * \return rotation matrix.
+ */
+static inline mat4 mat4_make_rotation(vec3 u, float angle) {
+    mat4 r = mat4_zero;
+    u = vec3_norm(u);
+
+    float a_cos = cosf(angle);
+    float a_sin = sinf(angle);
+    float a_icos = 1 - cosf(angle);
+
+    r.xx = a_cos + u.x * u.x * a_icos;
+    r.xy = u.x * u.y * a_icos - u.z * a_sin;
+    r.xz = u.x * u.z * a_icos + u.y * a_sin;
+
+    r.yx = u.y * u.x * a_icos + u.z * a_sin;
+    r.yy = a_cos + u.y * u.y * a_icos;
+    r.yz = u.y * u.z * a_icos - u.x * a_sin;
+
+    r.zx = u.z * u.x * a_icos - u.y * a_sin;
+    r.zy = u.z * u.y * a_icos + u.x * a_sin;
+    r.zz = a_cos + u.z * u.z * a_icos;
+
+    return r;
+}
 
 #endif /* IKE_MATH4_H */

@@ -1,6 +1,5 @@
 #ifndef IKETESTING_MAT4_HELPER_H
 #define IKETESTING_MAT4_HELPER_H
-#define ROUND(m) (ceilf(m * 100.f)/100.f)
 
 /**
  * \brief Compares two matrices.
@@ -17,7 +16,7 @@ static inline int mat4_is_aprox(mat4 a, mat4 b) {
     for(int i=0;i<4;i++) {
         for (int j=0;j<4;j++) {
             int offset = i*4+j;
-            if (ROUND(adata[offset]) != ROUND(bdata[offset])) {
+            if (ROUND4(adata[offset]) != ROUND4(bdata[offset])) {
                 return 0;
             }
         }
