@@ -254,9 +254,9 @@ static inline mat4 mat4_make_rotation_y(float angle) {
     float s = sinf(angle);
 
     r.xx = c;
-    r.xz = s;
+    r.xz = -s;
 
-    r.zx = -s;
+    r.zx = s;
     r.zz = c;
     return r;
 }
@@ -273,9 +273,9 @@ static inline mat4 mat4_make_rotation_z(float angle) {
     float s = sinf(angle);
 
     r.xx = c;
-    r.xy = -s;
+    r.xy = s;
 
-    r.yx = s;
+    r.yx = -s;
     r.yy = c;
     return r;
 }
