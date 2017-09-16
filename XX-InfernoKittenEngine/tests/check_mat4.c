@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <check.h>
+#include <ike/vec3.h>
 #include <ike/mat4.h>
 #include <ike/mathutil.h>
 #include "mat4_helper.h"
@@ -366,10 +367,26 @@ START_TEST(test_mat4_make_perspective)
 }
 END_TEST
 
+START_TEST(test_mat4_look_at)
+{
+    mat4 e = {
+         0.707107f, -0.408248f,  0.577350f, 0.000000f,
+         0.000000f,  0.816497f,  0.577350f, 0.000000f,
+        -0.707107f, -0.408248f,  0.577350f, 0.000000f,
+        -0.000000f, -0.000000f, -1.732051f, 1.000000f
+    };
+
+    vec3 eye = {0.f, 0.f, 0.f};
+    vec3 center = {0.f, 0.f, 0.f};
+    mat4 a = mat4_look_at(eye, center, vec3_up);
+    ck_assert_msg(mat4_is_aprox(a, e) == 1, "Wrong look at matrix");
+}
+END_TEST
+
 Suite *mat4_suite(void)
 {
     Suite *s;
-    TCase *tc_arithm, *tc_access, *tc_model, *tc_proj;
+    TCase *tc_arithm, *tc_access, *tc_model, *tc_proj, *tc_misc;
 
     s = suite_create("ike/mat4");
 
@@ -401,6 +418,11 @@ Suite *mat4_suite(void)
     tcase_add_test(tc_proj, test_mat4_make_ortho);
     tcase_add_test(tc_proj, test_mat4_make_perspective);
     suite_add_tcase(s, tc_proj);
+
+    tc_misc = tcase_create("misc");
+    tcase_add_test(tc_misc, test_mat4_look_at);
+    suite_add_tcase(s, tc_misc);
+
     return s;
 }
 

@@ -347,4 +347,33 @@ static inline mat4 mat4_make_perspective(float yfov, float aspect, float n, floa
     return m;
 }
 
+/**
+ * \brief Makes a new "looking at" matrix.
+ *
+ * \param float eye position to look at
+ * \param float center of object
+ * \param float up
+ */
+static inline mat4 mat4_look_at(vec3 eye, vec3 center, vec3 up) {
+    mat4 m = mat4_identity;
+    vec3 f = vec3_norm(vec3_sub(center, eye));
+    vec3 u = vec3_norm(up);
+    vec3 s = vec3_norm(vec3_cross(f, u));
+    u = vec3_cross(s, f);
+
+    m.xx = s.x;
+    m.yx = s.y;
+    m.zx = s.z;
+    m.xy = u.x;
+    m.yy = u.y;
+    m.zy = u.z;
+    m.xz = -f.x;
+    m.yz = -f.y;
+    m.zz = -f.z;
+    m.wx = -vec3_dot(s, eye);
+    m.wy = -vec3_dot(u, eye);
+    m.wz =  vec3_dot(f, eye);
+    return m;
+}
+
 #endif /* IKE_MATH4_H */
