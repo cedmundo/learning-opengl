@@ -201,26 +201,82 @@ static inline mat4 mat4_make_scale(vec3 u) {
  * \return rotation matrix.
  */
 static inline mat4 mat4_make_rotation(vec3 u, float angle) {
-    mat4 r = mat4_zero;
+    mat4 r = mat4_identity;
     u = vec3_norm(u);
 
     float a_cos = cosf(angle);
     float a_sin = sinf(angle);
-    float a_icos = 1 - cosf(angle);
+    float a_icos = (1 - cosf(angle));
 
     r.xx = a_cos + u.x * u.x * a_icos;
-    r.xy = u.x * u.y * a_icos - u.z * a_sin;
+    r.xy = u.x * u.y * a_icos + u.z * a_sin;
     r.xz = u.x * u.z * a_icos + u.y * a_sin;
 
-    r.yx = u.y * u.x * a_icos + u.z * a_sin;
+    r.yx = u.y * u.x * a_icos - u.z * a_sin;
     r.yy = a_cos + u.y * u.y * a_icos;
-    r.yz = u.y * u.z * a_icos - u.x * a_sin;
+    r.yz = u.y * u.z * a_icos + u.x * a_sin;
 
     r.zx = u.z * u.x * a_icos - u.y * a_sin;
-    r.zy = u.z * u.y * a_icos + u.x * a_sin;
+    r.zy = u.z * u.y * a_icos - u.x * a_sin;
     r.zz = a_cos + u.z * u.z * a_icos;
 
     return r;
 }
 
+/**
+ * \brief Makes a new model rotation matrix only on X axis (euler).
+ *
+ * \param float angle in radians.
+ * \return rotation matrix on X axis.
+ */
+static inline mat4 mat4_make_rotation_x(float angle) {
+    mat4 r = mat4_identity;
+    float c = cosf(angle);
+    float s = sinf(angle);
+
+    r.yy = c;
+    r.yz = s;
+
+    r.zy = -s;
+    r.zz = c;
+    return r;
+}
+
+/**
+ * \brief Makes a new model rotation matrix only on Y axis (euler).
+ *
+ * \param float angle in radians.
+ * \return rotation matrix on Y axis.
+ */
+static inline mat4 mat4_make_rotation_y(float angle) {
+    mat4 r = mat4_identity;
+    float c = cosf(angle);
+    float s = sinf(angle);
+
+    r.xx = c;
+    r.xz = s;
+
+    r.zx = -s;
+    r.zz = c;
+    return r;
+}
+
+/**
+ * \brief Makes a new model rotation matrix only on Z axis (euler).
+ *
+ * \param float angle in radians.
+ * \return rotation matrix on Z axis.
+ */
+static inline mat4 mat4_make_rotation_z(float angle) {
+    mat4 r = mat4_identity;
+    float c = cosf(angle);
+    float s = sinf(angle);
+
+    r.xx = c;
+    r.xy = -s;
+
+    r.yx = s;
+    r.yy = c;
+    return r;
+}
 #endif /* IKE_MATH4_H */

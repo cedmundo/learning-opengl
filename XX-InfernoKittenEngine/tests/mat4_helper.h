@@ -1,5 +1,6 @@
 #ifndef IKETESTING_MAT4_HELPER_H
 #define IKETESTING_MAT4_HELPER_H
+#include <math.h>
 
 /**
  * \brief Compares two matrices.
@@ -12,11 +13,15 @@
 static inline int mat4_is_aprox(mat4 a, mat4 b) {
     float *adata = a.raw;
     float *bdata = b.raw;
+    static const char *pos = "XYZW";
 
     for(int i=0;i<4;i++) {
         for (int j=0;j<4;j++) {
             int offset = i*4+j;
-            if (ROUND4(adata[offset]) != ROUND4(bdata[offset])) {
+            float aval = adata[offset];
+            float bval = bdata[offset];
+
+            if (fabs(aval - bval) > 0.01) {
                 return 0;
             }
         }

@@ -279,28 +279,62 @@ END_TEST
 
 START_TEST(test_mat4_make_rotation)
 {
-    vec3 a = vec3_make(1, 0, 2);
-    float b = 90.0f;
+    vec3 a = vec3_make(1.f, 0.f, 2.f);
+    float b = TORAD(90.0f);
     mat4 e = {
-        0.2f, 0.894427f, 0.4f, 0.f,
-        -0.894427f, -0., 0.447214f, 0.f,
-        0.4f, -0.447214f, 0.8f, 0.f,
-        0.f, 0.f, 0.f, 1.f
+         0.200000f,  0.894427f, 0.400000f,  0.000000f,
+        -0.894427f, -0.000000f, 0.447214f,  0.000000f,
+         0.400000f, -0.447214f, 0.800000f,  0.000000f,
+         0.000000f,  0.000000f, 0.000000f,  1.000000f
     };
 
     mat4 c = mat4_make_rotation(a, b);
-    printf("e: \n");
-    printf("%f\t%f\t%f\t%f\n", e.xx, e.xy, e.xz, e.xw);
-    printf("%f\t%f\t%f\t%f\n", e.yx, e.yy, e.yz, e.yw);
-    printf("%f\t%f\t%f\t%f\n", e.zx, e.zy, e.zz, e.zw);
-    printf("%f\t%f\t%f\t%f\n", e.wx, e.wy, e.wz, e.ww);
-
-    printf("c: \n");
-    printf("%f\t%f\t%f\t%f\n", c.xx, c.xy, c.xz, c.xw);
-    printf("%f\t%f\t%f\t%f\n", c.yx, c.yy, c.yz, c.yw);
-    printf("%f\t%f\t%f\t%f\n", c.zx, c.zy, c.zz, c.zw);
-    printf("%f\t%f\t%f\t%f\n", c.wx, c.wy, c.wz, c.ww);
     ck_assert_msg(mat4_is_aprox(c, e) == 1, "Wrong rotation model matrix");
+}
+END_TEST
+
+START_TEST(test_mat4_make_rotation_x)
+{
+    float a = 35.f;
+    mat4 e = {
+         1.000000,  0.000000, 0.000000, 0.000000,
+        -0.000000,  0.819152, 0.573576, 0.000000,
+         0.000000, -0.573576, 0.819152, 0.000000,
+         0.000000,  0.000000, 0.000000, 1.000000
+    };
+
+    mat4 b = mat4_make_rotation_x(TORAD(a));
+    ck_assert_msg(mat4_is_aprox(b, e) == 1, "Wrong rotation by X model matrix");
+}
+END_TEST
+
+START_TEST(test_mat4_make_rotation_y)
+{
+    float a = 35.f;
+    mat4 e = {
+        -0.065600f,  0.989183f, -0.131200f, 0.000000f,
+        -0.894427f, -0.000000f,  0.447214f, 0.000000f,
+         0.442376f,  0.146686f,  0.884752f, 0.000000f,
+         0.000000f,  0.000000f,  0.000000f, 1.000000f
+    };
+
+    mat4 b = mat4_make_rotation_y(TORAD(a));
+    ck_assert_msg(mat4_is_aprox(b, e) == 1, "Wrong rotation by Y model matrix");
+}
+END_TEST
+
+START_TEST(test_mat4_make_rotation_z)
+{
+    float a = 35.f;
+    mat4 e = {
+        -0.349192f,  0.732672f, 0.584172f, 0.000000f,
+        -0.847387f, -0.513022f, 0.136905f, 0.000000f,
+         0.400000f, -0.447214f, 0.800000f, 0.000000f,
+         0.000000f,  0.000000f, 0.000000f, 1.000000f
+    };
+
+    mat4 b = mat4_make_rotation_y(TORAD(a));
+    ck_assert_msg(mat4_is_aprox(b, e) == 1, "Wrong rotation by Z model matrix");
 }
 END_TEST
 
@@ -330,6 +364,9 @@ Suite *mat4_suite(void)
     tc_model = tcase_create("model");
     tcase_add_test(tc_model, test_mat4_make_scale);
     tcase_add_test(tc_model, test_mat4_make_rotation);
+    tcase_add_test(tc_model, test_mat4_make_rotation_x);
+    tcase_add_test(tc_model, test_mat4_make_rotation_y);
+    tcase_add_test(tc_model, test_mat4_make_rotation_z);
     suite_add_tcase(s, tc_model);
     return s;
 }
