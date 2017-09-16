@@ -279,4 +279,72 @@ static inline mat4 mat4_make_rotation_z(float angle) {
     r.yy = c;
     return r;
 }
+
+/**
+ * \brief Makes a new ortho matrix.
+ *
+ * Generates a new projection matrix usen left, right, bottom, top, near and far parameters.
+ *
+ * \param float l left
+ * \param float r right
+ * \param float b bottom
+ * \param float t top
+ * \param float n near
+ * \param float f far
+ * \return a othographic projection matrix.
+ */
+static inline mat4 mat4_make_ortho(float l, float r, float b, float t, float n, float f){
+    mat4 m = mat4_zero;
+
+    m.xx = 2.0f/(r-l);
+    m.yy = 2.0f/(t-b);
+    m.zz = -2.0f/(f-n);
+
+    m.wx = -(r+l)/(r-l);
+    m.wy = -(t+b)/(t-b);
+    m.wz = -(f+n)/(f-n);
+    m.ww = 1.0f;
+
+    return m;
+}
+
+/**
+ * \brief Makes a new perspective matrix.
+ *
+ * Generates a new projection matrix usen fov, aspect, near and far parameters.
+ *
+ * \param float yfov Field of view from Y axis
+ * \param float aspect ratio
+ * \param float n near
+ * \param float f far
+ * \return a prerspective projection matrix.
+ */
+static inline mat4 mat4_make_perspective(float yfov, float aspect, float n, float f) {
+    mat4 m = mat4_zero;
+
+    // Note: use radians intead degrees
+    float const a = 1.0f / tan(yfov / 2.0f);
+
+    m.xx = a / aspect;
+    m.xy = 0.0f;
+    m.xz = 0.0f;
+    m.xw = 0.0f;
+
+    m.yx = 0.0f;
+    m.yy = a;
+    m.yz = 0.0f;
+    m.yw = 0.0f;
+
+    m.zx = 0.0f;
+    m.zy = 0.0f;
+    m.zz = -((f + n) / (f - n));
+    m.zw = -1.0f;
+
+    m.wx = 0.0f;
+    m.wy = 0.0f;
+    m.wz = -((2.0f * f * n) / (f - n));
+    m.ww = 0.0f;
+    return m;
+}
+
 #endif /* IKE_MATH4_H */

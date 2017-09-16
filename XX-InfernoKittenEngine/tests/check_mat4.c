@@ -338,10 +338,38 @@ START_TEST(test_mat4_make_rotation_z)
 }
 END_TEST
 
+START_TEST(test_mat4_make_ortho)
+{
+    mat4 e = {
+         0.020000f,  0.000000f,  0.000000f, 0.000000f,
+         0.000000f, -0.020000f,  0.000000f, 0.000000f,
+         0.000000f,  0.000000f, -0.020020f, 0.000000f,
+        -1.000000f,  1.000000f, -1.002002f, 1.000000f
+    };
+
+    mat4 a = mat4_make_ortho(0.f, 100.f, 100.f, 0.f, 0.1f, 100.f);
+    ck_assert_msg(mat4_is_aprox(a, e) == 1, "Wrong ortho projection matrix");
+}
+END_TEST
+
+START_TEST(test_mat4_make_perspective)
+{
+    mat4 e = {
+        -0.224922f,  0.000000f,  0.000000f,  0.000000f,
+         0.000000f, -0.224922f,  0.000000f,  0.000000f,
+         0.000000f,  0.000000f, -1.002002f, -1.000000f,
+         0.000000f,  0.000000f, -0.200200f,  0.000000f
+    };
+
+    mat4 a = mat4_make_perspective(35.f, 1.f, 0.1f, 100.f);
+    ck_assert_msg(mat4_is_aprox(a, e) == 1, "Wrong perspective projection matrix");
+}
+END_TEST
+
 Suite *mat4_suite(void)
 {
     Suite *s;
-    TCase *tc_arithm, *tc_access, *tc_model;
+    TCase *tc_arithm, *tc_access, *tc_model, *tc_proj;
 
     s = suite_create("ike/mat4");
 
@@ -368,6 +396,11 @@ Suite *mat4_suite(void)
     tcase_add_test(tc_model, test_mat4_make_rotation_y);
     tcase_add_test(tc_model, test_mat4_make_rotation_z);
     suite_add_tcase(s, tc_model);
+
+    tc_proj = tcase_create("projection");
+    tcase_add_test(tc_proj, test_mat4_make_ortho);
+    tcase_add_test(tc_proj, test_mat4_make_perspective);
+    suite_add_tcase(s, tc_proj);
     return s;
 }
 
