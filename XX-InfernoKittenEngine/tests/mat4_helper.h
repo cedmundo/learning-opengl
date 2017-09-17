@@ -11,7 +11,7 @@
  *
  * \return 1 if matrices are equal, 0 if doesn't.
  */
-static inline int mat4_is_aprox(mat4 a, mat4 b) {
+static inline int mat4IsAprox(mat4 a, mat4 b) {
     float *adata = a.raw;
     float *bdata = b.raw;
     static const char *pos = "XYZW";
@@ -38,7 +38,7 @@ static inline int mat4_is_aprox(mat4 a, mat4 b) {
  *
  * \param mat a matrix to be printed on stderr.
  */
-static inline void mat4_print_debug(mat4 a, const char *name) {
+static inline void mat4PrintDebug(mat4 a, const char *name) {
     fprintf(stderr, "| Matrix: %s\n", name);
     fprintf(stderr, "| %+04.4f, %+04.4f, %+04.4f, %+04.4f |\n", a.xx, a.xy, a.xz, a.xw);
     fprintf(stderr, "| %+04.4f, %+04.4f, %+04.4f, %+04.4f |\n", a.yx, a.yy, a.yz, a.yw);

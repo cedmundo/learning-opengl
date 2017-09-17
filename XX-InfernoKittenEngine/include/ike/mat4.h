@@ -21,14 +21,14 @@ typedef union _mat4 {
     float raw[16];
 } mat4;
 
-static const mat4 mat4_zero = {
+static const mat4 mat4Zero = {
     0.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 0.0f,
 };
 
-static const mat4 mat4_identity = {
+static const mat4 mat4Identity = {
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
@@ -42,7 +42,7 @@ static const mat4 mat4_identity = {
  * \param int i, row index, between 0 and 3. Warning: do not use quantities outside range.
  * \return a vec4 containing the full row.
  */
-static inline vec4 mat4_row(const mat4 m, const unsigned int i) {
+static inline vec4 mat4Row(const mat4 m, const unsigned int i) {
     assert(i <= 4);
 
     vec4 r;
@@ -60,7 +60,7 @@ static inline vec4 mat4_row(const mat4 m, const unsigned int i) {
  * \param int i, column index, between 0 and 3. Warning: do not use quantities outside range.
  * \return a vec4 containing the full column.
  */
-static inline vec4 mat4_col(const mat4 m, const unsigned int i) {
+static inline vec4 mat4Col(const mat4 m, const unsigned int i) {
     assert(i <= 3);
 
     vec4 r;
@@ -77,7 +77,7 @@ static inline vec4 mat4_col(const mat4 m, const unsigned int i) {
  * \param mat4 m matrix to be transposed (not modified).
  * \return transposed matrix.
  */
-static inline mat4 mat4_transpose(const mat4 m) {
+static inline mat4 mat4Transpose(const mat4 m) {
     mat4 r;
 
     r.xx = m.xx; r.xy = m.yx; r.xz = m.zx; r.xw = m.wx;
@@ -94,7 +94,7 @@ static inline mat4 mat4_transpose(const mat4 m) {
  * \param mat4 b right operand.
  * \return a new stack matrix with a+b components result.
  */
-static inline mat4 mat4_add(const mat4 a, const mat4 b){
+static inline mat4 mat4Add(const mat4 a, const mat4 b){
     mat4 r;
     r.xx = a.xx + b.xx; r.xy = a.xy + b.xy; r.xz = a.xz + b.xz; r.xw = a.xw + b.xw;
     r.yx = a.yx + b.yx; r.yy = a.yy + b.yy; r.yz = a.yz + b.yz; r.yw = a.yw + b.yw;
@@ -109,7 +109,7 @@ static inline mat4 mat4_add(const mat4 a, const mat4 b){
  * \param mat4 b right operand.
  * \return a new stack matrix with a-b components result.
  */
-static inline mat4 mat4_sub(const mat4 a, const mat4 b){
+static inline mat4 mat4Sub(const mat4 a, const mat4 b){
     mat4 r;
     r.xx = a.xx - b.xx; r.xy = a.xy - b.xy; r.xz = a.xz - b.xz; r.xw = a.xw - b.xw;
     r.yx = a.yx - b.yx; r.yy = a.yy - b.yy; r.yz = a.yz - b.yz; r.yw = a.yw - b.yw;
@@ -124,7 +124,7 @@ static inline mat4 mat4_sub(const mat4 a, const mat4 b){
  * \param float s scalar factor.
  * \return new stack scaled matrix.
  */
-static inline mat4 mat4_scale(const mat4 a, float s) {
+static inline mat4 mat4Scale(const mat4 a, float s) {
     mat4 r;
     r.xx = a.xx * s; r.xy = a.xy * s; r.xz = a.xz * s; r.xw = a.xw * s;
     r.yx = a.yx * s; r.yy = a.yy * s; r.yz = a.yz * s; r.yw = a.yw * s;
@@ -139,8 +139,8 @@ static inline mat4 mat4_scale(const mat4 a, float s) {
  * \param mat4 b right operand.
  * \return a result of multiplication between axb.
  */
-static inline mat4 mat4_mul(const mat4 a, const mat4 b) {
-    mat4 r = mat4_zero;
+static inline mat4 mat4Mul(const mat4 a, const mat4 b) {
+    mat4 r = mat4Zero;
 
     r.xx = a.xx * b.xx + a.xy * b.yx + a.xz * b.zx + a.xw * b.wx;
     r.xy = a.xx * b.xy + a.xy * b.yy + a.xz * b.zy + a.xw * b.wy;
@@ -168,7 +168,7 @@ static inline mat4 mat4_mul(const mat4 a, const mat4 b) {
 /**
  * \brief Multiplies a vector with a matrix.
  */
-static inline vec4 mat4_mul_vec4(const mat4 a, const vec4 b) {
+static inline vec4 mat4MulVec4(const mat4 a, const vec4 b) {
     vec4 r;
 
     r.x = a.xx * b.x + a.xy * b.y + a.xz * b.z + a.xw * b.w;
@@ -185,8 +185,8 @@ static inline vec4 mat4_mul_vec4(const mat4 a, const vec4 b) {
  * \param vec3 u the scale for X, Y and Z coordinates.
  * \return scale matrix.
  */
-static inline mat4 mat4_make_scale(vec3 u) {
-    mat4 r = mat4_identity;
+static inline mat4 mat4MakeScale(vec3 u) {
+    mat4 r = mat4Identity;
     r.xx = u.x;
     r.yy = u.y;
     r.zz = u.z;
@@ -200,8 +200,8 @@ static inline mat4 mat4_make_scale(vec3 u) {
  * \param float angle the angle to rotate.
  * \return rotation matrix.
  */
-static inline mat4 mat4_make_rotation(vec3 u, float angle) {
-    mat4 r = mat4_identity;
+static inline mat4 mat4MakeRotation(vec3 u, float angle) {
+    mat4 r = mat4Identity;
     u = vec3_norm(u);
 
     float a_cos = cosf(angle);
@@ -229,8 +229,8 @@ static inline mat4 mat4_make_rotation(vec3 u, float angle) {
  * \param float angle in radians.
  * \return rotation matrix on X axis.
  */
-static inline mat4 mat4_make_rotation_x(float angle) {
-    mat4 r = mat4_identity;
+static inline mat4 mat4MakeRotationX(float angle) {
+    mat4 r = mat4Identity;
     float c = cosf(angle);
     float s = sinf(angle);
 
@@ -248,8 +248,8 @@ static inline mat4 mat4_make_rotation_x(float angle) {
  * \param float angle in radians.
  * \return rotation matrix on Y axis.
  */
-static inline mat4 mat4_make_rotation_y(float angle) {
-    mat4 r = mat4_identity;
+static inline mat4 mat4MakeRotationY(float angle) {
+    mat4 r = mat4Identity;
     float c = cosf(angle);
     float s = sinf(angle);
 
@@ -267,8 +267,8 @@ static inline mat4 mat4_make_rotation_y(float angle) {
  * \param float angle in radians.
  * \return rotation matrix on Z axis.
  */
-static inline mat4 mat4_make_rotation_z(float angle) {
-    mat4 r = mat4_identity;
+static inline mat4 mat4MakeRotationZ(float angle) {
+    mat4 r = mat4Identity;
     float c = cosf(angle);
     float s = sinf(angle);
 
@@ -293,8 +293,8 @@ static inline mat4 mat4_make_rotation_z(float angle) {
  * \param float f far
  * \return a othographic projection matrix.
  */
-static inline mat4 mat4_make_ortho(float l, float r, float b, float t, float n, float f){
-    mat4 m = mat4_zero;
+static inline mat4 mat4MakeOrtho(float l, float r, float b, float t, float n, float f){
+    mat4 m = mat4Zero;
 
     m.xx = 2.0f/(r-l);
     m.yy = 2.0f/(t-b);
@@ -319,8 +319,8 @@ static inline mat4 mat4_make_ortho(float l, float r, float b, float t, float n, 
  * \param float f far
  * \return a prerspective projection matrix.
  */
-static inline mat4 mat4_make_perspective(float yfov, float aspect, float n, float f) {
-    mat4 m = mat4_zero;
+static inline mat4 mat4MakePerspective(float yfov, float aspect, float n, float f) {
+    mat4 m = mat4Zero;
 
     // Note: use radians intead degrees
     float const a = 1.0f / tan(yfov / 2.0f);
@@ -354,8 +354,8 @@ static inline mat4 mat4_make_perspective(float yfov, float aspect, float n, floa
  * \param float center of object
  * \param float up
  */
-static inline mat4 mat4_look_at(vec3 eye, vec3 center, vec3 up) {
-    mat4 m = mat4_identity;
+static inline mat4 mat4LookAt(vec3 eye, vec3 center, vec3 up) {
+    mat4 m = mat4Identity;
     vec3 f = vec3_norm(vec3_sub(center, eye));
     vec3 u = vec3_norm(up);
     vec3 s = vec3_norm(vec3_cross(f, u));
