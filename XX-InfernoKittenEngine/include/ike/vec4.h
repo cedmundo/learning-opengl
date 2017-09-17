@@ -30,8 +30,8 @@ typedef union {
     float rgba[4];
 } vec4;
 
-static const vec4 vec4_zero = {0.0f, 0.0f, 0.0f, 0.0f};
-static const vec4 vec4_one = {1.0f, 1.0f, 1.0f, 1.0f};
+static const vec4 vec4Zero = {0.0f, 0.0f, 0.0f, 0.0f};
+static const vec4 vec4One = {1.0f, 1.0f, 1.0f, 1.0f};
 
 /**
  * \brief Makes a vec4 using x, y and z components.
@@ -43,7 +43,7 @@ static const vec4 vec4_one = {1.0f, 1.0f, 1.0f, 1.0f};
  * \param w new vector's W component.
  * \return newly created vector (stack).
  */
-static inline vec4 vec4_make(float x, float y, float z, float w) {
+static inline vec4 vec4Make(float x, float y, float z, float w) {
     vec4 r;
     r.x = x;
     r.y = y;
@@ -60,7 +60,7 @@ static inline vec4 vec4_make(float x, float y, float z, float w) {
  * \param w new vector's W component.
  * \return newly created vector (stack).
  */
-static inline vec4 vec4_make_vw(vec3 v, float w) {
+static inline vec4 vec4MakeVw(vec3 v, float w) {
     vec4 r;
     r.x = v.x;
     r.y = v.y;
@@ -78,7 +78,7 @@ static inline vec4 vec4_make_vw(vec3 v, float w) {
  * \param w new vector's W component.
  * \return newly created vector (stack).
  */
-static inline vec4 vec4_make_vzw(vec2 v, float z, float w) {
+static inline vec4 vec4MakeVzw(vec2 v, float z, float w) {
     vec4 r;
     r.x = v.x;
     r.y = v.y;
@@ -95,7 +95,7 @@ static inline vec4 vec4_make_vzw(vec2 v, float z, float w) {
  * \param vec4 b is the right operand.
  * \return a vec4 with the sum of components of a and b.
  */
-static inline vec4 vec4_add(const vec4 a, const vec4 b) {
+static inline vec4 vec4Add(const vec4 a, const vec4 b) {
     vec4 r;
     r.x = a.x + b.x;
     r.y = a.y + b.y;
@@ -112,7 +112,7 @@ static inline vec4 vec4_add(const vec4 a, const vec4 b) {
  * \param vec4 b is the right operand.
  * \return a vec4 with the substract of components of a minus b.
  */
-static inline vec4 vec4_sub(const vec4 a, const vec4 b) {
+static inline vec4 vec4Sub(const vec4 a, const vec4 b) {
     vec4 r;
     r.x = a.x - b.x;
     r.y = a.y - b.y;
@@ -129,7 +129,7 @@ static inline vec4 vec4_sub(const vec4 a, const vec4 b) {
  * \param s is the scalar factor.
  * \return the scalation result.
  */
-static inline vec4 vec4_scale(const vec4 a, const float s) {
+static inline vec4 vec4Scale(const vec4 a, const float s) {
     vec4 r;
     r.x = a.x * s;
     r.y = a.y * s;
@@ -147,7 +147,7 @@ static inline vec4 vec4_scale(const vec4 a, const float s) {
  * \param vec4 a is the right operand.
  * \return the sum of the multiplication of each component from both vectors.
  */
-static inline float vec4_mul_inner(const vec4 a, const vec4 b) {
+static inline float vec4MulInner(const vec4 a, const vec4 b) {
     float r = 0.0f;
     r += a.x * b.x;
     r += a.y * b.y;
@@ -159,24 +159,24 @@ static inline float vec4_mul_inner(const vec4 a, const vec4 b) {
 /**
  * \brief Square of length of a vector.
  *
- * Calculates the squared length of a vector, use this function instead vec4_len when comparing or
+ * Calculates the squared length of a vector, use this function instead vec4Len when comparing or
  * doing operations that doesn't require the exact length.
  * \param vec4 a the vector.
  * \return it's squared length.
  */
-static inline float vec4_sqr_len(const vec4 a) {
-    return vec4_mul_inner(a, a);
+static inline float vec4SqrLen(const vec4 a) {
+    return vec4MulInner(a, a);
 }
 
 /**
  * \brief Calculate a vector's length.
  *
- * Standard vector length calculation, use only when you have to use the exact length otherwise prefer vec4_sqr_len.
+ * Standard vector length calculation, use only when you have to use the exact length otherwise prefer vec4SqrLen.
  * \param vec4 a the vector.
  * \return vector's length.
  */
-static inline float vec4_len(const vec4 a) {
-    return sqrtf(vec4_sqr_len(a));
+static inline float vec4Len(const vec4 a) {
+    return sqrtf(vec4SqrLen(a));
 }
 
 /**
@@ -186,9 +186,9 @@ static inline float vec4_len(const vec4 a) {
  * \param vec4 a the vector normalize.
  * \return normalized vector.
  */
-static inline vec4 vec4_norm(const vec4 a) {
-    float k = 1.0f / vec4_len(a);
-    return vec4_scale(a, k);
+static inline vec4 vec4Norm(const vec4 a) {
+    float k = 1.0f / vec4Len(a);
+    return vec4Scale(a, k);
 }
 
 /**
@@ -199,7 +199,7 @@ static inline vec4 vec4_norm(const vec4 a) {
  * \param vec2 b the right vector.
  * \return a vector containing two minor values.
  */
-static inline vec4 vec4_min(const vec4 a, const vec4 b) {
+static inline vec4 vec4Min(const vec4 a, const vec4 b) {
     vec4 r;
     r.x = a.x < b.x ? a.x : b.x;
     r.y = a.y < b.y ? a.y : b.y;
@@ -216,7 +216,7 @@ static inline vec4 vec4_min(const vec4 a, const vec4 b) {
  * \param vec4 b the right vector.
  * \return a vector containing two major values.
  */
-static inline vec4 vec4_max(const vec4 a, const vec4 b) {
+static inline vec4 vec4Max(const vec4 a, const vec4 b) {
     vec4 r;
     r.x = a.x > b.x ? a.x : b.x;
     r.y = a.y > b.y ? a.y : b.y;

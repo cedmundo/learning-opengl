@@ -77,19 +77,19 @@ START_TEST(test_mat4_get_column)
          4,  8, 12, 16
     };
     vec4 b = mat4Col(a, 0);
-    vec4 e = vec4_make(1, 2, 3, 4);
+    vec4 e = vec4Make(1, 2, 3, 4);
     ck_assert_vec4_eq(b, e);
 
     b = mat4Col(a, 1);
-    e = vec4_make(5, 6, 7, 8);
+    e = vec4Make(5, 6, 7, 8);
     ck_assert_vec4_eq(b, e);
 
     b = mat4Col(a, 2);
-    e = vec4_make(9, 10, 11, 12);
+    e = vec4Make(9, 10, 11, 12);
     ck_assert_vec4_eq(b, e);
 
     b = mat4Col(a, 3);
-    e = vec4_make(13, 14, 15, 16);
+    e = vec4Make(13, 14, 15, 16);
     ck_assert_vec4_eq(b, e);
 }
 END_TEST
@@ -103,19 +103,19 @@ START_TEST(test_mat4_get_row)
         13, 14, 15, 16
     };
     vec4 b = mat4Row(a, 0);
-    vec4 e = vec4_make(1, 2, 3, 4);
+    vec4 e = vec4Make(1, 2, 3, 4);
     ck_assert_vec4_eq(b, e);
 
     b = mat4Row(a, 1);
-    e = vec4_make(5, 6, 7, 8);
+    e = vec4Make(5, 6, 7, 8);
     ck_assert_vec4_eq(b, e);
 
     b = mat4Row(a, 2);
-    e = vec4_make(9, 10, 11, 12);
+    e = vec4Make(9, 10, 11, 12);
     ck_assert_vec4_eq(b, e);
 
     b = mat4Row(a, 3);
-    e = vec4_make(13, 14, 15, 16);
+    e = vec4Make(13, 14, 15, 16);
     ck_assert_vec4_eq(b, e);
 }
 END_TEST
@@ -256,8 +256,8 @@ START_TEST(test_mat4MulVec4)
         1, 2, 3, 4
     };
 
-    vec4 b = vec4_make(1, 2, 3, 4);
-    vec4 e = vec4_make(30, 30, 30, 30);
+    vec4 b = vec4Make(1, 2, 3, 4);
+    vec4 e = vec4Make(30, 30, 30, 30);
     vec4 c = mat4MulVec4(a, b);
     ck_assert_vec4_eq(c, e);
 }
