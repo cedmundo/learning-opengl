@@ -21,8 +21,8 @@ typedef union {
     float xy[2];
 } vec2;
 
-static const vec2 vec2_zero = {0.0f, 0.0f};
-static const vec2 vec2_one = {1.0f, 1.0f};
+static const vec2 vec2Zero = {0.0f, 0.0f};
+static const vec2 vec2One = {1.0f, 1.0f};
 
 /**
  * \brief Make a vec2 using its x and y components.
@@ -32,7 +32,7 @@ static const vec2 vec2_one = {1.0f, 1.0f};
  * \param y new vector's Y component.
  * \return newly created vector (stack).
  */
-static inline vec2 vec2_make(float x, float y) {
+static inline vec2 vec2Make(float x, float y) {
     vec2 r;
     r.x = x;
     r.y = y;
@@ -47,7 +47,7 @@ static inline vec2 vec2_make(float x, float y) {
  * \param vec2 b is the right operand.
  * \return a vec2 with the sum of components of a and b.
  */
-static inline vec2 vec2_add(const vec2 a, const vec2 b) {
+static inline vec2 vec2Add(const vec2 a, const vec2 b) {
     vec2 r;
     r.x = a.x + b.x;
     r.y = a.y + b.y;
@@ -62,7 +62,7 @@ static inline vec2 vec2_add(const vec2 a, const vec2 b) {
  * \param vec2 b is the right operand.
  * \return a vec2 with the substract of components of a minus b.
  */
-static inline vec2 vec2_sub(const vec2 a, const vec2 b) {
+static inline vec2 vec2Sub(const vec2 a, const vec2 b) {
     vec2 r;
     r.x = a.x - b.x;
     r.y = a.y - b.y;
@@ -77,7 +77,7 @@ static inline vec2 vec2_sub(const vec2 a, const vec2 b) {
  * \param s is the scalar factor.
  * \return the scalation result.
  */
-static inline vec2 vec2_scale(const vec2 a, const float s) {
+static inline vec2 vec2Scale(const vec2 a, const float s) {
     vec2 r;
     r.x = a.x * s;
     r.y = a.y * s;
@@ -93,7 +93,7 @@ static inline vec2 vec2_scale(const vec2 a, const float s) {
  * \param vec2 a is the right operand.
  * \return the sum of the multiplication of each component from both vectors.
  */
-static inline float vec2_mul_inner(const vec2 a, const vec2 b) {
+static inline float vec2MulInner(const vec2 a, const vec2 b) {
     float r = 0.0f;
     r += a.x * b.x;
     r += a.y * b.y;
@@ -103,25 +103,25 @@ static inline float vec2_mul_inner(const vec2 a, const vec2 b) {
 /**
  * \brief Square of length of a vector.
  *
- * Calculates the squared length of a vector, use this function instead vec2_len when comparing or
+ * Calculates the squared length of a vector, use this function instead vec2Len when comparing or
  * doing operations that doesn't require the exact length.
  * \param vec2 a the vector.
  * \return it's squared length.
  */
-static inline float vec2_sqr_len(const vec2 a) {
-    return vec2_mul_inner(a, a);
+static inline float vec2SqrLen(const vec2 a) {
+    return vec2MulInner(a, a);
 }
 
 
 /**
  * \brief Calculate a vector's length.
  *
- * Standard vector length calculation, use only when you have to use the exact length otherwise prefer vec2_sqr_len.
+ * Standard vector length calculation, use only when you have to use the exact length otherwise prefer vec2SqrLen.
  * \param vec2 a the vector.
  * \return vector's length.
  */
-static inline float vec2_len(const vec2 a) {
-    return sqrtf(vec2_sqr_len(a));
+static inline float vec2Len(const vec2 a) {
+    return sqrtf(vec2SqrLen(a));
 }
 
 /**
@@ -131,9 +131,9 @@ static inline float vec2_len(const vec2 a) {
  * \param vec2 a the vector normalize.
  * \return normalized vector.
  */
-static inline vec2 vec2_norm(const vec2 a) {
-    float k = 1.0f / vec2_len(a);
-    return vec2_scale(a, k);
+static inline vec2 vec2Norm(const vec2 a) {
+    float k = 1.0f / vec2Len(a);
+    return vec2Scale(a, k);
 }
 
 /**
@@ -144,7 +144,7 @@ static inline vec2 vec2_norm(const vec2 a) {
  * \param vec2 b the right vector.
  * \return a vector containing two minor values.
  */
-static inline vec2 vec2_min(const vec2 a, const vec2 b) {
+static inline vec2 vec2Min(const vec2 a, const vec2 b) {
     vec2 r;
     r.x = a.x < b.x ? a.x : b.x;
     r.y = a.y < b.y ? a.y : b.y;
@@ -159,7 +159,7 @@ static inline vec2 vec2_min(const vec2 a, const vec2 b) {
  * \param vec2 b the right vector.
  * \return a vector containing two major values.
  */
-static inline vec2 vec2_max(const vec2 a, const vec2 b) {
+static inline vec2 vec2Max(const vec2 a, const vec2 b) {
     vec2 r;
     r.x = a.x > b.x ? a.x : b.x;
     r.y = a.y > b.y ? a.y : b.y;
