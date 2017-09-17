@@ -265,7 +265,7 @@ END_TEST
 
 START_TEST(test_mat4MakeScale)
 {
-    vec3 a = vec3_make(1.5f, 1.5f, 1.5f);
+    vec3 a = vec3Make(1.5f, 1.5f, 1.5f);
     mat4 e = {
         1.5f, 0, 0, 0,
         0, 1.5f, 0, 0,
@@ -280,7 +280,7 @@ END_TEST
 
 START_TEST(test_mat4MakeRotation)
 {
-    vec3 a = vec3_make(1.f, 0.f, 2.f);
+    vec3 a = vec3Make(1.f, 0.f, 2.f);
     float b = TORAD(90.0f);
     mat4 e = {
          0.200000f,  0.894427f, 0.400000f,  0.000000f,
@@ -378,7 +378,7 @@ START_TEST(test_mat4LookAt)
 
     vec3 eye = {0.f, 0.f, 0.f};
     vec3 center = {0.f, 0.f, 0.f};
-    mat4 a = mat4LookAt(eye, center, vec3_up);
+    mat4 a = mat4LookAt(eye, center, vec3Up);
     ck_assert_msg(mat4IsAprox(a, e) == 1, "Wrong look at matrix");
 }
 END_TEST

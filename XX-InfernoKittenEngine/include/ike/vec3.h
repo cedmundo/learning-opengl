@@ -30,9 +30,9 @@ typedef union {
     float rgb[3];
 } vec3;
 
-static const vec3 vec3_zero = {0.0f, 0.0f, 0.0f};
-static const vec3 vec3_up = {0.0f, 1.0f, 0.0f};
-static const vec3 vec3_one = {1.0f, 1.0f, 1.0f};
+static const vec3 vec3Zero = {0.0f, 0.0f, 0.0f};
+static const vec3 vec3Up = {0.0f, 1.0f, 0.0f};
+static const vec3 vec3One = {1.0f, 1.0f, 1.0f};
 
 /**
  * \brief Makes a vec3 using x, y and z components.
@@ -43,7 +43,7 @@ static const vec3 vec3_one = {1.0f, 1.0f, 1.0f};
  * \param z new vector's Z component.
  * \return newly created vector (stack).
  */
-static inline vec3 vec3_make(float x, float y, float z) {
+static inline vec3 vec3Make(float x, float y, float z) {
     vec3 r;
     r.x = x;
     r.y = y;
@@ -59,7 +59,7 @@ static inline vec3 vec3_make(float x, float y, float z) {
  * \param z new vector's Z component.
  * \return newly created vector (stack).
  */
-static inline vec3 vec3_make_vz(vec2 v, float z) {
+static inline vec3 vec3MakeVz(vec2 v, float z) {
     vec3 r;
     r.x = v.x;
     r.y = v.y;
@@ -75,7 +75,7 @@ static inline vec3 vec3_make_vz(vec2 v, float z) {
  * \param vec3 b is the right operand.
  * \return a vec3 with the sum of components of a and b.
  */
-static inline vec3 vec3_add(const vec3 a, const vec3 b) {
+static inline vec3 vec3Add(const vec3 a, const vec3 b) {
     vec3 r;
     r.x = a.x + b.x;
     r.y = a.y + b.y;
@@ -91,7 +91,7 @@ static inline vec3 vec3_add(const vec3 a, const vec3 b) {
  * \param vec3 b is the right operand.
  * \return a vec3 with the substract of components of a minus b.
  */
-static inline vec3 vec3_sub(const vec3 a, const vec3 b) {
+static inline vec3 vec3Sub(const vec3 a, const vec3 b) {
     vec3 r;
     r.x = a.x - b.x;
     r.y = a.y - b.y;
@@ -107,7 +107,7 @@ static inline vec3 vec3_sub(const vec3 a, const vec3 b) {
  * \param s is the scalar factor.
  * \return the scalation result.
  */
-static inline vec3 vec3_scale(const vec3 a, const float s) {
+static inline vec3 vec3Scale(const vec3 a, const float s) {
     vec3 r;
     r.x = a.x * s;
     r.y = a.y * s;
@@ -124,7 +124,7 @@ static inline vec3 vec3_scale(const vec3 a, const float s) {
  * \param vec3 a is the right operand.
  * \return the sum of the multiplication of each component from both vectors.
  */
-static inline float vec3_mul_inner(const vec3 a, const vec3 b) {
+static inline float vec3MulInner(const vec3 a, const vec3 b) {
     float r = 0.0f;
     r += a.x * b.x;
     r += a.y * b.y;
@@ -135,24 +135,24 @@ static inline float vec3_mul_inner(const vec3 a, const vec3 b) {
 /**
  * \brief Square of length of a vector.
  *
- * Calculates the squared length of a vector, use this function instead vec3_len when comparing or
+ * Calculates the squared length of a vector, use this function instead vec3Len when comparing or
  * doing operations that doesn't require the exact length.
  * \param vec3 a the vector.
  * \return it's squared length.
  */
-static inline float vec3_sqr_len(const vec3 a) {
-    return vec3_mul_inner(a, a);
+static inline float vec3SqrLen(const vec3 a) {
+    return vec3MulInner(a, a);
 }
 
 /**
  * \brief Calculate a vector's length.
  *
- * Standard vector length calculation, use only when you have to use the exact length otherwise prefer vec3_sqr_len.
+ * Standard vector length calculation, use only when you have to use the exact length otherwise prefer vec3SqrLen.
  * \param vec3 a the vector.
  * \return vector's length.
  */
-static inline float vec3_len(const vec3 a) {
-    return sqrtf(vec3_sqr_len(a));
+static inline float vec3Len(const vec3 a) {
+    return sqrtf(vec3SqrLen(a));
 }
 
 /**
@@ -162,9 +162,9 @@ static inline float vec3_len(const vec3 a) {
  * \param vec3 a the vector normalize.
  * \return normalized vector.
  */
-static inline vec3 vec3_norm(const vec3 a) {
-    float k = 1.0f / vec3_len(a);
-    return vec3_scale(a, k);
+static inline vec3 vec3Norm(const vec3 a) {
+    float k = 1.0f / vec3Len(a);
+    return vec3Scale(a, k);
 }
 
 /**
@@ -175,7 +175,7 @@ static inline vec3 vec3_norm(const vec3 a) {
  * \param vec3 b the right vector.
  * \return a vector containing two minor values.
  */
-static inline vec3 vec3_min(const vec3 a, const vec3 b) {
+static inline vec3 vec3Min(const vec3 a, const vec3 b) {
     vec3 r;
     r.x = a.x < b.x ? a.x : b.x;
     r.y = a.y < b.y ? a.y : b.y;
@@ -191,7 +191,7 @@ static inline vec3 vec3_min(const vec3 a, const vec3 b) {
  * \param vec3 b the right vector.
  * \return a vector containing two major values.
  */
-static inline vec3 vec3_max(const vec3 a, const vec3 b) {
+static inline vec3 vec3Max(const vec3 a, const vec3 b) {
     vec3 r;
     r.x = a.x > b.x ? a.x : b.x;
     r.y = a.y > b.y ? a.y : b.y;
@@ -206,7 +206,7 @@ static inline vec3 vec3_max(const vec3 a, const vec3 b) {
  * \param vec3 b the right vector.
  * \return result of dot product.
  */
-static inline float vec3_dot(const vec3 a, const vec3 b) {
+static inline float vec3Dot(const vec3 a, const vec3 b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
@@ -217,7 +217,7 @@ static inline float vec3_dot(const vec3 a, const vec3 b) {
  * \param vec3 b the right vector.
  * \return result of cross product.
  */
-static inline vec3 vec3_cross(const vec3 a, const vec3 b) {
+static inline vec3 vec3Cross(const vec3 a, const vec3 b) {
     vec3 r;
     r.x = a.y * b.z - a.z * b.y;
     r.y = a.z * b.x - a.x * b.z;
@@ -232,9 +232,9 @@ static inline vec3 vec3_cross(const vec3 a, const vec3 b) {
  * \param vec3 b the right vector.
  * \return reflection vector.
  */
-static inline vec3 vec3_reflect(const vec3 d, const vec3 b) {
-    vec3 n = vec3_norm(b);
-    vec3 r = vec3_sub(d, vec3_scale(n, 2*vec3_dot(d, n)));
+static inline vec3 vec3Reflect(const vec3 d, const vec3 b) {
+    vec3 n = vec3Norm(b);
+    vec3 r = vec3Sub(d, vec3Scale(n, 2*vec3Dot(d, n)));
     return r;
 }
 

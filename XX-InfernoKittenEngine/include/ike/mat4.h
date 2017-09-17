@@ -202,7 +202,7 @@ static inline mat4 mat4MakeScale(vec3 u) {
  */
 static inline mat4 mat4MakeRotation(vec3 u, float angle) {
     mat4 r = mat4Identity;
-    u = vec3_norm(u);
+    u = vec3Norm(u);
 
     float a_cos = cosf(angle);
     float a_sin = sinf(angle);
@@ -356,10 +356,10 @@ static inline mat4 mat4MakePerspective(float yfov, float aspect, float n, float 
  */
 static inline mat4 mat4LookAt(vec3 eye, vec3 center, vec3 up) {
     mat4 m = mat4Identity;
-    vec3 f = vec3_norm(vec3_sub(center, eye));
-    vec3 u = vec3_norm(up);
-    vec3 s = vec3_norm(vec3_cross(f, u));
-    u = vec3_cross(s, f);
+    vec3 f = vec3Norm(vec3Sub(center, eye));
+    vec3 u = vec3Norm(up);
+    vec3 s = vec3Norm(vec3Cross(f, u));
+    u = vec3Cross(s, f);
 
     m.xx = s.x;
     m.yx = s.y;
@@ -370,9 +370,9 @@ static inline mat4 mat4LookAt(vec3 eye, vec3 center, vec3 up) {
     m.xz = -f.x;
     m.yz = -f.y;
     m.zz = -f.z;
-    m.wx = -vec3_dot(s, eye);
-    m.wy = -vec3_dot(u, eye);
-    m.wz =  vec3_dot(f, eye);
+    m.wx = -vec3Dot(s, eye);
+    m.wy = -vec3Dot(u, eye);
+    m.wz =  vec3Dot(f, eye);
     return m;
 }
 
