@@ -1,5 +1,5 @@
 #!/bin/bash
-grep "^$1[[:alnum:]]" tags | cut -f 1 | while read oldname
+grep "^$1[[:alnum:]]" tags | cut -f 1 | sort -r | while read oldname
 do
    newname=$(echo $oldname | sed -r 's/(_)([a-z])/\U\2/g')
    echo "Renaming: $oldname => $newname"
