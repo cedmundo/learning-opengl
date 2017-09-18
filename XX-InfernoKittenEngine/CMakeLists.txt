@@ -71,9 +71,9 @@ add_subdirectory(tests)
 
 # Unit tests
 enable_testing()
-add_test(NAME check_mathutil COMMAND check_mathutil)
-add_test(NAME check_vec2 COMMAND check_vec2)
-add_test(NAME check_vec3 COMMAND check_vec3)
-add_test(NAME check_vec4 COMMAND check_vec4)
-add_test(NAME check_mat4 COMMAND check_mat4)
+add_test(NAME mathutil_test COMMAND mathutil_test)
+add_test(NAME vec2_test COMMAND vec2_test)
+add_test(NAME vec3_test COMMAND vec3_test)
+add_test(NAME vec4_test COMMAND vec4_test)
+add_test(NAME mat4_test COMMAND mat4_test)
 
