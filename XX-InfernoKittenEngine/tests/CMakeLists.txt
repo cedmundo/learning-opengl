@@ -24,3 +24,6 @@ target_link_libraries(mat4_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
 
 add_executable(mathutil_test mathutil_test.c)
 target_link_libraries(mathutil_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(quat_test quat_test.c)
+target_link_libraries(quat_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

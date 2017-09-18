@@ -50,7 +50,7 @@ START_TEST(test_vec4Sub)
 
     a = vec4Make(-.5f, 5.f, 5.f, -.5f);
     b = vec4Make(.5f, 2.f, -5.f, 3.f);
-    e = vec4Make(-1.f, 3.f, 10.f, 2.5f);
+    e = vec4Make(-1.f, 3.f, 10.f, -3.5f);
     c = vec4Sub(a, b);
     ck_assert_vec4_eq(c, e);
 }
@@ -60,7 +60,7 @@ START_TEST(test_vec4Scale)
 {
     vec4 a = vec4Make(.5f, 5.f, -5.f, -.5f);
     float b = 3.f;
-    vec4 e = vec4Make(1.5f, 15.f, -15.f, -1.f);
+    vec4 e = vec4Make(1.5f, 15.f, -15.f, -1.5f);
     vec4 c = vec4Scale(a, b);
     ck_assert_vec4_eq(c, e);
 
@@ -300,7 +300,7 @@ START_TEST(test_vec4Min)
 
     a = vec4Make(-3.f, 6.f, -1.f, -2.f);
     b = vec4Make(2.f, 8.f, -1.f, -3.5f);
-    e = vec4Make(-3.f, 6.f, -1.f, -3.f);
+    e = vec4Make(-3.f, 6.f, -1.f, -3.5f);
     c = vec4Min(a, b);
     ck_assert_vec4_eq(c, e);
 
