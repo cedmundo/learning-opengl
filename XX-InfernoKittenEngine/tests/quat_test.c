@@ -7,14 +7,14 @@ START_TEST(test_quat_access)
 {
     quat a = quatMake(.5f, 5.f, -5.f, -.5f);
 
-    ck_assert_msg(a.x == .5f, "X Member of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.y == 5.f, "Y Member of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.z == -5.f, "Z Member of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.w == -.5f, "W Member of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.xyzw[0] == .5f, "Array member 0 of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.xyzw[1] == 5.f, "Array member 1 of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.xyzw[2] == -5.f, "Array member 2 of vector should be as same as asigned on quatMake");
-    ck_assert_msg(a.xyzw[3] == -.5f, "Array member 3 of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.w == .5f, "W Member of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.x == 5.f, "X Member of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.y == -5.f, "Y Member of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.z == -.5f, "Z Member of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.wxyz[0] == .5f, "Array member 0 of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.wxyz[1] == 5.f, "Array member 1 of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.wxyz[2] == -5.f, "Array member 2 of vector should be as same as asigned on quatMake");
+    ck_assert_msg(a.wxyz[3] == -.5f, "Array member 3 of vector should be as same as asigned on quatMake");
 }
 END_TEST
 
@@ -25,11 +25,15 @@ START_TEST(test_quatAdd)
     quat e = quatMake(1.f, 10.f, -10.f, -1.f);
     quat c = quatAdd(a, b);
     ck_assert_quat_eq(c, e);
+}
+END_TEST
 
-    a = quatMake(-.5f, -5.f, 5.f, -.5f);
-    b = quatMake(.5f, 5.f, -5.f, -.5f);
-    e = quatMake(0.f, 0.f, 0.f, -1.f);
-    c = quatAdd(a, b);
+START_TEST(test_quatMul)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat b = quatMake(4, 3, 2, 1.);
+    quat e = quatMake(6, 24, 12, -12);
+    quat c = quatMul(a, b);
     ck_assert_quat_eq(c, e);
 }
 END_TEST
