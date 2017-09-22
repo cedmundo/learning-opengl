@@ -1,5 +1,6 @@
 #ifndef IKE_QUAT_H
 #define IKE_QUAT_H
+#include <math.h>
 
 /**
  * \brief Quaternion representation.
@@ -44,7 +45,7 @@ static inline quat quatMake(float w, float x, float y, float z) {
  * Adds two quat variables, returning the result as a new vector (on stack).
  * \param quat a is the left operand.
  * \param quat b is the right operand.
- * \return a vec4 with the sum of components of a and b.
+ * \return a quaternion with the sum of components of a and b.
  */
 static inline quat quatAdd(const quat a, const quat b) {
     quat r;
@@ -52,6 +53,23 @@ static inline quat quatAdd(const quat a, const quat b) {
     r.x = a.x + b.x;
     r.y = a.y + b.y;
     r.z = a.z + b.z;
+    return r;
+}
+
+/**
+ * \brief Scales a quat.
+ *
+ * Multiplies all components by factor s, returning result as a new vector (on stack).
+ * \param quat a is the vector to scale.
+ * \param s is the scalar factor.
+ * \return the scalation result.
+ */
+static inline quat quatScale(const quat a, const float s) {
+    quat r;
+    r.x = a.x * s;
+    r.y = a.y * s;
+    r.z = a.z * s;
+    r.w = a.w * s;
     return r;
 }
 
@@ -69,6 +87,39 @@ static inline quat quatMul(const quat a, const quat b) {
     r.x = a.w*b.x + a.x*b.w - a.y*b.z + a.z*b.y;
     r.y = a.w*b.y + a.x*b.z + a.y*b.w - a.z*b.x;
     r.z = a.w*b.z - a.x*b.y + a.y*b.x + a.z*b.w;
+    return r;
+}
+
+/**
+ * \brief Normalizes a quaternion.
+ *
+ * Normalize all components of a quaternion.
+ * \param quat to normalize.
+ * \return a normalized quaternion from param a.
+ */
+static inline quat quatNorm(const quat a) {
+    quat r;
+    float m = sqrtf(a.w*a.w + a.x*a.x + a.y*a.y + a.z*a.z);
+    r.w = a.w/m;
+    r.x = a.x/m;
+    r.y = a.y/m;
+    r.z = a.z/m;
+    return r;
+}
+
+/**
+ * \brief Conjugate a quaternion.
+ *
+ * Conjugates a quaternion.
+ * \param quat to conjugate.
+ * \return a conjugated quaternion from param a.
+ */
+static inline quat quatConjugate(const quat a) {
+    quat r;
+    r.w = a.w;
+    r.x = -a.x;
+    r.y = -a.y;
+    r.z = -a.z;
     return r;
 }
 

@@ -24,17 +24,44 @@ START_TEST(test_quatAdd)
     quat b = quatMake(.5f, 5.f, -5.f, -.5f);
     quat e = quatMake(1.f, 10.f, -10.f, -1.f);
     quat c = quatAdd(a, b);
-    ck_assert_quat_eq(c, e);
+    ck_assert_msg(quatIsAprox(c, e), "Wrong sum of quaternions");
 }
 END_TEST
 
 START_TEST(test_quatMul)
 {
     quat a = quatMake(1, 2, 3, 4);
-    quat b = quatMake(4, 3, 2, 1.);
-    quat e = quatMake(6, 24, 12, -12);
+    quat b = quatMake(1, 2, 3, 4);
+    quat e = quatMake(-28, 4, 6, 8);
     quat c = quatMul(a, b);
-    ck_assert_quat_eq(c, e);
+    ck_assert_msg(quatIsAprox(c, e), "Wrong mul of quaternions");
+}
+END_TEST
+
+START_TEST(test_quatScale)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat e = quatMake(3, 6, 9, 12);
+    quat c = quatScale(a, 3);
+    ck_assert_msg(quatIsAprox(c, e), "Wrong scale of quaternion");
+}
+END_TEST
+
+START_TEST(test_quatNorm)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat e = quatMake(0.182574f, 0.365148f, 0.547723f, 0.730297f);
+    quat c = quatNorm(a);
+    ck_assert_msg(quatIsAprox(c, e), "Wrong norm of quaternion");
+}
+END_TEST
+
+START_TEST(test_quatConjugate)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat e = quatMake(1, -2, -3, -4);
+    quat c = quatConjugate(a);
+    ck_assert_msg(quatIsAprox(c, e), "Wrong conjugate of quaternion");
 }
 END_TEST
 
@@ -51,6 +78,9 @@ Suite *quatSuite(void)
 
     tc_arithm = tcase_create("arithmetic");
     tcase_add_test(tc_arithm, test_quatAdd);
+    tcase_add_test(tc_arithm, test_quatMul);
+    tcase_add_test(tc_arithm, test_quatNorm);
+    tcase_add_test(tc_arithm, test_quatConjugate);
     suite_add_tcase(s, tc_arithm);
 
     return s;

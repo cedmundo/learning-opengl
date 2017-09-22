@@ -2,24 +2,42 @@
 #define IKETESTING_QUAT_HELPER_H
 #include <check.h>
 #include <math.h>
+#include <stdio.h>
 
-static inline int ck_assert_quat_eq(quat a, quat b) {
-    int xe, ye, ze, we;
-    float ax = ceilf(a.x * 100.f)/100.f;
-    float ay = ceilf(a.y * 100.f)/100.f;
-    float az = ceilf(a.z * 100.f)/100.f;
-    float aw = ceilf(a.w * 100.f)/100.f;
+/**
+ * \brief Compares two quaternions.
+ *
+ * Comparision is done by rounding both internal values and comparing
+ * each component, one by one.
+ *
+ * \return 1 if matrices are aprox, 0 if aren't.
+ */
+static inline int quatIsAprox(quat a, quat b) {
+    float *adata = a.wxyz;
+    float *bdata = b.wxyz;
+    static const char *pos = "WXYZ";
 
-    float bx = ceilf(b.x * 100.f)/100.f;
-    float by = ceilf(b.y * 100.f)/100.f;
-    float bz = ceilf(b.z * 100.f)/100.f;
-    float bw = ceilf(b.w * 100.f)/100.f;
+    for(int i=0;i<4;i++) {
+        float aval = adata[i];
+        float bval = bdata[i];
 
-    ck_assert_msg(xe = (ax == bx), "x member of a and b are not equal (approximated)");
-    ck_assert_msg(ye = (ay == by), "y member of a and b are not equal (approximated)");
-    ck_assert_msg(ze = (az == bz), "z member of a and b are not equal (approximated)");
-    ck_assert_msg(we = (aw == bw), "w member of a and b are not equal (approximated)");
-    return xe == 1 && ye == 1 && ze == 1 && we == 1;
+        if (fabs(aval - bval) > 0.01) {
+            fprintf(stderr, "Value not aproximately equal at (%c)[offset %d]: a=%.4f, b=%.4f\n",
+                    pos[i], i, aval, bval);
+            return 0;
+        }
+    }
+}
+
+/*
+ * \brief Prints a debug message of a quaternion
+ *
+ * \param quat a quaternion to be printed on stderr.
+ * \param name a name to differentiate on stderr.
+ */
+static inline void quatPrintDebug(quat a, const char *name) {
+    fprintf(stderr, "| Quat: %s\n", name);
+    fprintf(stderr, "| %+04.4f, %+04.4f, %+04.4f, %+04.4f |\n", a.w, a.x, a.y, a.z);
 }
 
 #endif /* IKETESTING_QUAT_HELPER_H */
