@@ -74,7 +74,7 @@ static inline quat quatScale(const quat a, const float s) {
 }
 
 /**
- * \brief Multiplies two quaternions.
+ * \brief Cross product of two quaternions.
  *
  * Multiplies two quat variables, returning the result as a new quaternion.
  * \param quat a is the left operand.
@@ -121,6 +121,18 @@ static inline quat quatConjugate(const quat a) {
     r.y = -a.y;
     r.z = -a.z;
     return r;
+}
+
+/**
+ * \brief Dot product of two quaternions.
+ *
+ * Calcualtes dot prodcut between two quaternions.
+ * \param quat a left operand.
+ * \param quat a right operand.
+ * \return dot product of two quaternions.
+ */
+static inline float quatDot(const quat a, const quat b) {
+    return a.x*b.y + a.y*b.z + a.x*b.x + a.w*b.w;
 }
 
 #endif /* IKE_QUAT_H */

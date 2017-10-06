@@ -65,6 +65,16 @@ START_TEST(test_quatConjugate)
 }
 END_TEST
 
+START_TEST(test_quatDot)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat b = quatMake(1, 2, 3, 4);
+    float e = 30.f;
+    float c = quatDot(a, b);
+    ck_assert_msg(e = c, "Wrong dot product of quaternions");
+}
+END_TEST
+
 Suite *quatSuite(void)
 {
     Suite *s;
@@ -81,6 +91,7 @@ Suite *quatSuite(void)
     tcase_add_test(tc_arithm, test_quatMul);
     tcase_add_test(tc_arithm, test_quatNorm);
     tcase_add_test(tc_arithm, test_quatConjugate);
+    tcase_add_test(tc_arithm, test_quatDot);
     suite_add_tcase(s, tc_arithm);
 
     return s;
