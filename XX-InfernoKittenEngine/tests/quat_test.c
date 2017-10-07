@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <check.h>
 #include <ike/quat.h>
+#include <ike/vec3.h>
+#include <ike/mathutil.h>
 #include "quat_helper.h"
 
 START_TEST(test_quat_access)
@@ -71,7 +73,25 @@ START_TEST(test_quatDot)
     quat b = quatMake(1, 2, 3, 4);
     float e = 30.f;
     float c = quatDot(a, b);
-    ck_assert_msg(e = c, "Wrong dot product of quaternions");
+    ck_assert_msg(fabs(e - c) < 0.001f, "Wrong dot product of quaternions");
+}
+END_TEST
+
+START_TEST(test_quatInverse)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat e = quatMake(0.033333, -0.066667, -0.100000, -0.133333);
+    quat c = quatInverse(a);
+    ck_assert_msg(quatIsAprox(c, e), "Wrong inverse of quaternion");
+}
+END_TEST
+
+START_TEST(test_quatLen)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    float e = 5.47723f;
+    float c = quatLen(a);
+    ck_assert_msg(fabs(e - c) < 0.001f, "Wrong length of quaternion");
 }
 END_TEST
 
@@ -92,6 +112,9 @@ Suite *quatSuite(void)
     tcase_add_test(tc_arithm, test_quatNorm);
     tcase_add_test(tc_arithm, test_quatConjugate);
     tcase_add_test(tc_arithm, test_quatDot);
+    tcase_add_test(tc_arithm, test_quatInverse);
+    tcase_add_test(tc_arithm, test_quatLen);
+    tcase_add_test(tc_arithm, test_quatRotate);
     suite_add_tcase(s, tc_arithm);
 
     return s;

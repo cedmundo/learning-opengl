@@ -1,6 +1,7 @@
 #ifndef IKE_QUAT_H
 #define IKE_QUAT_H
 #include <math.h>
+#include "vec3.h"
 
 /**
  * \brief Quaternion representation.
@@ -132,7 +133,27 @@ static inline quat quatConjugate(const quat a) {
  * \return dot product of two quaternions.
  */
 static inline float quatDot(const quat a, const quat b) {
-    return a.x*b.y + a.y*b.z + a.x*b.x + a.w*b.w;
+    return a.w*b.w + a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+/**
+ * \brief Inverse of a quaternion.
+ *
+ * \param quat a to invert.
+ * \return a inverse quaternion of param a.
+ */
+static inline quat quatInverse(const quat a) {
+    return quatScale(quatConjugate(a), 1/quatDot(a, a));
+}
+
+/**
+ * \brief Length of a quaternion.
+ *
+ * \param quat to get length.
+ * \return Magnitude (or length) of a quaternion.
+ */
+static inline float quatLen(const quat a) {
+    return sqrtf(quatDot(a, a));
 }
 
 #endif /* IKE_QUAT_H */
