@@ -2,8 +2,10 @@
 #include <check.h>
 #include <ike/quat.h>
 #include <ike/vec3.h>
+#include <ike/mat4.h>
 #include <ike/mathutil.h>
 #include "quat_helper.h"
+#include "mat4_helper.h"
 
 START_TEST(test_quat_access)
 {
@@ -95,10 +97,59 @@ START_TEST(test_quatLen)
 }
 END_TEST
 
+START_TEST(test_quatAxisAngle)
+{
+    quat a, e;
+
+    e = quatMake(0.707107f, 0.707107f, 0, 0);
+    a = quatAxisAngle(vec3Make(1.f, 0, 0), TORAD(90.f));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion make from axis(1,0,0) angle (90°)");
+
+    e = quatMake(0.707107f, 0, 0.707107f, 0);
+    a = quatAxisAngle(vec3Make(0, 1.f, 0), TORAD(90.f));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion make from axis(0,1,0) angle (90°)");
+
+    e = quatMake(0.707107, 0, 0, 0.707107f);
+    a = quatAxisAngle(vec3Make(0, 0, 1.f), TORAD(90.f));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion make from axis(0,0,1) angle (90°)");
+}
+END_TEST
+
+START_TEST(test_quatToMat4)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    mat4 e = {
+        -49.f,  20.f,  10.f, 0.f,
+          4.f, -39.f,  28.f, 0.f,
+         22.f,  20.f, -25.f, 0.f,
+          0.f,   0.f,   0.f, 1.f
+    };
+
+    mat4 b = quatToMat4(a);
+    ck_assert_msg(mat4IsAprox(b, e), "Wrong quat to mat4 conversion");
+}
+END_TEST
+
+
+START_TEST(test_quatFromMat4)
+{
+    mat4 a = {
+        -49.f,  20.f,  10.f, 0.f,
+          4.f, -39.f,  28.f, 0.f,
+         22.f,  20.f, -25.f, 0.f,
+          0.f,   0.f,   0.f, 1.f
+    };
+    quat e = quatMake(1, 2, 3, 4);
+
+    quat b = quatFromMat4(a);
+    ck_assert_msg(quatIsAprox(b, e), "Wrong quat from mat4 conversion");
+}
+END_TEST
+
 Suite *quatSuite(void)
 {
     Suite *s;
-    TCase *tc_arithm, *tc_access, *tc_make;
+    TCase *tc_arithm, *tc_access, *tc_cast;
 
     s = suite_create("ike/quat");
 
@@ -114,8 +165,13 @@ Suite *quatSuite(void)
     tcase_add_test(tc_arithm, test_quatDot);
     tcase_add_test(tc_arithm, test_quatInverse);
     tcase_add_test(tc_arithm, test_quatLen);
-    tcase_add_test(tc_arithm, test_quatRotate);
+    tcase_add_test(tc_arithm, test_quatAxisAngle);
     suite_add_tcase(s, tc_arithm);
+
+    tc_cast = tcase_create("cast");
+    tcase_add_test(tc_cast, test_quatToMat4);
+    tcase_add_test(tc_cast, test_quatFromMat4);
+    suite_add_tcase(s, tc_cast);
 
     return s;
 }

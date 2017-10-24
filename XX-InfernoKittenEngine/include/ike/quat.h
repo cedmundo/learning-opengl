@@ -2,6 +2,7 @@
 #define IKE_QUAT_H
 #include <math.h>
 #include "vec3.h"
+#include "mat4.h"
 
 /**
  * \brief Quaternion representation.
@@ -91,6 +92,9 @@ static inline quat quatMul(const quat a, const quat b) {
     return r;
 }
 
+// For semantic propouses.
+#define quatCross quatMul
+
 /**
  * \brief Normalizes a quaternion.
  *
@@ -127,7 +131,7 @@ static inline quat quatConjugate(const quat a) {
 /**
  * \brief Dot product of two quaternions.
  *
- * Calcualtes dot prodcut between two quaternions.
+ * Calcualtes dot product between two quaternions.
  * \param quat a left operand.
  * \param quat a right operand.
  * \return dot product of two quaternions.
@@ -155,5 +159,78 @@ static inline quat quatInverse(const quat a) {
 static inline float quatLen(const quat a) {
     return sqrtf(quatDot(a, a));
 }
+
+/**
+ * \brief Quat from axis and angle.
+ *
+ * \param vec3 axis.
+ * \param float angle.
+ * \return Quaternion with determined axis and angle.
+ */
+static inline quat quatAxisAngle(const vec3 axis, const float angle) {
+    vec3 a = vec3Norm(axis);
+    float k = sinf(angle/2);
+    return quatMake(cosf(angle/2), a.x*k, a.y*k, a.z*k);
+}
+
+/**
+ * \brief Cast a quaternion into a mat4.
+ *
+ * \param quat a to convert.
+ * \return the casted quaternion.
+ */
+static inline mat4 quatToMat4(const quat a) {
+    mat4 r = mat4Identity;
+    quat n;
+    float qw, qx, qy, qz;
+
+    qw = a.w;
+    qx = a.x;
+    qy = a.y;
+    qz = a.z;
+
+    r.xx = 1.0f - 2.0f*qy*qy - 2.0f*qz*qz;
+    r.xy = 2.0f*qx*qy + 2.0f*qz*qw;
+    r.xz = 2.0f*qx*qz - 2.0f*qy*qw;
+    r.xw = 0.0f;
+
+    r.yx = 2.0f*qx*qy - 2.0f*qz*qw;
+    r.yy = 1.0f - 2.0f*qx*qx - 2.0f*qz*qz;
+    r.yz = 2.0f*qy*qz + 2.0f*qx*qw;
+    r.yw = 0.0f;
+
+    r.zx = 2.0f*qx*qz + 2.0f*qy*qw;
+    r.zy = 2.0f*qy*qz - 2.0f*qx*qw;
+    r.zz = 1.0f - 2.0f*qx*qx - 2.0f*qy*qy;
+    r.zw = 0.0f;
+
+    return r;
+}
+
+/**
+ * \brief Cast a mat4 into a quaternion.
+ *
+ * \param mat4 a to convert.
+ * \return the casted matrix.
+ */
+static inline quat quatFromMat4(const mat4 a) {
+    quat r;
+    float trace = a.xx+a.yy+a.zz;
+    float root = 0.f;
+
+    if (trace > 0.0f) {
+        root = sqrtf(trace + 1.0f);
+        r.w = 0.5f*root;
+        root = 0.5f/root;
+        r.x = (a.zy-a.yz)*root;
+        r.y = (a.xz-a.zx)*root;
+        r.z = (a.yx-a.xy)*root;
+    } else {
+
+    }
+
+    return r;
+}
+
 
 #endif /* IKE_QUAT_H */
