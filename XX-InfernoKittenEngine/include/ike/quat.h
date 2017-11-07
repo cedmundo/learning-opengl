@@ -3,7 +3,6 @@
 #include <math.h>
 #include "vec3.h"
 #include "mat4.h"
-#include "mathutil.h"
 
 /**
  * \brief Quaternion representation.
