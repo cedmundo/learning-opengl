@@ -2,6 +2,8 @@
 #define IKE_QUAT_H
 #include <math.h>
 #include "vec3.h"
+#include "mat4.h"
+#include "mathutil.h"
 
 /**
  * \brief Quaternion representation.
@@ -31,12 +33,41 @@ static const quat quatIdentity = {1, 0, 0, 0};
  * \param z new quaternion's Z component.
  * \return newly created quaternion (stack).
  */
-static inline quat quatMake(float w, float x, float y, float z) {
+static inline quat quatMake(const float w, const float x, const float y, const float z) {
     quat r;
     r.w = w;
     r.x = x;
     r.y = y;
     r.z = z;
+    return r;
+}
+
+/**
+ * \brief Makes a quat using x, y and z euler angles.
+ *
+ * Converts euler angles to a quaternion.
+ * \param x new quaternion's X angle.
+ * \param y new quaternion's Y angle.
+ * \param z new quaternion's Z angle.
+ * \return newly created quaternion (stack).
+ */
+static inline quat quatMakeEuler(const vec3 angles) {
+    quat r;
+    const float x = angles.x*0.5f;
+    const float y = angles.y*0.5f;
+    const float z = angles.z*0.5f;
+    const float sx = sinf(x);
+    const float sy = sinf(y);
+    const float sz = sinf(z);
+    const float cx = cosf(x);
+    const float cy = cosf(y);
+    const float cz = cosf(z);
+
+    r.w = cx * cy * cz + sx * sy * sz;
+    r.x = sx * cy * cz - cx * sy * sz;
+    r.y = cx * sy * cz + sx * cy * sz;
+    r.z = cx * cy * sz - sx * sy * cz;
+
     return r;
 }
 
@@ -154,6 +185,73 @@ static inline quat quatInverse(const quat a) {
  */
 static inline float quatLen(const quat a) {
     return sqrtf(quatDot(a, a));
+}
+
+/**
+ * \brief Make a quat from axis and angle.
+ *
+ * \param vec3 axis to rotate.
+ * \param float angle.
+ * \return A quaternion built from axis angle.
+ */
+static inline quat quatAxisAngle(const vec3 axis, const float angle) {
+    const vec3 n = vec3Norm(axis);
+    const float ra = angle * 0.5;
+    const float sa = sinf(ra);
+    return quatMake(cosf(ra), n.x * sa, n.y * sa, n.z * sa);
+}
+
+/**
+ * \brief Quaternion to matrix representation.
+ *
+ * \param quat a to convert.
+ * \return A *normalized* rotation matrix.
+ */
+static inline mat4 quatToMat4(const quat q) {
+    mat4 r = mat4Identity;
+
+    const float sqw = q.w*q.w;
+    const float sqx = q.x*q.x;
+    const float sqy = q.y*q.y;
+    const float sqz = q.z*q.z;
+    const float invs = 1.0f / (sqx + sqy + sqz + sqw);
+
+	r.raw[0] = ( sqx - sqy - sqz + sqw) * invs;
+    r.raw[5] = (-sqx + sqy - sqz + sqw) * invs;
+    r.raw[10] = (-sqx - sqy + sqz + sqw) * invs;
+
+    float tmp1 = q.x*q.y;
+    float tmp2 = q.z*q.w;
+    r.raw[4] = 2.0 * (tmp1 + tmp2) * invs;
+    r.raw[1] = 2.0 * (tmp1 - tmp2) * invs;
+
+    tmp1 = q.x*q.z;
+    tmp2 = q.y*q.w;
+    r.raw[8] = 2.0 * (tmp1 - tmp2) * invs;
+    r.raw[2] = 2.0 * (tmp1 + tmp2) * invs;
+
+    tmp1 = q.y*q.z;
+    tmp2 = q.x*q.w;
+    r.raw[9] = 2.0 * (tmp1 + tmp2) * invs;
+    r.raw[6] = 2.0 * (tmp1 - tmp2) * invs;
+
+    return mat4Transpose(r);
+}
+
+/**
+ * \brief Angle between two quaternions.
+ *
+ * \param quat a left operand.
+ * \param quat b left operand.
+ * \return float angle on degrees.
+ */
+static inline float quatAngle(const quat a, const quat b) {
+    float deg = TODEG(acosf(quatMul(b, quatInverse(a)).w) * 2.0f);
+    if (deg > 180.f) {
+        return 360.f - deg;
+    }
+
+    return deg;
 }
 
 #endif /* IKE_QUAT_H */

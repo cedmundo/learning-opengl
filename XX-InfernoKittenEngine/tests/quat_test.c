@@ -4,6 +4,7 @@
 #include <ike/vec3.h>
 #include <ike/mathutil.h>
 #include "quat_helper.h"
+#include "mat4_helper.h"
 
 START_TEST(test_quat_access)
 {
@@ -95,6 +96,55 @@ START_TEST(test_quatLen)
 }
 END_TEST
 
+START_TEST(test_quatAxisAngle)
+{
+    quat e = quatMake(0.707107, 0.707107, 0, 0);
+    quat a = quatAxisAngle(vec3Make(1, 0, 0), TORAD(90.f));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion from axis(1,0,0) angle");
+
+    e = quatMake(0.707107, 0, 0.707107, 0);
+    a = quatAxisAngle(vec3Make(0, 1, 0), TORAD(90.f));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion from axis(0,1,0) angle");
+
+    e = quatMake(0.707107, 0, 0, 0.707107);
+    a = quatAxisAngle(vec3Make(0, 0, 1), TORAD(90.f));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion from axis(0,0,1) angle");
+}
+END_TEST
+
+START_TEST(test_quatToMat4)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    mat4 e = {
+        -0.666667f,  0.666667f, 0.333333f, 0.000000f,
+         0.133333f, -0.333333f, 0.933333f, 0.000000f,
+         0.733333f,  0.666667f, 0.133333f, 0.000000f,
+         0.000000f,  0.000000f, 0.000000f, 1.000000f
+    };
+
+    mat4 b = quatToMat4(a);
+    ck_assert_msg(mat4IsAprox(b, e), "Wrong matrix(4) from quaternion");
+}
+END_TEST
+
+START_TEST(test_quatMakeEuler)
+{
+    quat e = quatMake(0.706434f, 0.560986f, 0.430459f, 0.030844f);
+    quat a = quatMakeEuler(vec3Make(TORAD(90), TORAD(35), TORAD(40)));
+    ck_assert_msg(quatIsAprox(a, e), "Wrong quaternion from euler angles");
+}
+END_TEST
+
+START_TEST(test_quatAngle)
+{
+    quat a = quatMake(1, 2, 3, 4);
+    quat b = quatMake(4, 3, 2, 1);
+    float e = 35.f;
+    float c = quatAngle(a, b);
+    ck_assert_msg(fabs(c - e) < 0.001f, "Wrong angle from two quaternions");
+}
+END_TEST
+
 Suite *quatSuite(void)
 {
     Suite *s;
@@ -114,7 +164,10 @@ Suite *quatSuite(void)
     tcase_add_test(tc_arithm, test_quatDot);
     tcase_add_test(tc_arithm, test_quatInverse);
     tcase_add_test(tc_arithm, test_quatLen);
-    tcase_add_test(tc_arithm, test_quatRotate);
+    tcase_add_test(tc_arithm, test_quatAxisAngle);
+    tcase_add_test(tc_arithm, test_quatToMat4);
+    tcase_add_test(tc_arithm, test_quatMakeEuler);
+    tcase_add_test(tc_arithm, test_quatAngle);
     suite_add_tcase(s, tc_arithm);
 
     return s;
