@@ -238,20 +238,4 @@ static inline mat4 quatToMat4(const quat q) {
     return mat4Transpose(r);
 }
 
-/**
- * \brief Angle between two quaternions.
- *
- * \param quat a left operand.
- * \param quat b left operand.
- * \return float angle on degrees.
- */
-static inline float quatAngle(const quat a, const quat b) {
-    float deg = TODEG(acosf(quatMul(b, quatInverse(a)).w) * 2.0f);
-    if (deg > 180.f) {
-        return 360.f - deg;
-    }
-
-    return deg;
-}
-
 #endif /* IKE_QUAT_H */

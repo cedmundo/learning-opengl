@@ -135,16 +135,6 @@ START_TEST(test_quatMakeEuler)
 }
 END_TEST
 
-START_TEST(test_quatAngle)
-{
-    quat a = quatMake(1, 2, 3, 4);
-    quat b = quatMake(4, 3, 2, 1);
-    float e = 35.f;
-    float c = quatAngle(a, b);
-    ck_assert_msg(fabs(c - e) < 0.001f, "Wrong angle from two quaternions");
-}
-END_TEST
-
 Suite *quatSuite(void)
 {
     Suite *s;
@@ -167,7 +157,6 @@ Suite *quatSuite(void)
     tcase_add_test(tc_arithm, test_quatAxisAngle);
     tcase_add_test(tc_arithm, test_quatToMat4);
     tcase_add_test(tc_arithm, test_quatMakeEuler);
-    tcase_add_test(tc_arithm, test_quatAngle);
     suite_add_tcase(s, tc_arithm);
 
     return s;
