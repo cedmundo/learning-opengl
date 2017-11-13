@@ -1,11 +1,11 @@
 set(LIB_SOURCES
     ike.c
-    content.c
+    asset.c
     )
 
 set(HEADERS
     ${CONFIG_HEADER}
-    ../include/ike/content.h
+    ../include/ike/asset.h
     )
 
 include_directories(src)
