@@ -16,6 +16,39 @@ START_TEST(test_mathutil_round)
 }
 END_TEST
 
+START_TEST(test_mathutil_max)
+{
+    int a = 3;
+    int b = 2;
+    int e = 3;
+    int c = MAX(int, a, b);
+    ck_assert(c == e);
+
+    float af = 3.4f;
+    float bf = 3.2f;
+    float ef = 3.4f;
+    float cf = MAX(float, af, bf);
+    ck_assert(cf == ef);
+}
+END_TEST
+
+START_TEST(test_mathutil_min)
+{
+    int a = 3;
+    int b = 2;
+    int e = 2;
+    int c = MIN(int, a, b);
+    ck_assert(c == e);
+
+    float af = 3.4f;
+    float bf = 3.2f;
+    float ef = 3.2f;
+    float cf = MIN(float, af, bf);
+    ck_assert(cf == ef);
+}
+END_TEST
+
+
 START_TEST(test_mathutil_convertions)
 {
     float a = 90.f;
@@ -40,6 +73,8 @@ Suite *mat4Suite(void)
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_mathutil_round);
     tcase_add_test(tc_core, test_mathutil_convertions);
+    tcase_add_test(tc_core, test_mathutil_max);
+    tcase_add_test(tc_core, test_mathutil_min);
     suite_add_tcase(s, tc_core);
     return s;
 }

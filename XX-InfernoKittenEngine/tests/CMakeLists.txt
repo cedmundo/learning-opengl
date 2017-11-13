@@ -10,6 +10,11 @@ find_package(Check REQUIRED)
 find_package(Threads REQUIRED)
 include_directories(${CHECK_INCLUDE_DIRS})
 
+# Copy assets and configure
+file(COPY assets DESTINATION .)
+set(CONTENT_PATH ${CMAKE_BINARY_DIR}/tests/assets)
+configure_file(config.h.in config.h)
+
 add_executable(vec2_test vec2_test.c)
 target_link_libraries(vec2_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
@@ -27,3 +32,6 @@ target_link_libraries(mathutil_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_I
 
 add_executable(quat_test quat_test.c)
 target_link_libraries(quat_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(content_test content_test.c)
+target_link_libraries(content_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

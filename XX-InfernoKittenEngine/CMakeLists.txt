@@ -77,4 +77,5 @@ add_test(NAME vec3_test COMMAND vec3_test)
 add_test(NAME vec4_test COMMAND vec4_test)
 add_test(NAME mat4_test COMMAND mat4_test)
 add_test(NAME quat_test COMMAND quat_test)
+add_test(NAME content_test COMMAND content_test)
 
