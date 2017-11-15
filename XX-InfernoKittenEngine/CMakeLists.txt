@@ -68,6 +68,7 @@ include_directories(include)
 # Subdirectories
 add_subdirectory(src)
 add_subdirectory(tests)
+add_subdirectory(tools)
 
 # Unit tests
 enable_testing()
@@ -78,4 +79,5 @@ add_test(NAME vec4_test COMMAND vec4_test)
 add_test(NAME mat4_test COMMAND mat4_test)
 add_test(NAME quat_test COMMAND quat_test)
 add_test(NAME asset_test COMMAND asset_test)
+add_test(NAME display_test COMMAND display_test)
 

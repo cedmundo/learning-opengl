@@ -5,8 +5,6 @@
 #include <ike/mathutil.h>
 #include <ike/asset.h>
 
-#include <stdio.h>
-
 START_TEST(test_getText)
 {
     ikeAssetSetBase(CONTENT_PATH);
@@ -14,9 +12,9 @@ START_TEST(test_getText)
     char *data = NULL;
     size_t len;
 
-    int ok = ikeAssetGetText("plain-text.txt", &data, &len);
-    ck_assert_msg(ok, "could not read plain text data");
-    if(ok) {
+    int res = ikeAssetGetText("plain-text", &data, &len);
+    ck_assert_msg(res == IKE_ASSET_OK, "could not read plain text data");
+    if(res == IKE_ASSET_OK) {
         ck_assert_msg(len != 0, "did not read text data");
         ck_assert_msg(data != NULL, "read data is null");
 
