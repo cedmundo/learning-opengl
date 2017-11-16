@@ -1,9 +1,9 @@
 #include <ike/asset.h>
+#include <ike/spec.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <msgpack.h>
 
 static const char *bpath = (void *) 0;
 static size_t bpathl = 0;
@@ -13,57 +13,78 @@ void ikeAssetSetBase(const char* newbase) {
     bpathl = strlen(newbase);
 }
 
-char *assetpath(const char* trail, const char *ext){
-    size_t traill = strlen(trail);
+char *assetpath(const char *base, const char *name, const char *ext){
+    size_t basel = strlen(base);
+    size_t namel = strlen(name);
     size_t extl = strlen(ext);
 
     // Note: 2 because a leading zero and a space for a possible slash '/'
-    char *absolute = calloc(traill+bpathl+extl+2, sizeof(char));
+    char *absolute = calloc(namel+basel+extl+2, sizeof(char));
+    if (absolute == NULL)
+        return absolute;
 
-    strcat(absolute, bpath);
-    if ( (traill > 0 ? trail[traill-1] : 0) != '/' && (bpath > 0 ? bpath[bpathl-1] : 0) != '/') {
+    strcat(absolute, base);
+    if ( (namel > 0 ? name[namel-1] : 0) != '/' && (base > 0 ? base[basel-1] : 0) != '/') {
         strcat(absolute, "/");
     }
 
-    strcat(absolute, trail);
+    strcat(absolute, name);
     strcat(absolute, ext);
     return absolute;
 }
 
-int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
-    char *apath = assetpath(rpath, ".txt");
-    FILE *tfile = fopen(apath, "r");
-    if (tfile == NULL)
-        return IKE_ASSET_FAILURE;
+int readFile(const char *path, char **data, size_t *len) {
+    int excode = IKE_ASSET_OK;
+    FILE *pfile = fopen(path, "r");
+    if (pfile == NULL) {
+        excode = IKE_ASSET_FAILURE; goto finalize;
+    }
 
     size_t tlen = 0;
-    fseek(tfile, 0L, SEEK_END);
-    tlen = ftell(tfile);
-    rewind(tfile);
+    fseek(pfile, 0L, SEEK_END);
+    tlen = ftell(pfile);
+    rewind(pfile);
 
     if (len != NULL) {
         *len = tlen;
     }
 
     *data = calloc(tlen, sizeof(char));
-    size_t rlen = fread(*data, sizeof(char), tlen, tfile);
-    return rlen != tlen;
+    size_t rlen = fread(*data, sizeof(char), tlen, pfile);
+    excode = rlen != tlen;
+
+finalize:
+    if (pfile != NULL)
+        close(pfile);
+
+    return excode;
 }
 
-int ikeAssetGetSpec(const char* rpath, msgpack_sbuffer* sbuf) {
-    char *apath = assetpath(rpath, ".spec");
-    FILE *tfile = fopen(apath, "rb");
-    if (tfile == NULL)
-        return IKE_ASSET_FAILURE;
+int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
+    char *apath = assetpath(bpath, rpath, ".txt");
+    int res = readFile(apath, data, len);
+    free(apath);
+    return res;
+}
 
-    size_t tlen = 0;
-    fseek(tfile, 0L, SEEK_END);
-    tlen = ftell(tfile);
-    rewind(tfile);
-    sbuf->size = tlen;
+int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
+    char *data;
+    size_t len;
+    char *apath = assetpath(bpath, rpath, ".spec");
+    int excode = IKE_ASSET_OK;
 
-    sbuf->data = calloc(tlen, sizeof(char));
-    return fread(sbuf->data, sizeof(char), tlen, tfile) != tlen;
+    if (readFile(apath, &data, &len) != IKE_ASSET_FAILURE) {
+        excode = IKE_ASSET_FAILURE; goto finalize;
+    }
+
+finalize:
+    if (apath != NULL)
+        free(apath);
+
+    if (data != NULL)
+        free(data);
+
+    return excode;
 }
 
 void ikeAssetFree(char **data) {

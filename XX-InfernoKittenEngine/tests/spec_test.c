@@ -38,8 +38,11 @@ START_TEST(test_specSimple)
     free(itest);
     free(ftest);
     free(dtest);
+    free(stest);
 }
 END_TEST
+
+// TODO: Remaining tests for Spec
 
 Suite *mat4Suite(void)
 {
