@@ -33,6 +33,9 @@ target_link_libraries(mathutil_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_I
 add_executable(quat_test quat_test.c)
 target_link_libraries(quat_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
+add_executable(spec_test spec_test.c)
+target_link_libraries(spec_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
 add_executable(asset_test asset_test.c)
 target_link_libraries(asset_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 

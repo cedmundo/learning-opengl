@@ -6,6 +6,7 @@ find_package(OpenGL REQUIRED)
 
 set(LIB_SOURCES
     ike.c
+    spec.c
     asset.c
     display.c
     )
@@ -14,6 +15,7 @@ set(HEADERS
     ${CONFIG_HEADER}
     ../include/glad/glad.h
     ../include/KHR/khrplatform.h
+    ../include/ike/spec.h
     ../include/ike/asset.h
     ../include/ike/display.h
     )
