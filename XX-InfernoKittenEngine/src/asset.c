@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <msgpack.h>
 
 static const char *bpath = (void *) 0;
 static size_t bpathl = 0;
@@ -55,7 +56,7 @@ int readFile(const char *path, char **data, size_t *len) {
 
 finalize:
     if (pfile != NULL)
-        close(pfile);
+        fclose(pfile);
 
     return excode;
 }
@@ -68,13 +69,35 @@ int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
 }
 
 int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
-    char *data;
-    size_t len;
+    msgpack_zone *mempool = NULL;
+    char *data = NULL;
+    size_t len = 0;
     char *apath = assetpath(bpath, rpath, ".spec");
     int excode = IKE_ASSET_OK;
 
     if (readFile(apath, &data, &len) != IKE_ASSET_FAILURE) {
         excode = IKE_ASSET_FAILURE; goto finalize;
+    }
+
+    mempool = calloc(1, sizeof(msgpack_zone));
+    msgpack_zone_init(mempool, 512);
+
+    // Memory pool will be released when spec is released
+    if (ikeSpecPut(spec, "_release", mempool) != IKE_SPEC_MAP_OK) {
+        excode = IKE_ASSET_FAILURE; goto finalize;
+    }
+
+    int pr = 0;
+    size_t offset = 0;
+    msgpack_unpack_return ret;
+    msgpack_object obj;
+
+    ret = msgpack_unpack(data, len, &offset, mempool, &obj);
+    pr = ikeSpecPutObj(spec, obj);
+
+    while((ret == MSGPACK_UNPACK_EXTRA_BYTES || ret == MSGPACK_UNPACK_CONTINUE) && pr == IKE_SPEC_MAP_OK) {
+        ret = msgpack_unpack(data, len, &offset, mempool, &obj);
+        pr = ikeSpecPutObj(spec, obj);
     }
 
 finalize:
@@ -84,7 +107,20 @@ finalize:
     if (data != NULL)
         free(data);
 
+    if (excode != IKE_ASSET_OK && mempool != NULL) {
+        // Since we haven't created the map, we should remove memory of memory pool.
+        msgpack_zone_destroy(mempool);
+    }
+
     return excode;
+}
+
+int ikeSpecPutObj(ikeSpec *spec, msgpack_object obj) {
+    if (obj.type == MSGPACK_OBJECT_MAP) {
+
+    }
+
+    return IKE_SPEC_MAP_OK;
 }
 
 void ikeAssetFree(char **data) {

@@ -321,6 +321,14 @@ int ikeSpecRemove(ikeSpec* spec, const char *key) {
 }
 
 void ikeSpecFree(ikeSpec* spec) {
+    // Automatically release memory
+    void *release;
+    if (ikeSpecGet(spec, "_release", release) == IKE_SPEC_MAP_OK) {
+        if (release != NULL) {
+            free(release);
+        }
+    }
+
     if (spec->data != NULL)
         free(spec->data);
 }
