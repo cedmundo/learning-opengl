@@ -1,4 +1,0 @@
-#!/bin/bash
-OLD="$1"
-NEW="$2"
-grep -e $OLD -r . -I | cut -d : -f 1 | xargs sed -i "s/$OLD/$NEW/g"
