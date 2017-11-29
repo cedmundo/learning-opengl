@@ -1,0 +1,5 @@
+file(GLOB files "${CMAKE_SOURCE_DIR}/tests/*_test.c")
+foreach(file ${files})
+    get_filename_component(unit ${file} NAME_WE)
+    add_test(NAME ${unit} COMMAND ${unit})
+endforeach()

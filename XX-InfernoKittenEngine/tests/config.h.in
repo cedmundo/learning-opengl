@@ -1,0 +1,6 @@
+#ifndef IKE_TEST_CONFIG_H
+#define IKE_TEST_CONFIG_H
+
+#define CONTENT_PATH "${CONTENT_PATH}"
+
+#endif /* IKE_TEST_CONFIG_H */
