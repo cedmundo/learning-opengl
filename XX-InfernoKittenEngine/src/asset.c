@@ -75,7 +75,7 @@ int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
     char *apath = assetpath(bpath, rpath, ".spec");
     int excode = IKE_ASSET_OK;
 
-    if (readFile(apath, &data, &len) != IKE_ASSET_FAILURE) {
+    if (readFile(apath, &data, &len) == IKE_ASSET_FAILURE) {
         excode = IKE_ASSET_FAILURE; goto finalize;
     }
 
@@ -93,12 +93,11 @@ int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
     msgpack_object obj;
 
     ret = msgpack_unpack(data, len, &offset, mempool, &obj);
-    pr = ikeSpecPutObj(spec, obj);
-
-    while((ret == MSGPACK_UNPACK_EXTRA_BYTES || ret == MSGPACK_UNPACK_CONTINUE) && pr == IKE_SPEC_MAP_OK) {
-        ret = msgpack_unpack(data, len, &offset, mempool, &obj);
-        pr = ikeSpecPutObj(spec, obj);
+    if (obj.type != MSGPACK_OBJECT_MAP) {
+        excode = IKE_ASSET_FAILURE; goto finalize;
     }
+
+    fprintf(stderr, "Type: %d\n", obj.type);
 
 finalize:
     if (apath != NULL)
@@ -113,14 +112,6 @@ finalize:
     }
 
     return excode;
-}
-
-int ikeSpecPutObj(ikeSpec *spec, msgpack_object obj) {
-    if (obj.type == MSGPACK_OBJECT_MAP) {
-
-    }
-
-    return IKE_SPEC_MAP_OK;
 }
 
 void ikeAssetFree(char **data) {

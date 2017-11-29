@@ -4,6 +4,7 @@
 #include <tests/config.h>
 #include <ike/mathutil.h>
 #include <ike/asset.h>
+#include <ike/spec.h>
 
 START_TEST(test_getText)
 {
@@ -28,9 +29,20 @@ START_TEST(test_getText)
 }
 END_TEST
 
-START_TEST(test_getImage)
+START_TEST(test_getSpec)
 {
     ikeAssetSetBase(CONTENT_PATH);
+
+    ikeSpec spec;
+    ikeSpecInit(&spec);
+
+    int res = ikeAssetGetSpec("data", &spec);
+    ck_assert_msg(res == IKE_ASSET_OK, "could not read spec data");
+    if (res == IKE_ASSET_OK) {
+
+    }
+
+    ikeSpecFree(&spec);
 }
 END_TEST
 
@@ -43,7 +55,7 @@ Suite *mat4Suite(void)
 
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_getText);
-    tcase_add_test(tc_core, test_getImage);
+    tcase_add_test(tc_core, test_getSpec);
     suite_add_tcase(s, tc_core);
     return s;
 }
