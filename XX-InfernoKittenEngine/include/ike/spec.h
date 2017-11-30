@@ -26,6 +26,14 @@ typedef void* ikeAny;
  */
 typedef int (*ikeSpecIterator)(ikeAny, ikeAny);
 
+/**
+ * \brief Generic callback.
+ *
+ * Currently used only for destructor of a spec (in case that it has any kind of
+ * memory pool). First parameter is the spec which is being processed.
+ */
+typedef void (*ikeSpecCallback)(ikeAny);
+
 /* We need to keep keys and values */
 typedef struct _ikeSpecElement {
 	const char* key;
@@ -44,6 +52,8 @@ typedef struct _ikeSpec {
     int tablesize;
     int size;
     ikeSpecElement *data;
+    ikeAny userdata;
+    ikeSpecCallback destructor;
 } ikeSpec;
 
 /**

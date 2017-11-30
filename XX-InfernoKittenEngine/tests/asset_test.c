@@ -20,7 +20,7 @@ START_TEST(test_getText)
         ck_assert_msg(data != NULL, "read data is null");
 
         if (len > 0) {
-            int tmp = strncmp(expect, data, MAX(size_t, len, strlen(expect)));
+            int tmp = strncmp(expect, data, MIN(size_t, len, strlen(expect)));
             ck_assert_msg(tmp == 0, "read data is not equal to expected data.");
         }
     }
@@ -39,7 +39,21 @@ START_TEST(test_getSpec)
     int res = ikeAssetGetSpec("data", &spec);
     ck_assert_msg(res == IKE_ASSET_OK, "could not read spec data");
     if (res == IKE_ASSET_OK) {
+        int ival = 0;
+        ikeSpecGetInt(spec, "integer", &ival);
+        ck_assert_msg(ival == 10, "bad integer read");
 
+        char *cval = NULL;
+        ikeSpecGetString(spec, "string", &cval);
+        ck_assert_msg(strcmp("content", cval) == 0, "bad string read");
+
+        double dval = 0.0;
+        ikeSpecGetDouble(spec, "decimal", &dval);
+        ck_assert_msg(dval == 3.3, "bad double read");
+
+        int bval = 0;
+        ikeSpecGetBoolean(spec, "boolean", &bval);
+        ck_assert_msg(bval == 1, "bad boolean read");
     }
 
     ikeSpecFree(&spec);

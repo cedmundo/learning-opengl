@@ -8,6 +8,7 @@
 
 static const char *bpath = (void *) 0;
 static size_t bpathl = 0;
+void ikeAssetDestroySpec(ikeAny any);
 
 void ikeAssetSetBase(const char* newbase) {
     bpath = newbase;
@@ -69,11 +70,11 @@ int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
 }
 
 int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
-    msgpack_zone *mempool = NULL;
-    char *data = NULL;
+    int excode = IKE_ASSET_OK;
     size_t len = 0;
     char *apath = assetpath(bpath, rpath, ".spec");
-    int excode = IKE_ASSET_OK;
+    char *data = NULL;
+    msgpack_zone *mempool = NULL;
 
     if (readFile(apath, &data, &len) == IKE_ASSET_FAILURE) {
         excode = IKE_ASSET_FAILURE; goto finalize;
@@ -83,9 +84,8 @@ int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
     msgpack_zone_init(mempool, 512);
 
     // Memory pool will be released when spec is released
-    if (ikeSpecPut(spec, "_release", mempool) != IKE_SPEC_MAP_OK) {
-        excode = IKE_ASSET_FAILURE; goto finalize;
-    }
+    spec->userdata = mempool;
+    spec->destructor = &ikeAssetDestroySpec;
 
     int pr = 0;
     size_t offset = 0;
@@ -109,9 +109,19 @@ finalize:
     if (excode != IKE_ASSET_OK && mempool != NULL) {
         // Since we haven't created the map, we should remove memory of memory pool.
         msgpack_zone_destroy(mempool);
+        spec->userdata = NULL;
+        spec->destructor = NULL;
     }
 
     return excode;
+}
+
+void ikeAssetDestroySpec(ikeAny any) {
+    ikeSpec *spec = (ikeSpec *) any;
+    if (spec->userdata != NULL) {
+        msgpack_zone_destroy((msgpack_zone*) spec->userdata);
+        spec->userdata = NULL;
+    }
 }
 
 void ikeAssetFree(char **data) {
