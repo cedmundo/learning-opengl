@@ -97,6 +97,23 @@ int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
         excode = IKE_ASSET_FAILURE; goto finalize;
     }
 
+    msgpack_object_map *map = ret.via.map;
+    size_t i = 0;
+    for (i=0;i<map.size;i++) {
+        msgpack_object_kv *pair = map.via.map.ptr[i];
+
+        msgpack_object key = pair.key;
+        msgpack_object val = pair.val;
+
+        switch(key) {
+            case MSGPACK_OBJECT_BOOLEAN:
+            case MSGPACK_OBJECT_POSITIVE_INTEGER:
+            case MSGPACK_OBJECT_NEGATIVE_INTEGER:
+                ikeSpecPut(spec, key.via.raw.ptr, &val.via.u64);
+                break;
+        }
+    }
+
     fprintf(stderr, "Type: %d\n", obj.type);
 
 finalize:

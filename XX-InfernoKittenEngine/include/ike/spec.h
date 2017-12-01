@@ -85,7 +85,6 @@ int ikeSpecIterate(ikeSpec* spec, ikeSpecIterator iter, ikeAny userdata);
  */
 int ikeSpecPut(ikeSpec* spec, const char *key, ikeAny item);
 
-
 /**
  * \brief Gets a value using specified key.
  *
@@ -95,6 +94,46 @@ int ikeSpecPut(ikeSpec* spec, const char *key, ikeAny item);
  * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
  */
 int ikeSpecGet(ikeSpec* spec, const char *key, ikeAny *item);
+
+/**
+ * \brief Gets an integer using specified key.
+ *
+ * \param spec where value is stored.
+ * \param key to hash.
+ * \param item (output) to copy value from map.
+ * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ */
+int ikeSpecGetInt(ikeSpec* spec, const char *key, int *item);
+
+/**
+ * \brief Gets a float using specified key.
+ *
+ * \param spec where value is stored.
+ * \param key to hash.
+ * \param item (output) to copy value from map.
+ * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ */
+int ikeSpecGetFloat(ikeSpec* spec, const char *key, float *item);
+
+/**
+ * \brief Gets a double using specified key.
+ *
+ * \param spec where value is stored.
+ * \param key to hash.
+ * \param item (output) to copy value from map.
+ * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ */
+int ikeSpecGetDouble(ikeSpec* spec, const char *key, double *item);
+
+/**
+ * \brief Gets a string using specified key.
+ *
+ * \param spec where value is stored.
+ * \param key to hash.
+ * \param item (output) to copy value from map.
+ * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ */
+int ikeSpecGetString(ikeSpec* spec, const char *key, char **item);
 
 /**
  * \brief Remove an element from spec.

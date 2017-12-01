@@ -220,7 +220,9 @@ int ikeSpecInit(ikeSpec* spec) {
     spec->destructor = NULL;
 
 finalize:
-    ikeSpecFree(spec);
+    if (excode != IKE_SPEC_MAP_OK)
+        ikeSpecFree(spec);
+
     return excode;
 }
 
@@ -292,6 +294,34 @@ int ikeSpecGet(ikeSpec* spec, const char *key, ikeAny *arg) {
     return IKE_SPEC_MAP_MISSING;
 }
 
+int ikeSpecGetInt(ikeSpec* spec, const char *key, int *item){
+    ikeAny val;
+    int rv = ikeSpecGet(spec, key, &val);
+    if (rv == IKE_SPEC_MAP_OK)
+        *item = *((int*) val);
+    return rv;
+}
+
+int ikeSpecGetFloat(ikeSpec* spec, const char *key, float *item){
+    ikeAny val;
+    int rv = ikeSpecGet(spec, key, &val);
+    if (rv == IKE_SPEC_MAP_OK)
+        *item = *((float*) val);
+    return rv;
+}
+
+int ikeSpecGetDouble(ikeSpec* spec, const char *key, double *item){
+    ikeAny val;
+    int rv = ikeSpecGet(spec, key, &val);
+    if (rv == IKE_SPEC_MAP_OK)
+        *item = *((double*) val);
+    return rv;
+}
+
+int ikeSpecGetString(ikeSpec* spec, const char *key, char **item){
+    return ikeSpecGet(spec, key, (ikeAny *) item);
+}
+
 int ikeSpecRemove(ikeSpec* spec, const char *key) {
     int i;
     int curr;
@@ -323,8 +353,10 @@ int ikeSpecRemove(ikeSpec* spec, const char *key) {
 }
 
 void ikeSpecFree(ikeSpec* spec) {
-    if (spec->destructor != NULL)
+    if (spec->destructor != NULL) {
         spec->destructor((ikeAny) spec);
+        spec->destructor = NULL;
+    }
 
     if (spec->data != NULL) {
         free(spec->data);
