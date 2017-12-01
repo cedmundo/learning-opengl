@@ -34,6 +34,10 @@ add_executable(quat_test quat_test.c)
 target_link_libraries(quat_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(quat_test PUBLIC ${CMAKE_BINARY_DIR})
 
+add_executable(pool_test pool_test.c)
+target_link_libraries(pool_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(pool_test PUBLIC ${CMAKE_BINARY_DIR})
+
 add_executable(spec_test spec_test.c)
 target_link_libraries(spec_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(spec_test PUBLIC ${CMAKE_BINARY_DIR})

@@ -7,6 +7,7 @@ set(IKE_SOURCES
   spec.c
   asset.c
   display.c
+  pool.c
   )
 
 # Find packages
