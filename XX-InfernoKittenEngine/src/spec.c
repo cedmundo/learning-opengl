@@ -216,8 +216,6 @@ int ikeSpecInit(ikeSpec* spec) {
 
     spec->tablesize = INITIAL_SIZE;
     spec->size = 0;
-    spec->userdata = NULL;
-    spec->destructor = NULL;
 
 finalize:
     if (excode != IKE_SPEC_MAP_OK)
@@ -353,11 +351,6 @@ int ikeSpecRemove(ikeSpec* spec, const char *key) {
 }
 
 void ikeSpecFree(ikeSpec* spec) {
-    if (spec->destructor != NULL) {
-        spec->destructor((ikeAny) spec);
-        spec->destructor = NULL;
-    }
-
     if (spec->data != NULL) {
         free(spec->data);
         spec->data = NULL;

@@ -83,10 +83,6 @@ int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
     mempool = calloc(1, sizeof(msgpack_zone));
     msgpack_zone_init(mempool, 512);
 
-    // Memory pool will be released when spec is released
-    spec->userdata = mempool;
-    spec->destructor = &ikeAssetDestroySpec;
-
     int pr = 0;
     size_t offset = 0;
     msgpack_unpack_return ret;
@@ -126,8 +122,6 @@ finalize:
     if (excode != IKE_ASSET_OK && mempool != NULL) {
         // Since we haven't created the map, we should remove memory of memory pool.
         msgpack_zone_destroy(mempool);
-        spec->userdata = NULL;
-        spec->destructor = NULL;
     }
 
     return excode;
@@ -135,10 +129,6 @@ finalize:
 
 void ikeAssetDestroySpec(ikeAny any) {
     ikeSpec *spec = (ikeSpec *) any;
-    if (spec->userdata != NULL) {
-        msgpack_zone_destroy((msgpack_zone*) spec->userdata);
-        spec->userdata = NULL;
-    }
 }
 
 void ikeAssetFree(char **data) {

@@ -11,28 +11,31 @@ START_TEST(test_specSimple)
     ikeSpecInit(&spec);
 
     int *itest = calloc(1, sizeof(int)); *itest = 7;
-    float *ftest = calloc(1, sizeof(float)); *ftest = 3.4f;
-    double *dtest = calloc(1, sizeof(double)); *dtest = 3.4;
-    char *stest = calloc(12, sizeof(char)); strcpy(stest, "hello world");
-
     ck_assert_msg(ikeSpecPut(&spec, "int", itest) == IKE_SPEC_MAP_OK, "could not store int");
+
+    float *ftest = calloc(1, sizeof(float)); *ftest = 3.4f;
     ck_assert_msg(ikeSpecPut(&spec, "float", ftest) == IKE_SPEC_MAP_OK, "could not store float");
+
+    double *dtest = calloc(1, sizeof(double)); *dtest = 3.4;
     ck_assert_msg(ikeSpecPut(&spec, "double", dtest) == IKE_SPEC_MAP_OK, "could not store double");
+
+    char *stest = calloc(12, sizeof(char)); strcpy(stest, "hello world");
     ck_assert_msg(ikeSpecPut(&spec, "string", stest) == IKE_SPEC_MAP_OK, "could not store string");
 
     int *itestr;
-    float *ftestr;
-    double *dtestr;
-    char *stestr;
-
     ck_assert_msg(ikeSpecGet(&spec, "int", (ikeAny *) &itestr) == IKE_SPEC_MAP_OK, "could not read int");
-    ck_assert_msg(ikeSpecGet(&spec, "float", (ikeAny *) &ftestr) == IKE_SPEC_MAP_OK, "could not read float");
-    ck_assert_msg(ikeSpecGet(&spec, "double", (ikeAny *) &dtestr) == IKE_SPEC_MAP_OK, "could not read double");
-    ck_assert_msg(ikeSpecGet(&spec, "string", (ikeAny *) &stestr) == IKE_SPEC_MAP_OK, "could not read string");
-
     ck_assert_msg(*itest == *itestr, "stored integer is not equal than expected");
+
+    float *ftestr;
+    ck_assert_msg(ikeSpecGet(&spec, "float", (ikeAny *) &ftestr) == IKE_SPEC_MAP_OK, "could not read float");
     ck_assert_msg(*ftest == *ftestr, "stored float is not equal than expected");
+
+    double *dtestr;
+    ck_assert_msg(ikeSpecGet(&spec, "double", (ikeAny *) &dtestr) == IKE_SPEC_MAP_OK, "could not read double");
     ck_assert_msg(*dtest == *dtestr, "stored double is not equal than expected");
+
+    char *stestr;
+    ck_assert_msg(ikeSpecGet(&spec, "string", (ikeAny *) &stestr) == IKE_SPEC_MAP_OK, "could not read string");
     ck_assert_msg(strcmp(stest, stestr) == 0, "stored string is not equal than expected");
 
     free(itest);
@@ -89,7 +92,6 @@ START_TEST(test_specGetDouble)
 }
 END_TEST
 
-
 START_TEST(test_specGetString)
 {
     ikeSpec spec;
@@ -105,7 +107,30 @@ START_TEST(test_specGetString)
 }
 END_TEST
 
-// TODO: Remaining tests for Spec
+static int test_specIterateCount = 0;
+static int test_specIterateHelper(ikeAny udata, ikeAny item) {
+    test_specIterateCount ++;
+    return IKE_SPEC_MAP_OK;
+}
+
+START_TEST(test_specIterate)
+{
+    ikeSpec spec;
+    ikeSpecInit(&spec);
+
+    char *stest1 = calloc(12, sizeof(char)); strcpy(stest1, "hello world");
+    char *stest2 = calloc(12, sizeof(char)); strcpy(stest2, "dlrow olleh");
+
+    ck_assert_msg(ikeSpecPut(&spec, "regular", stest1) == IKE_SPEC_MAP_OK, "could not store string (regular)");
+    ck_assert_msg(ikeSpecPut(&spec, "reverse", stest2) == IKE_SPEC_MAP_OK, "could not store string (reverse)");
+
+    ck_assert_msg(ikeSpecIterate(&spec, test_specIterateHelper, NULL) == IKE_SPEC_MAP_OK, "could not iterate map");
+    ck_assert_msg(test_specIterateCount == 2, "unexpected iteration keys count");
+
+    free(stest1);
+    free(stest2);
+}
+END_TEST
 
 Suite *mat4Suite(void)
 {
@@ -120,6 +145,7 @@ Suite *mat4Suite(void)
     tcase_add_test(tc_core, test_specGetFloat);
     tcase_add_test(tc_core, test_specGetDouble);
     tcase_add_test(tc_core, test_specGetString);
+    tcase_add_test(tc_core, test_specIterate);
     suite_add_tcase(s, tc_core);
     return s;
 }
