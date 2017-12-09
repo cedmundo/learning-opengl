@@ -1,5 +1,5 @@
 #include <ike/asset.h>
-#include <ike/spec.h>
+#include <ike/hashmap.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 
 static const char *bpath = (void *) 0;
 static size_t bpathl = 0;
-void ikeAssetDestroySpec(ikeAny any);
+void ikeAssetDestroyHashMap(ikeAny any);
 
 void ikeAssetSetBase(const char* newbase) {
     bpath = newbase;
@@ -69,10 +69,10 @@ int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
     return res;
 }
 
-int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
+int ikeAssetGetHashMap(const char* rpath, ikeHashMap* hashmap) {
     int excode = IKE_ASSET_OK;
     size_t len = 0;
-    char *apath = assetpath(bpath, rpath, ".spec");
+    char *apath = assetpath(bpath, rpath, ".hashmap");
     char *data = NULL;
     msgpack_zone *mempool = NULL;
 
@@ -105,7 +105,7 @@ int ikeAssetGetSpec(const char* rpath, ikeSpec* spec) {
     //         case MSGPACK_OBJECT_BOOLEAN:
     //         case MSGPACK_OBJECT_POSITIVE_INTEGER:
     //         case MSGPACK_OBJECT_NEGATIVE_INTEGER:
-    //             ikeSpecPut(spec, key.via.raw.ptr, &val.via.u64);
+    //             ikeHashMapPut(hashmap, key.via.raw.ptr, &val.via.u64);
     //             break;
     //     }
     // }
@@ -127,8 +127,8 @@ finalize:
     return excode;
 }
 
-void ikeAssetDestroySpec(ikeAny any) {
-    ikeSpec *spec = (ikeSpec *) any;
+void ikeAssetDestroyHashMap(ikeAny any) {
+    ikeHashMap *hashmap = (ikeHashMap *) any;
 }
 
 void ikeAssetFree(char **data) {

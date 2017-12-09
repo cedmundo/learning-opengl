@@ -17,7 +17,7 @@ int ikeDisplayConfig(ikeDisplay *display) {
     msgpack_sbuffer_init(&sbuf);
 
     // Dump file data
-    if (ikeAssetGetSpec("display", &sbuf) != IKE_ASSET_OK){
+    if (ikeAssetGetHashMap("display", &sbuf) != IKE_ASSET_OK){
         return IKE_DISPLAY_FAILURE;
     }
 

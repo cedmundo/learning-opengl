@@ -5,8 +5,8 @@
 #define IKE_ASSET_OK 0
 #define IKE_ASSET_FAILURE 1
 
-// We do not care about spec right now.
-typedef struct _ikeSpec ikeSpec;
+// We do not care about hashmap right now.
+typedef struct _ikeHashMap ikeHashMap;
 
 /*
  * \brief Sets the root for asset for loading objects.
@@ -40,7 +40,7 @@ int ikeAssetGetText(const char* file, char** data, size_t* len);
  * \param sbuf to dump asset.
  * \return int 0 if success, 1 otherwise.
  */
-int ikeAssetGetSpec(const char* file, ikeSpec* spec);
+int ikeAssetGetHashMap(const char* file, ikeHashMap* hashmap);
 
 /*
  * \brief Releases memory for any loaded asset.

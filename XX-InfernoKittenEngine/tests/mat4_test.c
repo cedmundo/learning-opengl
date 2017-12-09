@@ -353,7 +353,7 @@ START_TEST(test_mat4MakeOrtho)
 }
 END_TEST
 
-START_TEST(test_mat4MakePerspective)
+START_TEST(test_mat4MakePerhashmaptive)
 {
     mat4 e = {
         -0.224922f,  0.000000f,  0.000000f,  0.000000f,
@@ -362,8 +362,8 @@ START_TEST(test_mat4MakePerspective)
          0.000000f,  0.000000f, -0.200200f,  0.000000f
     };
 
-    mat4 a = mat4MakePerspective(35.f, 1.f, 0.1f, 100.f);
-    ck_assert_msg(mat4IsAprox(a, e) == 1, "Wrong perspective projection matrix");
+    mat4 a = mat4MakePerhashmaptive(35.f, 1.f, 0.1f, 100.f);
+    ck_assert_msg(mat4IsAprox(a, e) == 1, "Wrong perhashmaptive projection matrix");
 }
 END_TEST
 
@@ -416,7 +416,7 @@ Suite *mat4Suite(void)
 
     tc_proj = tcase_create("projection");
     tcase_add_test(tc_proj, test_mat4MakeOrtho);
-    tcase_add_test(tc_proj, test_mat4MakePerspective);
+    tcase_add_test(tc_proj, test_mat4MakePerhashmaptive);
     suite_add_tcase(s, tc_proj);
 
     tc_misc = tcase_create("misc");

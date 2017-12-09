@@ -309,23 +309,23 @@ static inline mat4 mat4MakeOrtho(float l, float r, float b, float t, float n, fl
 }
 
 /**
- * \brief Makes a new perspective matrix.
+ * \brief Makes a new perhashmaptive matrix.
  *
- * Generates a new projection matrix usen fov, aspect, near and far parameters.
+ * Generates a new projection matrix usen fov, ahashmapt, near and far parameters.
  *
  * \param float yfov Field of view from Y axis
- * \param float aspect ratio
+ * \param float ahashmapt ratio
  * \param float n near
  * \param float f far
- * \return a prerspective projection matrix.
+ * \return a prerhashmaptive projection matrix.
  */
-static inline mat4 mat4MakePerspective(float yfov, float aspect, float n, float f) {
+static inline mat4 mat4MakePerhashmaptive(float yfov, float ahashmapt, float n, float f) {
     mat4 m = mat4Zero;
 
     // Note: use radians intead degrees
     float const a = 1.0f / tan(yfov / 2.0f);
 
-    m.xx = a / aspect;
+    m.xx = a / ahashmapt;
     m.xy = 0.0f;
     m.xz = 0.0f;
     m.xw = 0.0f;

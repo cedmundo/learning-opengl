@@ -4,7 +4,7 @@ set(IKE_LIBNAME ike)
 # Create library
 set(IKE_SOURCES
   ike.c
-  spec.c
+  hashmap.c
   asset.c
   display.c
   pool.c

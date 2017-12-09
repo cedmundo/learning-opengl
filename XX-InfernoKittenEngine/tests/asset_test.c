@@ -4,7 +4,7 @@
 #include <tests/config.h>
 #include <ike/mathutil.h>
 #include <ike/asset.h>
-#include <ike/spec.h>
+#include <ike/hashmap.h>
 
 START_TEST(test_getText)
 {
@@ -29,34 +29,34 @@ START_TEST(test_getText)
 }
 END_TEST
 
-START_TEST(test_getSpec)
+START_TEST(test_getHashMap)
 {
     ikeAssetSetBase(CONTENT_PATH);
 
-    ikeSpec spec;
-    ikeSpecInit(&spec);
+    ikeHashMap hashmap;
+    ikeHashMapInit(&hashmap);
 
-    int res = ikeAssetGetSpec("data", &spec);
-    ck_assert_msg(res == IKE_ASSET_OK, "could not read spec data");
+    int res = ikeAssetGetHashMap("data", &hashmap);
+    ck_assert_msg(res == IKE_ASSET_OK, "could not read hashmap data");
     if (res == IKE_ASSET_OK) {
         int ival = 0;
-        ikeSpecGetInt(&spec, "integer", &ival);
+        ikeHashMapGetInt(&hashmap, "integer", &ival);
         ck_assert_msg(ival == 10, "bad integer read");
 
         char *cval = NULL;
-        ikeSpecGetString(&spec, "string", &cval);
+        ikeHashMapGetString(&hashmap, "string", &cval);
         ck_assert_msg(strcmp("content", cval) == 0, "bad string read");
 
         double dval = 0.0;
-        ikeSpecGetDouble(&spec, "decimal", &dval);
+        ikeHashMapGetDouble(&hashmap, "decimal", &dval);
         ck_assert_msg(dval == 3.3, "bad double read");
 
         int bval = 0;
-        ikeSpecGetInt(&spec, "boolean", &bval);
+        ikeHashMapGetInt(&hashmap, "boolean", &bval);
         ck_assert_msg(bval == 1, "bad boolean read");
     }
 
-    ikeSpecFree(&spec);
+    ikeHashMapFree(&hashmap);
 }
 END_TEST
 
@@ -69,7 +69,7 @@ Suite *mat4Suite(void)
 
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_getText);
-    tcase_add_test(tc_core, test_getSpec);
+    tcase_add_test(tc_core, test_getHashMap);
     suite_add_tcase(s, tc_core);
     return s;
 }
