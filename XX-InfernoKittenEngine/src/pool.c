@@ -60,6 +60,70 @@ size_t ikePoolTotalSize(ikePool *pool) {
     return ikePoolBlockAvailable(pool->current);
 }
 
+void *ikePoolGet(ikePool *pool, size_t size) {
+    ikePoolBlock *tmp = NULL;
+    char *ptr = NULL;
+    int res = 0;
+
+    // Align memory to prevent hardware issues.
+    size = ikePoolMemoryAlign(size);
+
+    // Allocate a bigger chunk if required size
+    // is major than current chunksize.
+    if (size > pool->chunksize) {
+        tmp = malloc(sizeof(ikePoolBlock));
+        res = ikePoolBlockInit(tmp, size);
+        if (res != IKE_POOL_OK) {
+            if (tmp != NULL)
+                free(tmp);
+
+            return NULL;
+        }
+
+        // If there is recycled memory use it,
+        // only insert bigger chunk.
+        if (pool->current->next != NULL) {
+            tmp->next = pool->current->next;
+        }
+
+        // Insert block on the chain.
+        pool->current->next = tmp;
+        pool->current = tmp;
+    }
+
+    tmp = pool->current;
+    ptr = tmp->free; // Usable memory.
+    tmp->free += size; // Point to next block.
+
+    // Check if current block is exhausted.
+    if (tmp->free >= tmp->end) {
+        // Is the next block already allocated?
+        if (tmp->next != NULL) {
+            // Re-use block.
+            tmp->next->free = tmp->next->start;
+            pool->current = tmp->next;
+        } else {
+            // Extend the pool with a new block.
+            tmp->next = malloc(sizeof(ikePoolBlock));
+            res = ikePoolBlockInit(tmp->next, size);
+            if (res != IKE_POOL_OK) {
+                if (tmp->next != NULL)
+                    free(tmp->next);
+
+                return NULL;
+            }
+
+            pool->current = tmp->next;
+        }
+
+        // Set ptr to the first location in the new block.
+        ptr = pool->current->free;
+        pool->current->free += size;
+    }
+
+    return ptr;
+}
+
 void ikePoolDestroy(ikePool *pool) {
     ikePoolBlock *tmp, *cur = pool->first;
     while (cur != NULL) {
