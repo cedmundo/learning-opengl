@@ -13,7 +13,8 @@
 // requires anyother memory aligment please implement that here.
 //
 // TODO?: Define a MACRO to use build configuration aligment.
-#define ikePoolMemoryAlign(s) ((s+3) & 0xfffffffc)
+#define IKE_POOL_ALIGMENT (4)
+#define ikePoolMemoryAlign(s) ((s+(IKE_POOL_ALIGMENT-1)) & 0xfffffffc)
 
 /**
  * Memory block.
@@ -119,5 +120,11 @@ void ikePoolDestroy(ikePool *pool);
  *
  */
 void *ikePoolGet(ikePool *pool, size_t size);
+
+/**
+ * Resets a pool to be used again without freeing its memory blocks.
+ * \param pool to be recycled.
+ */
+void ikePoolRecycle(ikePool *pool);
 
 #endif /* IKE_POOL_H */

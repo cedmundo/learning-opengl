@@ -57,7 +57,14 @@ size_t ikePoolTotalSize(ikePool *pool) {
     if (pool->current == NULL)
         return (size_t) 0L;
 
-    return ikePoolBlockAvailable(pool->current);
+    size_t len = 0;
+    ikePoolBlock *cur = pool->first;
+    while (cur != NULL) {
+        len += ikePoolBlockTotalSize(cur);
+        cur = cur->next;
+    }
+
+    return len;
 }
 
 void *ikePoolGet(ikePool *pool, size_t size) {
@@ -72,7 +79,7 @@ void *ikePoolGet(ikePool *pool, size_t size) {
     // is major than current chunksize.
     if (size > pool->chunksize) {
         tmp = malloc(sizeof(ikePoolBlock));
-        res = ikePoolBlockInit(tmp, size);
+        res = ikePoolBlockInit(tmp, pool->chunksize);
         if (res != IKE_POOL_OK) {
             if (tmp != NULL)
                 free(tmp);
@@ -135,4 +142,9 @@ void ikePoolDestroy(ikePool *pool) {
 
     pool->first = NULL;
     pool->current = NULL;
+}
+
+void ikePoolRecycle(ikePool *pool) {
+    pool->current = pool->first;
+    pool->current->free = pool->current->start;
 }
