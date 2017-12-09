@@ -2,10 +2,12 @@
 #include <check.h>
 #include <ike/pool.h>
 
+#include <stdio.h>
+
 START_TEST(test_initRelease)
 {
     ikePool pool;
-    ikePoolInit(&pool, IKE_POOL_SMALL);
+    ck_assert_msg(ikePoolInit(&pool, IKE_POOL_SMALL) == IKE_POOL_OK, "could not init pool");
 
     size_t a = ikePoolAvailable(&pool);
     size_t e = IKE_POOL_SMALL;
@@ -15,6 +17,18 @@ START_TEST(test_initRelease)
     a = ikePoolAvailable(&pool);
     e = (size_t) 0L;
     ck_assert_msg(a == e, "memory marked as avilable after destroying pool");
+}
+END_TEST
+
+START_TEST(test_alloc)
+{
+    ikePool pool;
+    ck_assert_msg(ikePoolInit(&pool, IKE_POOL_SMALL) == IKE_POOL_OK, "could not init pool");
+
+    int *ival = ikePoolGet(&pool, sizeof(int));
+    float *fval = ikePoolGet(&pool, sizeof(float));
+
+    ikePoolDestroy(&pool);
 }
 END_TEST
 
