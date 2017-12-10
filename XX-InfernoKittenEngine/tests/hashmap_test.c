@@ -11,31 +11,31 @@ START_TEST(test_hashmapSimple)
     ikeHashMapInit(&hashmap);
 
     int *itest = calloc(1, sizeof(int)); *itest = 7;
-    ck_assert_msg(ikeHashMapPut(&hashmap, "int", itest) == IKE_SPEC_MAP_OK, "could not store int");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "int", itest) == IKE_HASHMAP_OK, "could not store int");
 
     float *ftest = calloc(1, sizeof(float)); *ftest = 3.4f;
-    ck_assert_msg(ikeHashMapPut(&hashmap, "float", ftest) == IKE_SPEC_MAP_OK, "could not store float");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "float", ftest) == IKE_HASHMAP_OK, "could not store float");
 
     double *dtest = calloc(1, sizeof(double)); *dtest = 3.4;
-    ck_assert_msg(ikeHashMapPut(&hashmap, "double", dtest) == IKE_SPEC_MAP_OK, "could not store double");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "double", dtest) == IKE_HASHMAP_OK, "could not store double");
 
     char *stest = calloc(12, sizeof(char)); strcpy(stest, "hello world");
-    ck_assert_msg(ikeHashMapPut(&hashmap, "string", stest) == IKE_SPEC_MAP_OK, "could not store string");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "string", stest) == IKE_HASHMAP_OK, "could not store string");
 
     int *itestr;
-    ck_assert_msg(ikeHashMapGet(&hashmap, "int", (ikeAny *) &itestr) == IKE_SPEC_MAP_OK, "could not read int");
+    ck_assert_msg(ikeHashMapGet(&hashmap, "int", (ikeAny *) &itestr) == IKE_HASHMAP_OK, "could not read int");
     ck_assert_msg(*itest == *itestr, "stored integer is not equal than expected");
 
     float *ftestr;
-    ck_assert_msg(ikeHashMapGet(&hashmap, "float", (ikeAny *) &ftestr) == IKE_SPEC_MAP_OK, "could not read float");
+    ck_assert_msg(ikeHashMapGet(&hashmap, "float", (ikeAny *) &ftestr) == IKE_HASHMAP_OK, "could not read float");
     ck_assert_msg(*ftest == *ftestr, "stored float is not equal than expected");
 
     double *dtestr;
-    ck_assert_msg(ikeHashMapGet(&hashmap, "double", (ikeAny *) &dtestr) == IKE_SPEC_MAP_OK, "could not read double");
+    ck_assert_msg(ikeHashMapGet(&hashmap, "double", (ikeAny *) &dtestr) == IKE_HASHMAP_OK, "could not read double");
     ck_assert_msg(*dtest == *dtestr, "stored double is not equal than expected");
 
     char *stestr;
-    ck_assert_msg(ikeHashMapGet(&hashmap, "string", (ikeAny *) &stestr) == IKE_SPEC_MAP_OK, "could not read string");
+    ck_assert_msg(ikeHashMapGet(&hashmap, "string", (ikeAny *) &stestr) == IKE_HASHMAP_OK, "could not read string");
     ck_assert_msg(strcmp(stest, stestr) == 0, "stored string is not equal than expected");
 
     free(itest);
@@ -55,8 +55,8 @@ START_TEST(test_hashmapGetInt)
     int *itest = calloc(1, sizeof(int)); *itest = 7;
     int itestr;
 
-    ck_assert_msg(ikeHashMapPut(&hashmap, "int", itest) == IKE_SPEC_MAP_OK, "could not store int");
-    ck_assert_msg(ikeHashMapGetInt(&hashmap, "int", &itestr) == IKE_SPEC_MAP_OK, "could not read int");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "int", itest) == IKE_HASHMAP_OK, "could not store int");
+    ck_assert_msg(ikeHashMapGetInt(&hashmap, "int", &itestr) == IKE_HASHMAP_OK, "could not read int");
     ck_assert_msg(*itest == itestr, "stored integer is not equal than expected");
     free(itest);
 }
@@ -70,8 +70,8 @@ START_TEST(test_hashmapGetFloat)
     float *ftest = calloc(1, sizeof(float)); *ftest = 5.6;
     float ftestr;
 
-    ck_assert_msg(ikeHashMapPut(&hashmap, "float", ftest) == IKE_SPEC_MAP_OK, "could not store float");
-    ck_assert_msg(ikeHashMapGetFloat(&hashmap, "float", &ftestr) == IKE_SPEC_MAP_OK, "could not read float");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "float", ftest) == IKE_HASHMAP_OK, "could not store float");
+    ck_assert_msg(ikeHashMapGetFloat(&hashmap, "float", &ftestr) == IKE_HASHMAP_OK, "could not read float");
     ck_assert_msg(*ftest == ftestr, "stored float is not equal than expected");
     free(ftest);
 }
@@ -85,8 +85,8 @@ START_TEST(test_hashmapGetDouble)
     double *dtest = calloc(1, sizeof(double)); *dtest = 5.6;
     double dtestr;
 
-    ck_assert_msg(ikeHashMapPut(&hashmap, "double", dtest) == IKE_SPEC_MAP_OK, "could not store double");
-    ck_assert_msg(ikeHashMapGetDouble(&hashmap, "double", &dtestr) == IKE_SPEC_MAP_OK, "could not read double");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "double", dtest) == IKE_HASHMAP_OK, "could not store double");
+    ck_assert_msg(ikeHashMapGetDouble(&hashmap, "double", &dtestr) == IKE_HASHMAP_OK, "could not read double");
     ck_assert_msg(*dtest == dtestr, "stored double is not equal than expected");
     free(dtest);
 }
@@ -100,8 +100,8 @@ START_TEST(test_hashmapGetString)
     char *stest = calloc(12, sizeof(char)); strcpy(stest, "hello world");
     char *stestr;
 
-    ck_assert_msg(ikeHashMapPut(&hashmap, "string", stest) == IKE_SPEC_MAP_OK, "could not store string");
-    ck_assert_msg(ikeHashMapGetString(&hashmap, "string", &stestr) == IKE_SPEC_MAP_OK, "could not read string");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "string", stest) == IKE_HASHMAP_OK, "could not store string");
+    ck_assert_msg(ikeHashMapGetString(&hashmap, "string", &stestr) == IKE_HASHMAP_OK, "could not read string");
     ck_assert_msg(strcmp(stest, stestr) == 0, "stored string is not equal than expected");
     free(stest);
 }
@@ -110,7 +110,7 @@ END_TEST
 static int test_hashmapIterateCount = 0;
 static int test_hashmapIterateHelper(ikeAny udata, ikeAny item) {
     test_hashmapIterateCount ++;
-    return IKE_SPEC_MAP_OK;
+    return IKE_HASHMAP_OK;
 }
 
 START_TEST(test_hashmapIterate)
@@ -121,10 +121,10 @@ START_TEST(test_hashmapIterate)
     char *stest1 = calloc(12, sizeof(char)); strcpy(stest1, "hello world");
     char *stest2 = calloc(12, sizeof(char)); strcpy(stest2, "dlrow olleh");
 
-    ck_assert_msg(ikeHashMapPut(&hashmap, "regular", stest1) == IKE_SPEC_MAP_OK, "could not store string (regular)");
-    ck_assert_msg(ikeHashMapPut(&hashmap, "reverse", stest2) == IKE_SPEC_MAP_OK, "could not store string (reverse)");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "regular", stest1) == IKE_HASHMAP_OK, "could not store string (regular)");
+    ck_assert_msg(ikeHashMapPut(&hashmap, "reverse", stest2) == IKE_HASHMAP_OK, "could not store string (reverse)");
 
-    ck_assert_msg(ikeHashMapIterate(&hashmap, test_hashmapIterateHelper, NULL) == IKE_SPEC_MAP_OK, "could not iterate map");
+    ck_assert_msg(ikeHashMapIterate(&hashmap, test_hashmapIterateHelper, NULL) == IKE_HASHMAP_OK, "could not iterate map");
     ck_assert_msg(test_hashmapIterateCount == 2, "unexpected iteration keys count");
 
     free(stest1);

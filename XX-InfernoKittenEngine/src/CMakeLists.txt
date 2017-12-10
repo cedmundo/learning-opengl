@@ -4,10 +4,9 @@ set(IKE_LIBNAME ike)
 # Create library
 set(IKE_SOURCES
   ike.c
+  pool.c
   hashmap.c
   asset.c
-  display.c
-  pool.c
   )
 
 # Find packages

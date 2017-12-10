@@ -5,9 +5,6 @@
 #define IKE_ASSET_OK 0
 #define IKE_ASSET_FAILURE 1
 
-// We do not care about hashmap right now.
-typedef struct _ikeHashMap ikeHashMap;
-
 /*
  * \brief Sets the root for asset for loading objects.
  *
@@ -30,17 +27,6 @@ void ikeAssetSetBase(const char *path);
  * \return int 0 if success, 1 otherwise.
  */
 int ikeAssetGetText(const char* file, char** data, size_t* len);
-
-/*
- * \brief Reads the entire file into msgpack buffer.
- *
- * Reads contents of requested asset as binary into msgpack buffer's data.
- *
- * \param file to read
- * \param sbuf to dump asset.
- * \return int 0 if success, 1 otherwise.
- */
-int ikeAssetGetHashMap(const char* file, ikeHashMap* hashmap);
 
 /*
  * \brief Releases memory for any loaded asset.

@@ -140,7 +140,7 @@ unsigned int ikeHashMapHashInt(ikeHashMap* hashmap, const char* keystring){
 
 /*
  * Return the integer of the location in data
- * to store the point to the item, or IKE_SPEC_MAP_FULL.
+ * to store the point to the item, or IKE_HASHMAP_FULL.
  */
 int ikeHashMapHash(ikeHashMap* hashmap, const char* key){
     unsigned int curr;
@@ -148,7 +148,7 @@ int ikeHashMapHash(ikeHashMap* hashmap, const char* key){
 
     /* If full, return immediately */
     if(hashmap->size >= (hashmap->tablesize/2))
-        return IKE_SPEC_MAP_FULL;
+        return IKE_HASHMAP_FULL;
 
     /* Find the best index */
     curr = ikeHashMapHashInt(hashmap, key);
@@ -164,7 +164,7 @@ int ikeHashMapHash(ikeHashMap* hashmap, const char* key){
         curr = (curr + 1) % hashmap->tablesize;
     }
 
-    return IKE_SPEC_MAP_FULL;
+    return IKE_HASHMAP_FULL;
 }
 
 /* Doubles the size of the hashmap, and rehashes all the elements */
@@ -176,7 +176,7 @@ int ikeHashMapRehash(ikeHashMap* hashmap) {
     /* Setup the new elements */
     ikeHashMapElement* temp = (ikeHashMapElement *) calloc(2 * hashmap->tablesize, sizeof(ikeHashMapElement));
     if(!temp)
-        return IKE_SPEC_MAP_OMEM;
+        return IKE_HASHMAP_OMEM;
 
     /* Update the array */
     curr = hashmap->data;
@@ -195,30 +195,30 @@ int ikeHashMapRehash(ikeHashMap* hashmap) {
             continue;
 
         status = ikeHashMapPut(hashmap, curr[i].key, curr[i].data);
-        if (status != IKE_SPEC_MAP_OK)
+        if (status != IKE_HASHMAP_OK)
             return status;
     }
 
     free(curr);
-    return IKE_SPEC_MAP_OK;
+    return IKE_HASHMAP_OK;
 }
 
 int ikeHashMapInit(ikeHashMap* hashmap) {
-    int excode = IKE_SPEC_MAP_OK;
+    int excode = IKE_HASHMAP_OK;
     hashmap->data = NULL;
     hashmap->size = 0;
     hashmap->tablesize = 0;
 
     hashmap->data = calloc(INITIAL_SIZE, sizeof(ikeHashMapElement));
     if (hashmap->data == NULL) {
-        excode = IKE_SPEC_MAP_OMEM; goto finalize;
+        excode = IKE_HASHMAP_OMEM; goto finalize;
     }
 
     hashmap->tablesize = INITIAL_SIZE;
     hashmap->size = 0;
 
 finalize:
-    if (excode != IKE_SPEC_MAP_OK)
+    if (excode != IKE_HASHMAP_OK)
         ikeHashMapFree(hashmap);
 
     return excode;
@@ -229,20 +229,20 @@ int ikeHashMapIterate(ikeHashMap* hashmap, ikeHashMapIterator iter, ikeAny userd
 
     /* On empty hashmap, return immediately */
     if (ikeHashMapLength(hashmap) <= 0)
-        return IKE_SPEC_MAP_MISSING;
+        return IKE_HASHMAP_MISSING;
 
     /* Linear probing */
     for(i = 0; i< hashmap->tablesize; i++) {
         if(hashmap->data[i].inuse != 0) {
             ikeAny data = (ikeAny) hashmap->data[i].data;
             int status = iter(userdata, data);
-            if (status != IKE_SPEC_MAP_OK) {
+            if (status != IKE_HASHMAP_OK) {
                 return status;
             }
         }
     }
 
-    return IKE_SPEC_MAP_OK;
+    return IKE_HASHMAP_OK;
 }
 
 int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny value) {
@@ -250,9 +250,9 @@ int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny value) {
 
     /* Find a place to put our value */
     index = ikeHashMapHash(hashmap, key);
-    while(index == IKE_SPEC_MAP_FULL){
-        if (ikeHashMapRehash(hashmap) == IKE_SPEC_MAP_OMEM) {
-            return IKE_SPEC_MAP_OMEM;
+    while(index == IKE_HASHMAP_FULL){
+        if (ikeHashMapRehash(hashmap) == IKE_HASHMAP_OMEM) {
+            return IKE_HASHMAP_OMEM;
         }
         index = ikeHashMapHash(hashmap, key);
     }
@@ -263,7 +263,7 @@ int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny value) {
     hashmap->data[index].inuse = 1;
     hashmap->size++;
 
-    return IKE_SPEC_MAP_OK;
+    return IKE_HASHMAP_OK;
 }
 
 int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *arg) {
@@ -279,7 +279,7 @@ int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *arg) {
         if (inuse == 1){
             if (strcmp(hashmap->data[curr].key,key)==0){
                 *arg = (hashmap->data[curr].data);
-                return IKE_SPEC_MAP_OK;
+                return IKE_HASHMAP_OK;
             }
         }
 
@@ -289,13 +289,13 @@ int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *arg) {
     *arg = NULL;
 
     /* Not found */
-    return IKE_SPEC_MAP_MISSING;
+    return IKE_HASHMAP_MISSING;
 }
 
 int ikeHashMapGetInt(ikeHashMap* hashmap, const char *key, int *item){
     ikeAny val;
     int rv = ikeHashMapGet(hashmap, key, &val);
-    if (rv == IKE_SPEC_MAP_OK)
+    if (rv == IKE_HASHMAP_OK)
         *item = *((int*) val);
     return rv;
 }
@@ -303,7 +303,7 @@ int ikeHashMapGetInt(ikeHashMap* hashmap, const char *key, int *item){
 int ikeHashMapGetFloat(ikeHashMap* hashmap, const char *key, float *item){
     ikeAny val;
     int rv = ikeHashMapGet(hashmap, key, &val);
-    if (rv == IKE_SPEC_MAP_OK)
+    if (rv == IKE_HASHMAP_OK)
         *item = *((float*) val);
     return rv;
 }
@@ -311,7 +311,7 @@ int ikeHashMapGetFloat(ikeHashMap* hashmap, const char *key, float *item){
 int ikeHashMapGetDouble(ikeHashMap* hashmap, const char *key, double *item){
     ikeAny val;
     int rv = ikeHashMapGet(hashmap, key, &val);
-    if (rv == IKE_SPEC_MAP_OK)
+    if (rv == IKE_HASHMAP_OK)
         *item = *((double*) val);
     return rv;
 }
@@ -340,14 +340,14 @@ int ikeHashMapRemove(ikeHashMap* hashmap, const char *key) {
 
                 /* Reduce the size */
                 hashmap->size--;
-                return IKE_SPEC_MAP_OK;
+                return IKE_HASHMAP_OK;
             }
         }
         curr = (curr + 1) % hashmap->tablesize;
     }
 
     /* Data not found */
-    return IKE_SPEC_MAP_MISSING;
+    return IKE_HASHMAP_MISSING;
 }
 
 void ikeHashMapFree(ikeHashMap* hashmap) {

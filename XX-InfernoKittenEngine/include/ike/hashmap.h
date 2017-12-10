@@ -1,11 +1,11 @@
-#ifndef IKE_SPEC_H
-#define IKE_SPEC_H
+#ifndef IKE_HASHMAP_H
+#define IKE_HASHMAP_H
 #include <stdio.h>
 
-#define IKE_SPEC_MAP_MISSING (-3) // No such element
-#define IKE_SPEC_MAP_FULL (-2) // Full
-#define IKE_SPEC_MAP_OMEM (-1) // Out Of Memory
-#define IKE_SPEC_MAP_OK (0) // Ok
+#define IKE_HASHMAP_MISSING (-3) // No such element
+#define IKE_HASHMAP_FULL (-2) // Full
+#define IKE_HASHMAP_OMEM (-1) // Out Of Memory
+#define IKE_HASHMAP_OK (0) // Ok
 
 #ifndef IKE_ANY
 #define IKE_ANY
@@ -21,7 +21,7 @@ typedef void* ikeAny;
  * \brief Iterator callback.
  *
  * This callback must return a map status code, if it returns anything
- * other than IKE_SPEC_MAP_OK the traversal is terminated. Also, it's highly
+ * other than IKE_HASHMAP_OK the traversal is terminated. Also, it's highly
  * recommended to not reenter any HashMap functions, or deadlock may arise.
  */
 typedef int (*ikeHashMapIterator)(ikeAny, ikeAny);
@@ -71,7 +71,7 @@ int ikeHashMapIterate(ikeHashMap* hashmap, ikeHashMapIterator iter, ikeAny userd
  * \param hashmap where value is going to be stored.
  * \param key to hash.
  * \param item to store.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_OMEM.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_OMEM.
  */
 int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny item);
 
@@ -81,7 +81,7 @@ int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny item);
  * \param hashmap where value is stored.
  * \param key to hash.
  * \param item (output) to copy value from map.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
 int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *item);
 
@@ -91,7 +91,7 @@ int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *item);
  * \param hashmap where value is stored.
  * \param key to hash.
  * \param item (output) to copy value from map.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
 int ikeHashMapGetInt(ikeHashMap* hashmap, const char *key, int *item);
 
@@ -101,7 +101,7 @@ int ikeHashMapGetInt(ikeHashMap* hashmap, const char *key, int *item);
  * \param hashmap where value is stored.
  * \param key to hash.
  * \param item (output) to copy value from map.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
 int ikeHashMapGetFloat(ikeHashMap* hashmap, const char *key, float *item);
 
@@ -111,7 +111,7 @@ int ikeHashMapGetFloat(ikeHashMap* hashmap, const char *key, float *item);
  * \param hashmap where value is stored.
  * \param key to hash.
  * \param item (output) to copy value from map.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
 int ikeHashMapGetDouble(ikeHashMap* hashmap, const char *key, double *item);
 
@@ -121,7 +121,7 @@ int ikeHashMapGetDouble(ikeHashMap* hashmap, const char *key, double *item);
  * \param hashmap where value is stored.
  * \param key to hash.
  * \param item (output) to copy value from map.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
 int ikeHashMapGetString(ikeHashMap* hashmap, const char *key, char **item);
 
@@ -130,7 +130,7 @@ int ikeHashMapGetString(ikeHashMap* hashmap, const char *key, char **item);
  *
  * \param hashmap where value is stored.
  * \param key to hash.
- * \return IKE_SPEC_MAP_OK or IKE_SPEC_MAP_MISSING.
+ * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
 int ikeHashMapRemove(ikeHashMap* hashmap, const char *key);
 
@@ -150,4 +150,4 @@ void ikeHashMapFree(ikeHashMap* hashmap);
 int ikeHashMapLength(ikeHashMap* hashmap);
 
 
-#endif /* IKE_SPEC_H */
+#endif /* IKE_HASHMAP_H */

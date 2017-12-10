@@ -29,37 +29,6 @@ START_TEST(test_getText)
 }
 END_TEST
 
-START_TEST(test_getHashMap)
-{
-    ikeAssetSetBase(CONTENT_PATH);
-
-    ikeHashMap hashmap;
-    ikeHashMapInit(&hashmap);
-
-    int res = ikeAssetGetHashMap("data", &hashmap);
-    ck_assert_msg(res == IKE_ASSET_OK, "could not read hashmap data");
-    if (res == IKE_ASSET_OK) {
-        int ival = 0;
-        ikeHashMapGetInt(&hashmap, "integer", &ival);
-        ck_assert_msg(ival == 10, "bad integer read");
-
-        char *cval = NULL;
-        ikeHashMapGetString(&hashmap, "string", &cval);
-        ck_assert_msg(strcmp("content", cval) == 0, "bad string read");
-
-        double dval = 0.0;
-        ikeHashMapGetDouble(&hashmap, "decimal", &dval);
-        ck_assert_msg(dval == 3.3, "bad double read");
-
-        int bval = 0;
-        ikeHashMapGetInt(&hashmap, "boolean", &bval);
-        ck_assert_msg(bval == 1, "bad boolean read");
-    }
-
-    ikeHashMapFree(&hashmap);
-}
-END_TEST
-
 Suite *mat4Suite(void)
 {
     Suite *s;
@@ -69,7 +38,6 @@ Suite *mat4Suite(void)
 
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_getText);
-    tcase_add_test(tc_core, test_getHashMap);
     suite_add_tcase(s, tc_core);
     return s;
 }
