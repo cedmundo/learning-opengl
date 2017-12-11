@@ -6,7 +6,7 @@
 #define IKE_ASSET_FAILURE 1
 
 // We do not care about hashmap right now.
-typedef struct _ikeHashMap ikeHashMap;
+typedef struct _ikeHashmap ikeHashmap;
 
 /*
  * \brief Sets the root for asset for loading objects.
