@@ -32,17 +32,6 @@ void ikeAssetSetBase(const char *path);
 int ikeAssetGetText(const char* file, char** data, size_t* len);
 
 /*
- * \brief Reads the entire file into msgpack buffer.
- *
- * Reads contents of requested asset as binary into msgpack buffer's data.
- *
- * \param file to read
- * \param sbuf to dump asset.
- * \return int 0 if success, 1 otherwise.
- */
-int ikeAssetGetHashMap(const char* file, ikeHashMap* hashmap);
-
-/*
  * \brief Releases memory for any loaded asset.
  */
 void ikeAssetFree(char**);

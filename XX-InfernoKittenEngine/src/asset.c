@@ -8,7 +8,6 @@
 
 static const char *bpath = (void *) 0;
 static size_t bpathl = 0;
-void ikeAssetDestroyHashMap(ikeAny any);
 
 void ikeAssetSetBase(const char* newbase) {
     bpath = newbase;
@@ -67,68 +66,6 @@ int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
     int res = readFile(apath, data, len);
     free(apath);
     return res;
-}
-
-int ikeAssetGetHashMap(const char* rpath, ikeHashMap* hashmap) {
-    int excode = IKE_ASSET_OK;
-    size_t len = 0;
-    char *apath = assetpath(bpath, rpath, ".hashmap");
-    char *data = NULL;
-    msgpack_zone *mempool = NULL;
-
-    if (readFile(apath, &data, &len) == IKE_ASSET_FAILURE) {
-        excode = IKE_ASSET_FAILURE; goto finalize;
-    }
-
-    mempool = calloc(1, sizeof(msgpack_zone));
-    msgpack_zone_init(mempool, 512);
-
-    int pr = 0;
-    size_t offset = 0;
-    msgpack_unpack_return ret;
-    msgpack_object obj;
-
-    ret = msgpack_unpack(data, len, &offset, mempool, &obj);
-    if (obj.type != MSGPACK_OBJECT_MAP) {
-        excode = IKE_ASSET_FAILURE; goto finalize;
-    }
-
-    // msgpack_object_map *map = ret.via.map;
-    // size_t i = 0;
-    // for (i=0;i<map.size;i++) {
-    //     msgpack_object_kv *pair = map.via.map.ptr[i];
-
-    //     msgpack_object key = pair.key;
-    //     msgpack_object val = pair.val;
-
-    //     switch(key) {
-    //         case MSGPACK_OBJECT_BOOLEAN:
-    //         case MSGPACK_OBJECT_POSITIVE_INTEGER:
-    //         case MSGPACK_OBJECT_NEGATIVE_INTEGER:
-    //             ikeHashMapPut(hashmap, key.via.raw.ptr, &val.via.u64);
-    //             break;
-    //     }
-    // }
-
-    fprintf(stderr, "Type: %d\n", obj.type);
-
-finalize:
-    if (apath != NULL)
-        free(apath);
-
-    if (data != NULL)
-        free(data);
-
-    if (excode != IKE_ASSET_OK && mempool != NULL) {
-        // Since we haven't created the map, we should remove memory of memory pool.
-        msgpack_zone_destroy(mempool);
-    }
-
-    return excode;
-}
-
-void ikeAssetDestroyHashMap(ikeAny any) {
-    ikeHashMap *hashmap = (ikeHashMap *) any;
 }
 
 void ikeAssetFree(char **data) {

@@ -5,9 +5,8 @@ set(IKE_LIBNAME ike)
 set(IKE_SOURCES
   ike.c
   hashmap.c
-  asset.c
-  display.c
   pool.c
+  asset.c
   )
 
 # Find packages
