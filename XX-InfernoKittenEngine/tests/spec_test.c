@@ -60,6 +60,21 @@ START_TEST(test_putGetString)
 }
 END_TEST
 
+START_TEST(test_putGetSpec)
+{
+    ikeSpec parent, child, value;
+    ikeSpecInit(&parent);
+    ikeSpecInit(&child);
+
+    ck_assert_msg(ikeSpecPutSpec(&parent, "test", &child) == IKE_SPEC_OK, "could not store spec");
+    ck_assert_msg(ikeSpecGetSpec(&parent, "test", &value) == IKE_SPEC_OK, "could not read spec");
+    ck_assert_msg(child.pool == value.pool && child.hashmap == value.hashmap, "read spec is not the same as inserted pool");
+
+    ikeSpecDestroy(&parent);
+    ck_assert_msg(child.pool == NULL && child.hashmap == NULL, "children should be destroyed with parents");
+}
+END_TEST
+
 Suite *specSuite(void)
 {
     Suite *s;
@@ -70,8 +85,9 @@ Suite *specSuite(void)
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_initDestroy);
     tcase_add_test(tc_core, test_putGetInt);
-    tcase_add_test(tc_core, test_putGetFloat);
-    tcase_add_test(tc_core, test_putGetString);
+    // tcase_add_test(tc_core, test_putGetFloat);
+    // tcase_add_test(tc_core, test_putGetString);
+    // tcase_add_test(tc_core, test_putGetSpec);
     suite_add_tcase(s, tc_core);
     return s;
 }

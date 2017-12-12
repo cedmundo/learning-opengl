@@ -5,29 +5,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TEMPLATE_PUT(ctype, itype, spec, key, value) ctype *vcpy = (ctype *) ikePoolGet(spec->pool, sizeof(ctype)); \
-    *vcpy = value; \
-    ikeSpecItem *item = (ikeSpecItem *) ikePoolGet(spec->pool, sizeof(ikeSpecItem)); \
-    item->type = itype; \
-    item->value = vcpy; \
-    item->key = key; \
-    int code = ikeHashmapPut(spec->hashmap, key, item); \
-    if (code == IKE_HASHMAP_OK) { \
+#define TEMPLATE_PUT(_ctype, _itype, _spec, _key, _val) _ctype *_vcpy = (_ctype *) ikePoolGet(_spec->pool, sizeof(_ctype)); \
+    *_vcpy = _val; \
+    ikeSpecItem *_item = (ikeSpecItem *) ikePoolGet(_spec->pool, sizeof(ikeSpecItem)); \
+    _item->type = _itype; \
+    _item->value = _vcpy; \
+    _item->key = _key; \
+    int _code = ikeHashmapPut(_spec->hashmap, _key, _item); \
+    if (_code == IKE_HASHMAP_OK) { \
         return IKE_SPEC_OK; \
     } else { \
         return IKE_SPEC_OUT_OF_MEMORY; \
     }
 
-#define TEMPLATE_GET(ctype, itype, spec, key, value) ikeSpecItem *item; \
-    int code = ikeHashmapGet(spec->hashmap, key, (void **) &item); \
-    if (code == IKE_HASHMAP_OK) { \
-        if (item->type != itype) { \
+#define TEMPLATE_GET(_ctype, _itype, _spec, _key, _val) ikeSpecItem *_item; \
+    int _code = ikeHashmapGet(_spec->hashmap, _key, (void **) &_item); \
+    if (_code == IKE_HASHMAP_OK) { \
+        if (_item->type != _itype) { \
             return IKE_SPEC_INVALID_TYPE; \
         } \
-        *value = *((ctype *)item->value); \
+        *_val = *((_ctype *) _item->value); \
         return IKE_SPEC_OK; \
     } else { \
-        return code; \
+        return _code; \
     }
 
 
@@ -81,9 +81,9 @@ void ikeSpecDestroy(ikeSpec *spec) {
     }
 }
 
-int ikeNestedSpecDestructor(ikeAny aitem, ikeAny _unused0) {
+int ikeNestedSpecDestructor(ikeAny _unused0, ikeAny aitem) {
     ikeSpecItem *item = (ikeSpecItem *) aitem;
-    if (item != NULL && item->type == SPEC) {
+    if (item->type == SPEC) {
         ikeSpecDestroy(item->value);
     }
 
@@ -91,7 +91,7 @@ int ikeNestedSpecDestructor(ikeAny aitem, ikeAny _unused0) {
 }
 
 int ikeSpecGetInt(ikeSpec* spec, const char *key, int *value) {
-    TEMPLATE_GET(int, INT, spec, key, value)
+    TEMPLATE_GET(int, INT, spec, key, value);
 }
 
 int ikeSpecPutInt(ikeSpec* spec, const char *key, int value) {
@@ -99,7 +99,7 @@ int ikeSpecPutInt(ikeSpec* spec, const char *key, int value) {
 }
 
 int ikeSpecGetFloat(ikeSpec* spec, const char *key, float *value) {
-    TEMPLATE_GET(float, FLOAT, spec, key, value)
+    TEMPLATE_GET(float, FLOAT, spec, key, value);
 }
 
 int ikeSpecPutFloat(ikeSpec* spec, const char *key, float value) {
@@ -136,3 +136,13 @@ int ikeSpecPutString(ikeSpec* spec, const char *key, const char *value) {
         return IKE_SPEC_OUT_OF_MEMORY;
     }
 }
+
+int ikeSpecGetSpec(ikeSpec* spec, const char *key, ikeSpec *value) {
+    TEMPLATE_GET(ikeSpec, SPEC, spec, key, value);
+}
+
+int ikeSpecPutSpec(ikeSpec* spec, const char *key, ikeSpec *ref) {
+    ikeSpec value = *ref;
+    TEMPLATE_PUT(ikeSpec, SPEC, spec, key, value);
+}
+

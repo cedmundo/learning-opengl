@@ -122,4 +122,24 @@ int ikeSpecGetString(ikeSpec* spec, const char *key, const char **value);
  */
 int ikeSpecPutString(ikeSpec* spec, const char *key, const char *value);
 
+/**
+ * \brief Gets an spec using specified key (read-only).
+ *
+ * \param spec where value is stored.
+ * \param key to hash.
+ * \param value (output) to copy value from map.
+ * \return IKE_SPEC_OK or IKE_HASHMAP_MISSING.
+ */
+int ikeSpecGetSpec(ikeSpec* spec, const char *key, ikeSpec *value);
+
+/**
+ * \brief Puts an spec using specified key (read-only).
+ *
+ * \param spec where value is going to be stored.
+ * \param key to hash.
+ * \param value to store into map.
+ * \return IKE_SPEC_OK or IKE_HASHMAP_OMEM.
+ */
+int ikeSpecPutSpec(ikeSpec* spec, const char *key, ikeSpec *value);
+
 #endif /* IKE_SPEC_H */
