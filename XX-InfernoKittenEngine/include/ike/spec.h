@@ -1,6 +1,7 @@
 #ifndef IKE_SPEC_H
 #define IKE_SPEC_H
 #include <ike/any.h>
+#include <stddef.h>
 
 #define IKE_SPEC_OK (0)
 #define IKE_SPEC_OUT_OF_MEMORY (1)
@@ -121,6 +122,17 @@ int ikeSpecGetString(ikeSpec* spec, const char *key, const char **value);
  * \return IKE_SPEC_OK or IKE_HASHMAP_OMEM.
  */
 int ikeSpecPutString(ikeSpec* spec, const char *key, const char *value);
+
+/**
+ * \brief Puts size n string using specified key (read-only).
+ *
+ * \param spec where value is going to be stored.
+ * \param key to hash.
+ * \param value to store into map.
+ * \param size of value.
+ * \return IKE_SPEC_OK or IKE_HASHMAP_OMEM.
+ */
+int ikeSpecPutStringSize(ikeSpec* spec, const char *key, const char *value, size_t size);
 
 /**
  * \brief Gets an spec using specified key (read-only).

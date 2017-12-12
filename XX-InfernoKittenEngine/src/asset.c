@@ -1,4 +1,6 @@
 #include <ike/asset.h>
+#include <ike/spec.h>
+#include <ike/spec_decode.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -63,6 +65,31 @@ int ikeAssetGetText(const char *rpath, char **data, size_t *len) {
     char *apath = assetpath(bpath, rpath, ".txt");
     int res = readFile(apath, data, len);
     free(apath);
+    return res;
+}
+
+int ikeAssetGetSpec(const char* rpath, ikeSpec *spec) {
+    char *apath = assetpath(bpath, rpath, ".spec");
+    char *data = NULL;
+    int status = IKE_ASSET_OK;
+    size_t len = 0L;
+
+    int res = readFile(apath, &data, &len);
+    if (res != IKE_ASSET_OK) {
+        status = IKE_ASSET_FAILURE; goto finalize;
+    }
+
+    res = ikeSpecDecodeFromBuffer(spec, data, len);
+    if (res != IKE_SPEC_OK) {
+        status = IKE_ASSET_FAILURE; goto finalize;
+    }
+
+finalize:
+    free(apath);
+
+    if (data != NULL)
+        free(data);
+
     return res;
 }
 

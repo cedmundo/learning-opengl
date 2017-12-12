@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <check.h>
 #include <tests/config.h>
+#include <ike/spec.h>
 #include <ike/mathutil.h>
 #include <ike/asset.h>
 
@@ -28,7 +29,29 @@ START_TEST(test_getText)
 }
 END_TEST
 
-Suite *mat4Suite(void)
+START_TEST(test_getSpec)
+{
+    ikeAssetSetBase(CONTENT_PATH);
+    ikeSpec spec;
+    ikeSpecInit(&spec);
+
+    int res = ikeAssetGetSpec("data", &spec);
+    ck_assert_msg(res == IKE_ASSET_OK, "could not read spec");
+    if (res == IKE_ASSET_OK) {
+        int a = 0, ei = 10;
+        ck_assert_msg(ikeSpecGetInt(&spec, "integer", &a) == IKE_SPEC_OK, "could not read int from spec");
+        ck_assert_msg(a == ei);
+
+        float b = 0.f, ef = 3.3f;
+        ck_assert_msg(ikeSpecGetFloat(&spec, "decimal", &b) == IKE_SPEC_OK, "could not read float from spec");
+        ck_assert_msg(b == ef);
+    }
+
+    ikeSpecDestroy(&spec);
+}
+END_TEST
+
+Suite *assetSuite(void)
 {
     Suite *s;
     TCase *tc_core;
@@ -37,6 +60,7 @@ Suite *mat4Suite(void)
 
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_getText);
+    tcase_add_test(tc_core, test_getSpec);
     suite_add_tcase(s, tc_core);
     return s;
 }
@@ -47,7 +71,7 @@ int main(void)
     Suite *s;
     SRunner *sr;
 
-    s = mat4Suite();
+    s = assetSuite();
     sr = srunner_create(s);
 
     srunner_run_all(sr, CK_NORMAL);

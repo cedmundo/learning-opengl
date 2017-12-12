@@ -5,8 +5,8 @@
 #define IKE_ASSET_OK 0
 #define IKE_ASSET_FAILURE 1
 
-// We do not care about hashmap right now.
-typedef struct _ikeHashmap ikeHashmap;
+// We do not care about ikeSpec right now.
+typedef struct _ikeSpec ikeSpec;
 
 /*
  * \brief Sets the root for asset for loading objects.
@@ -30,6 +30,19 @@ void ikeAssetSetBase(const char *path);
  * \return int 0 if success, 1 otherwise.
  */
 int ikeAssetGetText(const char* file, char** data, size_t* len);
+
+/*
+ * \brief Reads a spec file.
+ *
+ * Reads a file and puts results into spec param, it must be pre-initialized.
+ *
+ * Warning: data must be destroyed using ikeSpecDestroy(...).
+ *
+ * \param file to read
+ * \param spec to dump asset.
+ * \return int 0 if success, 1 otherwise.
+ */
+int ikeAssetGetSpec(const char* file, ikeSpec *spec);
 
 /*
  * \brief Releases memory for any loaded asset.

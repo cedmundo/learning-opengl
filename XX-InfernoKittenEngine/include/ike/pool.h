@@ -2,6 +2,7 @@
 #define IKE_POOL_H
 #include <stddef.h>
 
+#define IKE_POOL_TINY ((size_t) 512)
 #define IKE_POOL_SMALL ((size_t) 1024)
 #define IKE_POOL_MEDIUM ((size_t) 64*1024)
 #define IKE_POOL_BIG ((size_t) 64*1024*1024)

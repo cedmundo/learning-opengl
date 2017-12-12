@@ -4,6 +4,7 @@
 #include <ike/mathutil.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 
 #define TEMPLATE_PUT(_ctype, _itype, _spec, _key, _val) _ctype *_vcpy = (_ctype *) ikePoolGet(_spec->pool, sizeof(_ctype)); \
     *_vcpy = _val; \
@@ -122,8 +123,12 @@ int ikeSpecGetString(ikeSpec* spec, const char *key, const char **value) {
 
 int ikeSpecPutString(ikeSpec* spec, const char *key, const char *value) {
     size_t len = strlen(value);
-    char *ccpy = (char *) ikePoolGet(spec->pool, len+1);
-    strncpy(ccpy, value, len);
+    return ikeSpecPutStringSize(spec, key, value, len);
+}
+
+int ikeSpecPutStringSize(ikeSpec* spec, const char *key, const char *value, size_t size) {
+    char *ccpy = (char *) ikePoolGet(spec->pool, size+1);
+    strncpy(ccpy, value, size);
 
     ikeSpecItem *item = (ikeSpecItem *) ikePoolGet(spec->pool, sizeof(ikeSpecItem));
     item->type = STRING;
