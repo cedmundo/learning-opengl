@@ -292,34 +292,6 @@ int ikeHashmapGet(ikeHashmap* hashmap, const char *key, ikeAny *arg) {
     return IKE_HASHMAP_MISSING;
 }
 
-int ikeHashmapGetInt(ikeHashmap* hashmap, const char *key, int *item){
-    ikeAny val;
-    int rv = ikeHashmapGet(hashmap, key, &val);
-    if (rv == IKE_HASHMAP_OK)
-        *item = *((int*) val);
-    return rv;
-}
-
-int ikeHashmapGetFloat(ikeHashmap* hashmap, const char *key, float *item){
-    ikeAny val;
-    int rv = ikeHashmapGet(hashmap, key, &val);
-    if (rv == IKE_HASHMAP_OK)
-        *item = *((float*) val);
-    return rv;
-}
-
-int ikeHashmapGetDouble(ikeHashmap* hashmap, const char *key, double *item){
-    ikeAny val;
-    int rv = ikeHashmapGet(hashmap, key, &val);
-    if (rv == IKE_HASHMAP_OK)
-        *item = *((double*) val);
-    return rv;
-}
-
-int ikeHashmapGetString(ikeHashmap* hashmap, const char *key, char **item){
-    return ikeHashmapGet(hashmap, key, (ikeAny *) item);
-}
-
 int ikeHashmapRemove(ikeHashmap* hashmap, const char *key) {
     int i;
     int curr;
