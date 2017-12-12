@@ -1,5 +1,5 @@
-#ifndef IKE_SPEC_H
-#define IKE_SPEC_H
+#ifndef IKE_HASHMAP_H
+#define IKE_HASHMAP_H
 #include <stdio.h>
 #include <ike/any.h>
 
@@ -77,46 +77,6 @@ int ikeHashmapPut(ikeHashmap* hashmap, const char *key, ikeAny item);
 int ikeHashmapGet(ikeHashmap* hashmap, const char *key, ikeAny *item);
 
 /**
- * \brief Gets an integer using hashmapified key.
- *
- * \param hashmap where value is stored.
- * \param key to hash.
- * \param item (output) to copy value from map.
- * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
- */
-int ikeHashmapGetInt(ikeHashmap* hashmap, const char *key, int *item);
-
-/**
- * \brief Gets a float using hashmapified key.
- *
- * \param hashmap where value is stored.
- * \param key to hash.
- * \param item (output) to copy value from map.
- * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
- */
-int ikeHashmapGetFloat(ikeHashmap* hashmap, const char *key, float *item);
-
-/**
- * \brief Gets a double using hashmapified key.
- *
- * \param hashmap where value is stored.
- * \param key to hash.
- * \param item (output) to copy value from map.
- * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
- */
-int ikeHashmapGetDouble(ikeHashmap* hashmap, const char *key, double *item);
-
-/**
- * \brief Gets a string using hashmapified key.
- *
- * \param hashmap where value is stored.
- * \param key to hash.
- * \param item (output) to copy value from map.
- * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
- */
-int ikeHashmapGetString(ikeHashmap* hashmap, const char *key, char **item);
-
-/**
  * \brief Remove an element from hashmap.
  *
  * \param hashmap where value is stored.
@@ -130,7 +90,7 @@ int ikeHashmapRemove(ikeHashmap* hashmap, const char *key);
  *
  * \param hashmap to be free.
  */
-void ikeHashmapFree(ikeHashmap* hashmap);
+void ikeHashmapDestroy(ikeHashmap* hashmap);
 
 /**
  * \brief Get the current size of a hashmap.
@@ -141,4 +101,4 @@ void ikeHashmapFree(ikeHashmap* hashmap);
 int ikeHashmapLength(ikeHashmap* hashmap);
 
 
-#endif /* IKE_SPEC_H */
+#endif /* IKE_HASHMAP_H */

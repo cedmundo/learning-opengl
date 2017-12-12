@@ -43,67 +43,7 @@ START_TEST(test_hashmapSimple)
     free(dtest);
     free(stest);
 
-    ikeHashmapFree(&hashmap);
-}
-END_TEST
-
-START_TEST(test_hashmapGetInt)
-{
-    ikeHashmap hashmap;
-    ikeHashmapInit(&hashmap);
-
-    int *itest = calloc(1, sizeof(int)); *itest = 7;
-    int itestr;
-
-    ck_assert_msg(ikeHashmapPut(&hashmap, "int", itest) == IKE_HASHMAP_OK, "could not store int");
-    ck_assert_msg(ikeHashmapGetInt(&hashmap, "int", &itestr) == IKE_HASHMAP_OK, "could not read int");
-    ck_assert_msg(*itest == itestr, "stored integer is not equal than expected");
-    free(itest);
-}
-END_TEST
-
-START_TEST(test_hashmapGetFloat)
-{
-    ikeHashmap hashmap;
-    ikeHashmapInit(&hashmap);
-
-    float *ftest = calloc(1, sizeof(float)); *ftest = 5.6;
-    float ftestr;
-
-    ck_assert_msg(ikeHashmapPut(&hashmap, "float", ftest) == IKE_HASHMAP_OK, "could not store float");
-    ck_assert_msg(ikeHashmapGetFloat(&hashmap, "float", &ftestr) == IKE_HASHMAP_OK, "could not read float");
-    ck_assert_msg(*ftest == ftestr, "stored float is not equal than expected");
-    free(ftest);
-}
-END_TEST
-
-START_TEST(test_hashmapGetDouble)
-{
-    ikeHashmap hashmap;
-    ikeHashmapInit(&hashmap);
-
-    double *dtest = calloc(1, sizeof(double)); *dtest = 5.6;
-    double dtestr;
-
-    ck_assert_msg(ikeHashmapPut(&hashmap, "double", dtest) == IKE_HASHMAP_OK, "could not store double");
-    ck_assert_msg(ikeHashmapGetDouble(&hashmap, "double", &dtestr) == IKE_HASHMAP_OK, "could not read double");
-    ck_assert_msg(*dtest == dtestr, "stored double is not equal than expected");
-    free(dtest);
-}
-END_TEST
-
-START_TEST(test_hashmapGetString)
-{
-    ikeHashmap hashmap;
-    ikeHashmapInit(&hashmap);
-
-    char *stest = calloc(12, sizeof(char)); strcpy(stest, "hello world");
-    char *stestr;
-
-    ck_assert_msg(ikeHashmapPut(&hashmap, "string", stest) == IKE_HASHMAP_OK, "could not store string");
-    ck_assert_msg(ikeHashmapGetString(&hashmap, "string", &stestr) == IKE_HASHMAP_OK, "could not read string");
-    ck_assert_msg(strcmp(stest, stestr) == 0, "stored string is not equal than expected");
-    free(stest);
+    ikeHashmapDestroy(&hashmap);
 }
 END_TEST
 
@@ -141,10 +81,6 @@ Suite *mat4Suite(void)
 
     tc_core = tcase_create("core");
     tcase_add_test(tc_core, test_hashmapSimple);
-    tcase_add_test(tc_core, test_hashmapGetInt);
-    tcase_add_test(tc_core, test_hashmapGetFloat);
-    tcase_add_test(tc_core, test_hashmapGetDouble);
-    tcase_add_test(tc_core, test_hashmapGetString);
     tcase_add_test(tc_core, test_hashmapIterate);
     suite_add_tcase(s, tc_core);
     return s;

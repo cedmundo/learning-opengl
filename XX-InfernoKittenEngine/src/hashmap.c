@@ -219,7 +219,7 @@ int ikeHashmapInit(ikeHashmap* hashmap) {
 
 finalize:
     if (excode != IKE_HASHMAP_OK)
-        ikeHashmapFree(hashmap);
+        ikeHashmapDestroy(hashmap);
 
     return excode;
 }
@@ -350,7 +350,7 @@ int ikeHashmapRemove(ikeHashmap* hashmap, const char *key) {
     return IKE_HASHMAP_MISSING;
 }
 
-void ikeHashmapFree(ikeHashmap* hashmap) {
+void ikeHashmapDestroy(ikeHashmap* hashmap) {
     if (hashmap->data != NULL) {
         free(hashmap->data);
         hashmap->data = NULL;
