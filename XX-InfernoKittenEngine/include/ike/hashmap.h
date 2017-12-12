@@ -1,21 +1,12 @@
 #ifndef IKE_SPEC_H
 #define IKE_SPEC_H
 #include <stdio.h>
+#include <ike/any.h>
 
 #define IKE_HASHMAP_MISSING (-3) // No such element
 #define IKE_HASHMAP_FULL (-2) // Full
 #define IKE_HASHMAP_OMEM (-1) // Out Of Memory
 #define IKE_HASHMAP_OK (0) // Ok
-
-#ifndef IKE_ANY
-#define IKE_ANY
-/**
- * \brief Any arbitary type.
- *
- * Used to handle abstract types without touching its data at all.
- */
-typedef void* ikeAny;
-#endif
 
 /**
  * \brief Iterator callback.
