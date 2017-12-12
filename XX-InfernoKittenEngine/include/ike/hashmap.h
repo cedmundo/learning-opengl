@@ -1,56 +1,47 @@
-#ifndef IKE_HASHMAP_H
-#define IKE_HASHMAP_H
+#ifndef IKE_SPEC_H
+#define IKE_SPEC_H
 #include <stdio.h>
+#include <ike/any.h>
 
 #define IKE_HASHMAP_MISSING (-3) // No such element
 #define IKE_HASHMAP_FULL (-2) // Full
 #define IKE_HASHMAP_OMEM (-1) // Out Of Memory
 #define IKE_HASHMAP_OK (0) // Ok
 
-#ifndef IKE_ANY
-#define IKE_ANY
-/**
- * \brief Any arbitary type.
- *
- * Used to handle abstract types without touching its data at all.
- */
-typedef void* ikeAny;
-#endif
-
 /**
  * \brief Iterator callback.
  *
  * This callback must return a map status code, if it returns anything
  * other than IKE_HASHMAP_OK the traversal is terminated. Also, it's highly
- * recommended to not reenter any HashMap functions, or deadlock may arise.
+ * recommended to not reenter any Hashmap functions, or deadlock may arise.
  */
-typedef int (*ikeHashMapIterator)(ikeAny, ikeAny);
+typedef int (*ikeHashmapIterator)(ikeAny, ikeAny);
 
 /* We need to keep keys and values */
-typedef struct _ikeHashMapElement {
+typedef struct _ikeHashmapElement {
 	const char* key;
 	int inuse;
 	ikeAny data;
-} ikeHashMapElement;
+} ikeHashmapElement;
 
 /**
- * \brief Forward declaration for ikeHashMap.
+ * \brief Forward declaration for ikeHashmap.
  *
- * Clients should use only ikeHashMap exported functions to handle data
- * within a hashmap, which is basically a HashMap, implementation borrowed
+ * Clients should use only ikeHashmap exported functions to handle data
+ * within a hashmap, which is basically a Hashmap, implementation borrowed
  * (re-written and sighlty modified for code style propouses) from https://github.com/petewarden/c_hashmap.
  */
-typedef struct _ikeHashMap {
+typedef struct _ikeHashmap {
     int tablesize;
     int size;
-    ikeHashMapElement *data;
-} ikeHashMap;
+    ikeHashmapElement *data;
+} ikeHashmap;
 
 /**
- * \brief Inits an ikeHashMap.
+ * \brief Inits an ikeHashmap.
  * \param hashmap that is going to be inited.
  */
-int ikeHashMapInit(ikeHashMap* hashmap);
+int ikeHashmapInit(ikeHashmap* hashmap);
 
 /**
  * \brief Iterate over items of hashmap.
@@ -63,7 +54,7 @@ int ikeHashMapInit(ikeHashMap* hashmap);
  * \param userdata first argument of call.
  * \return
  */
-int ikeHashMapIterate(ikeHashMap* hashmap, ikeHashMapIterator iter, ikeAny userdata);
+int ikeHashmapIterate(ikeHashmap* hashmap, ikeHashmapIterator iter, ikeAny userdata);
 
 /**
  * \brief Puts a value with hashmapified key.
@@ -73,7 +64,7 @@ int ikeHashMapIterate(ikeHashMap* hashmap, ikeHashMapIterator iter, ikeAny userd
  * \param item to store.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_OMEM.
  */
-int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny item);
+int ikeHashmapPut(ikeHashmap* hashmap, const char *key, ikeAny item);
 
 /**
  * \brief Gets a value using hashmapified key.
@@ -83,7 +74,7 @@ int ikeHashMapPut(ikeHashMap* hashmap, const char *key, ikeAny item);
  * \param item (output) to copy value from map.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
-int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *item);
+int ikeHashmapGet(ikeHashmap* hashmap, const char *key, ikeAny *item);
 
 /**
  * \brief Gets an integer using hashmapified key.
@@ -93,7 +84,7 @@ int ikeHashMapGet(ikeHashMap* hashmap, const char *key, ikeAny *item);
  * \param item (output) to copy value from map.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
-int ikeHashMapGetInt(ikeHashMap* hashmap, const char *key, int *item);
+int ikeHashmapGetInt(ikeHashmap* hashmap, const char *key, int *item);
 
 /**
  * \brief Gets a float using hashmapified key.
@@ -103,7 +94,7 @@ int ikeHashMapGetInt(ikeHashMap* hashmap, const char *key, int *item);
  * \param item (output) to copy value from map.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
-int ikeHashMapGetFloat(ikeHashMap* hashmap, const char *key, float *item);
+int ikeHashmapGetFloat(ikeHashmap* hashmap, const char *key, float *item);
 
 /**
  * \brief Gets a double using hashmapified key.
@@ -113,7 +104,7 @@ int ikeHashMapGetFloat(ikeHashMap* hashmap, const char *key, float *item);
  * \param item (output) to copy value from map.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
-int ikeHashMapGetDouble(ikeHashMap* hashmap, const char *key, double *item);
+int ikeHashmapGetDouble(ikeHashmap* hashmap, const char *key, double *item);
 
 /**
  * \brief Gets a string using hashmapified key.
@@ -123,7 +114,7 @@ int ikeHashMapGetDouble(ikeHashMap* hashmap, const char *key, double *item);
  * \param item (output) to copy value from map.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
-int ikeHashMapGetString(ikeHashMap* hashmap, const char *key, char **item);
+int ikeHashmapGetString(ikeHashmap* hashmap, const char *key, char **item);
 
 /**
  * \brief Remove an element from hashmap.
@@ -132,14 +123,14 @@ int ikeHashMapGetString(ikeHashMap* hashmap, const char *key, char **item);
  * \param key to hash.
  * \return IKE_HASHMAP_OK or IKE_HASHMAP_MISSING.
  */
-int ikeHashMapRemove(ikeHashMap* hashmap, const char *key);
+int ikeHashmapRemove(ikeHashmap* hashmap, const char *key);
 
 /**
  * \brief Frees the memory of a hashmap.
  *
  * \param hashmap to be free.
  */
-void ikeHashMapFree(ikeHashMap* hashmap);
+void ikeHashmapFree(ikeHashmap* hashmap);
 
 /**
  * \brief Get the current size of a hashmap.
@@ -147,7 +138,7 @@ void ikeHashMapFree(ikeHashMap* hashmap);
  * \param hashmap to get size of.
  * \return count of elements.
  */
-int ikeHashMapLength(ikeHashMap* hashmap);
+int ikeHashmapLength(ikeHashmap* hashmap);
 
 
-#endif /* IKE_HASHMAP_H */
+#endif /* IKE_SPEC_H */

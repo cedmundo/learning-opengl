@@ -4,7 +4,6 @@
 #include <tests/config.h>
 #include <ike/mathutil.h>
 #include <ike/asset.h>
-#include <ike/hashmap.h>
 
 START_TEST(test_getText)
 {

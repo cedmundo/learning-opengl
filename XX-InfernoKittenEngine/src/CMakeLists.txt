@@ -6,6 +6,7 @@ set(IKE_SOURCES
   ike.c
   pool.c
   hashmap.c
+  spec.c
   asset.c
   )
 
