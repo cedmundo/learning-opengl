@@ -10,6 +10,7 @@ set(IKE_SOURCES
     spec.c
     spec_decode.c
     asset.c
+    timer.c
     presenter.c
   )
 

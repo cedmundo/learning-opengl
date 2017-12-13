@@ -4,10 +4,10 @@
 #include <ike/spec.h>
 #include <ike/asset.h>
 #include <ike/vec4.h>
+#include <ike/timer.h>
 #include <stdio.h>
 
 static ikePresenter presenter;
-
 void ikeFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 int ikePresenterInit(const char *casset) {
@@ -135,7 +135,7 @@ int ikePresenterRunning() {
 }
 
 void ikePresenterUpdate() {
-    // TODO: Timer update
+    ikeGlobalTimerUpdate();
     // TODO: Input update
 }
 
