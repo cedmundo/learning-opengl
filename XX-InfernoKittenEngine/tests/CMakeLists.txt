@@ -49,3 +49,7 @@ target_include_directories(spec_test PUBLIC ${CMAKE_BINARY_DIR})
 add_executable(asset_test asset_test.c)
 target_link_libraries(asset_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(asset_test PUBLIC ${CMAKE_BINARY_DIR})
+
+add_executable(presenter_test presenter_test.c)
+target_link_libraries(presenter_test ike ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(presenter_test PUBLIC ${CMAKE_BINARY_DIR})
