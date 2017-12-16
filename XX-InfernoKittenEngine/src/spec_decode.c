@@ -6,7 +6,7 @@
 
 int ikeSpecDecodeFromMap(ikeSpec *spec, msgpack_object_map map);
 
-int ikeSpecDecodeFromBuffer(ikeSpec *spec, char *data, size_t len) {
+int ikeSpecDecodeFromBuffer(ikeSpec *spec, const char *data, const size_t len) {
     int status = IKE_SPEC_OK;
     msgpack_zone *mempool = NULL;
     mempool = calloc(1, sizeof(msgpack_zone));

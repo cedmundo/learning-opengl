@@ -17,6 +17,6 @@ typedef struct _ikeSpec ikeSpec;
  * \param len size of buffer.
  * \return IKE_SPEC_OK, IKE_SPEC_INVALID_TYPE or IKE_SPEC_OUT_OF_MEMORY
  */
-int ikeSpecDecodeFromBuffer(ikeSpec *spec, char *data, size_t len);
+int ikeSpecDecodeFromBuffer(ikeSpec *spec, const char *data, const size_t len);
 
 #endif /* IKE_SPEC_DECODE_H */
