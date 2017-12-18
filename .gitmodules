@@ -1,0 +1,3 @@
+[submodule "XX-InfernoKittenEngine/vendor/msgpack-c"]
+	path = XX-InfernoKittenEngine/vendor/msgpack-c
+	url = https://github.com/msgpack/msgpack-c
