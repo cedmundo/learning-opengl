@@ -43,12 +43,12 @@ int ikeSpecDecodeFromMap(ikeSpec *spec, msgpack_object_map map) {
 
         // Convert byte buffer to string
         msgpack_object pkey = pair.key;
-        if (pkey.type != MSGPACK_OBJECT_RAW) {
+        if (pkey.type != MSGPACK_OBJECT_STR) {
             status = IKE_SPEC_INVALID_TYPE; goto finalize;
         }
 
-        char *key = (char *) ikePoolGet(spec->pool, pkey.via.raw.size+1);
-        strncpy(key, pkey.via.raw.ptr, pkey.via.raw.size);
+        char *key = (char *) ikePoolGet(spec->pool, pkey.via.str.size+1);
+        strncpy(key, pkey.via.str.ptr, pkey.via.str.size);
         msgpack_object val = pair.val;
         ikeSpec child;
 
@@ -58,11 +58,12 @@ int ikeSpecDecodeFromMap(ikeSpec *spec, msgpack_object_map map) {
             case MSGPACK_OBJECT_NEGATIVE_INTEGER:
                 status = ikeSpecPutInt(spec, key, (int) val.via.i64); // Warning: truncation.
                 break;
-            case MSGPACK_OBJECT_DOUBLE:
-                status = ikeSpecPutFloat(spec, key, (float) val.via.dec); // Warning: truncation.
+            case MSGPACK_OBJECT_FLOAT32:
+            case MSGPACK_OBJECT_FLOAT64:
+                status = ikeSpecPutFloat(spec, key, (float) val.via.f64); // Warning: truncation.
                 break;
-            case MSGPACK_OBJECT_RAW:
-                status = ikeSpecPutStringSize(spec, key, val.via.raw.ptr, val.via.raw.size);
+            case MSGPACK_OBJECT_STR:
+                status = ikeSpecPutStringSize(spec, key, val.via.str.ptr, val.via.str.size);
                 break;
             case MSGPACK_OBJECT_MAP:
                 status = ikeSpecInit(&child);
