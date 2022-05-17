@@ -7,11 +7,19 @@ project(learning-opengl
 set(CMAKE_C_STANDARD 17)
 include(ExternalProject)
 
-# OpenGL and GLFW
+# Dependencies
+find_package(X11)
 find_package(OpenGL REQUIRED)
+find_package(Threads REQUIRED)
+
 ExternalProject_Add(GLFW
     URL "https://github.com/glfw/glfw/archive/3.3.7.tar.gz"
-    CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/glfw_install"
+    CMAKE_ARGS -DGLFW_BUILD_EXAMPLES=OFF
+               -DGLFW_BUILD_TESTS=OFF
+               -DGLFW_BUILD_DOCS=OFF
+               -DGLFW_VULKAN_STATIC=OFF
+               -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/glfw_install
+    UPDATE_COMMAND ""
 )
 set(GLFW_INCLUDE_DIR "${CMAKE_BINARY_DIR}/glfw_install/include/")
 set(GLFW_LIBRARY_DIR "${CMAKE_BINARY_DIR}/glfw_install/lib/")
@@ -26,6 +34,16 @@ function(configure_lecture TARGET)
     target_link_directories(${TARGET} PUBLIC ${GLFW_LIBRARY_DIR})
     target_link_libraries(${TARGET} LOUtils)
     target_link_libraries(${TARGET} glfw3)
+    target_link_libraries(${TARGET} ${OPENGL_LIBRARY})
+    target_link_libraries(${TARGET} ${CMAKE_DL_LIBS})
+
+    if(X11_FOUND)
+        target_include_directories(${TARGET} PUBLIC ${X11_INCLUDE_DIR})
+        target_link_libraries(${TARGET} ${X11_LIBRARIES})
+    endif()
+
+    target_link_libraries(${TARGET} Threads::Threads)
+    target_link_libraries(${TARGET} m)
 endfunction()
 
 # Actual lectures
