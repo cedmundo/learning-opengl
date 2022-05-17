@@ -20,10 +20,7 @@ int main() {
     GLint exit_code = 0;
 
     // Initialize the library
-    if (!glfwInit()) {
-        exit_code = -1;
-        goto terminate;
-    }
+    CHECK_ERROR(!glfwInit());
 
     // Configuration
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -32,10 +29,7 @@ int main() {
 
     // Create a windowed mode window and its OpenGL context
     window = glfwCreateWindow(640, 480, "Hello triangle", NULL, NULL);
-    if (!window) {
-        exit_code = -1;
-        goto terminate;
-    }
+    CHECK_ERROR(!window);
 
     // Make the window's context current
     glfwMakeContextCurrent(window);

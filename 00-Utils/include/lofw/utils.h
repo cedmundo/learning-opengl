@@ -41,6 +41,13 @@ void unload_text_file(char *);
     }                                                               \
 } while(0)
 
+#define CHECK_ERROR(cond) do { \
+    if((cond)) {               \
+        exit_code = -1;        \
+        goto terminate;        \
+    }                          \
+} while(0)
+
 #ifdef _WIN32
 #include <direct.h>
 #define GetCurrentDir _getcwd
