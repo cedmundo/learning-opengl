@@ -5,16 +5,19 @@
 #include <GLFW/glfw3.h>
 #include <lofw/utils.h>
 
+#define USE_GL_MODE GL_LINE // GL_LINE | GL_FILL
+
 int main() {
     GLFWwindow *window = NULL;
-    GLuint triangle_vbo = 0;
-    GLuint triangle_vao = 0;
-    GLuint triangle_vs = 0;
-    GLuint triangle_fs = 0;
-    GLuint triangle_sp = 0;
-    char *triangle_vsd = NULL;
-    char *triangle_fsd = NULL;
-    int exit_code = 0;
+    GLuint figure_vbo = 0;
+    GLuint figure_vao = 0;
+    GLuint figure_ebo = 0;
+    GLuint figure_vs = 0;
+    GLuint figure_fs = 0;
+    GLuint figure_sp = 0;
+    GLchar *figure_vsd = NULL;
+    GLchar *figure_fsd = NULL;
+    GLint exit_code = 0;
 
     // Initialize the library
     if (!glfwInit()) {
@@ -40,49 +43,60 @@ int main() {
 
     // Load and compile shaders
     {
-        triangle_vsd = load_text_file("./assets/hello_triangle.vs");
-        CHECK_TEXT_FILE_ERROR(triangle_vsd, "./assets/hello_triangle.vs");
+        figure_vsd = load_text_file("./assets/hello_triangle.vs");
+        CHECK_TEXT_FILE_ERROR(figure_vsd, "./assets/hello_triangle.vs");
 
-        triangle_vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(triangle_vs, 1, (const GLchar **) &triangle_vsd, NULL);
-        glCompileShader(triangle_vs);
-        CHECK_SHADER_COMPILE_ERROR(triangle_vs);
+        figure_vs = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(figure_vs, 1, (const GLchar **) &figure_vsd, NULL);
+        glCompileShader(figure_vs);
+        CHECK_SHADER_COMPILE_ERROR(figure_vs);
 
-        triangle_fsd = load_text_file("./assets/hello_triangle.fs");
-        CHECK_TEXT_FILE_ERROR(triangle_fsd, "./assets/hello_triangle.fs");
+        figure_fsd = load_text_file("./assets/hello_triangle.fs");
+        CHECK_TEXT_FILE_ERROR(figure_fsd, "./assets/hello_triangle.fs");
 
-        triangle_fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(triangle_fs, 1, (const GLchar **) &triangle_fsd, NULL);
-        glCompileShader(triangle_fs);
-        CHECK_SHADER_COMPILE_ERROR(triangle_fs);
+        figure_fs = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(figure_fs, 1, (const GLchar **) &figure_fsd, NULL);
+        glCompileShader(figure_fs);
+        CHECK_SHADER_COMPILE_ERROR(figure_fs);
 
-        triangle_sp = glCreateProgram();
-        glAttachShader(triangle_sp, triangle_vs);
-        glAttachShader(triangle_sp, triangle_fs);
-        glLinkProgram(triangle_sp);
-        CHECK_SHADER_LINK_ERROR(triangle_sp);
+        figure_sp = glCreateProgram();
+        glAttachShader(figure_sp, figure_vs);
+        glAttachShader(figure_sp, figure_fs);
+        glLinkProgram(figure_sp);
+        CHECK_SHADER_LINK_ERROR(figure_sp);
     }
 
     // Setup triangle object
     {
         // Vertex input
-        float triangle_vertices[] = {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.0f, 0.5f, 0.0f,
+        GLfloat figure_vertices[] = {
+                0.5f,  0.5f, 0.0f,  // top right
+                0.5f, -0.5f, 0.0f,  // bottom right
+                -0.5f, -0.5f, 0.0f,  // bottom left
+                -0.5f,  0.5f, 0.0f   // top left
         };
 
+        // Drawing indices
+        GLuint indices[] = {
+                0, 1, 3,
+                1, 2, 3,
+        };
+
+        glGenBuffers(1, &figure_ebo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, figure_ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
         // Generate VAO
-        glGenVertexArrays(1, &triangle_vao);
-        glBindVertexArray(triangle_vao);
+        glGenVertexArrays(1, &figure_vao);
+        glBindVertexArray(figure_vao);
 
         // Generate buffer and copy vertex data
-        glGenBuffers(1, &triangle_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+        glGenBuffers(1, &figure_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, figure_vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(figure_vertices), figure_vertices, GL_STATIC_DRAW);
 
         // Setup attributes
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
         glEnableVertexAttribArray(0);
     }
 
@@ -96,9 +110,11 @@ int main() {
 
         // Draw triangle
         {
-            glUseProgram(triangle_sp);
-            glBindVertexArray(triangle_vao);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glPolygonMode(GL_FRONT_AND_BACK, USE_GL_MODE);
+            glUseProgram(figure_sp);
+            glBindVertexArray(figure_vao);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, figure_ebo);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
 
         // Swap front and back buffers
@@ -109,27 +125,29 @@ int main() {
     }
 
     terminate:
-    if (triangle_vs != 0) {
-        glDeleteShader(triangle_vs);
+    if (figure_vs != 0) {
+        glDeleteShader(figure_vs);
     }
 
-    if (triangle_fs != 0) {
-        glDeleteShader(triangle_fs);
+    if (figure_fs != 0) {
+        glDeleteShader(figure_fs);
     }
 
-    if (triangle_sp != 0) {
-        glDeleteProgram(triangle_sp);
+    if (figure_sp != 0) {
+        glDeleteProgram(figure_sp);
     }
 
-    if (triangle_vsd != NULL) {
-        unload_text_file(triangle_vsd);
+    if (figure_vsd != NULL) {
+        unload_text_file(figure_vsd);
     }
 
-    if (triangle_fsd != NULL) {
-        unload_text_file(triangle_fsd);
+    if (figure_fsd != NULL) {
+        unload_text_file(figure_fsd);
     }
 
-    glDeleteBuffers(1, &triangle_vbo);
+    glDeleteVertexArrays(1, &figure_vao);
+    glDeleteBuffers(1, &figure_ebo);
+    glDeleteBuffers(1, &figure_vbo);
     if (window != NULL) {
         glfwDestroyWindow(window);
     }
