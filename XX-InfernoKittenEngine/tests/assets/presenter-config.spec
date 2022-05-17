@@ -1,1 +1,0 @@
-Š¥title«Hello world¥widthÍ ¦heightÍX«full-screenÂ©resizableÃ§visibleÂ©decoratedÃ§focusedÂ¨floatingÂ©maximizedÂ
