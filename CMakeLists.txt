@@ -44,6 +44,14 @@ function(configure_lecture TARGET)
 
     target_link_libraries(${TARGET} Threads::Threads)
     target_link_libraries(${TARGET} m)
+
+    set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
+    if (EXISTS ${ASSETS_DIR})
+        add_custom_command(TARGET ${TARGET}
+                PRE_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "$<TARGET_FILE_DIR:${TARGET}>/assets"
+                VERBATIM)
+    endif()
 endfunction()
 
 # Actual lectures
