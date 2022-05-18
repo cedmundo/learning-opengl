@@ -21,6 +21,7 @@ int main() {
 
     // Initialize the library
     CHECK_ERROR(!glfwInit());
+    glfwSetErrorCallback(report_glfw_error_cb);
 
     // Configuration
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -139,9 +140,18 @@ int main() {
         unload_text_file(figure_fsd);
     }
 
-    glDeleteVertexArrays(1, &figure_vao);
-    glDeleteBuffers(1, &figure_ebo);
-    glDeleteBuffers(1, &figure_vbo);
+    if (figure_vao != 0) {
+        glDeleteVertexArrays(1, &figure_vao);
+    }
+
+    if (figure_ebo != 0) {
+        glDeleteBuffers(1, &figure_ebo);
+    }
+
+    if (figure_vbo != 0) {
+        glDeleteBuffers(1, &figure_vbo);
+    }
+
     if (window != NULL) {
         glfwDestroyWindow(window);
     }

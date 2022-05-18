@@ -31,3 +31,7 @@ void unload_text_file(char *data) {
         free(data);
     }
 }
+
+void report_glfw_error_cb(int code, const char *message) {
+    fprintf(stderr, "glfw error(%d): %s\n", code, message);
+}

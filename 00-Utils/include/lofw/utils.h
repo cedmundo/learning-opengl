@@ -8,6 +8,7 @@
 
 char *load_text_file(const char *name);
 void unload_text_file(char *);
+void report_glfw_error_cb(int, const char *);
 
 #define CHECK_TEXT_FILE_ERROR(data, file) do {           \
     if ((data) == NULL) {                                \
