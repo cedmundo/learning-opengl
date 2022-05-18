@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <lofw/utils.h>
+// #include <math.h>
 
 #define USE_GL_MODE GL_FILL // GL_LINE | GL_FILL
 
@@ -21,6 +22,7 @@ int main() {
 
     // Initialize the library
     CHECK_ERROR(!glfwInit());
+    glfwSetErrorCallback(report_glfw_error_cb);
 
     // Configuration
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -64,9 +66,10 @@ int main() {
     {
         // Vertex input
         GLfloat figure_vertices[] = {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.0f,  0.5f, 0.0f
+                // positions                    // colors
+                -0.5f,-0.5f,0.0f,   1.0f, 0.0f, 0.0f,
+                 0.5f,-0.5f,0.0f,   0.0f, 1.0f, 0.0f,
+                0.0f, 0.5f,0.0f, 0.0f, 0.0f, 1.0f,
         };
 
         // Drawing indices
@@ -88,8 +91,11 @@ int main() {
         glBufferData(GL_ARRAY_BUFFER, sizeof(figure_vertices), figure_vertices, GL_STATIC_DRAW);
 
         // Setup attributes
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), NULL);
         glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
     }
 
     // Set clear color
@@ -102,8 +108,13 @@ int main() {
 
         // Draw triangle
         {
+            // GLdouble time_value = glfwGetTime();
+            // GLdouble green_value = (sin(time_value) / 2.0f) + 0.5f;
+            // GLint figure_our_color_uniform_loc = glGetUniformLocation(figure_sp, "ourColor");
+
             glPolygonMode(GL_FRONT_AND_BACK, USE_GL_MODE);
             glUseProgram(figure_sp);
+            // glUniform4f(figure_our_color_uniform_loc, 0.0f, (GLfloat)green_value, 0.0f, 1.0f);
             glBindVertexArray(figure_vao);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, figure_ebo);
             glDrawElements(GL_TRIANGLES, sizeof(figure_ebo), GL_UNSIGNED_INT, 0);
@@ -137,9 +148,18 @@ int main() {
         unload_text_file(figure_fsd);
     }
 
-    glDeleteVertexArrays(1, &figure_vao);
-    glDeleteBuffers(1, &figure_ebo);
-    glDeleteBuffers(1, &figure_vbo);
+    if (figure_vao != 0) {
+        glDeleteVertexArrays(1, &figure_vao);
+    }
+
+    if (figure_ebo != 0) {
+        glDeleteBuffers(1, &figure_ebo);
+    }
+
+    if (figure_vbo != 0) {
+        glDeleteBuffers(1, &figure_vbo);
+    }
+
     if (window != NULL) {
         glfwDestroyWindow(window);
     }
