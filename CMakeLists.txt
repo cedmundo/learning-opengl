@@ -5,9 +5,13 @@ project(learning-opengl
         HOMEPAGE_URL "https://github.com/cedmundo/learning-opengl"
         LANGUAGES C)
 set(CMAKE_C_STANDARD 17)
+
+include_directories(00-Utils/cmake)
 include(ExternalProject)
 
+
 # Dependencies
+find_package(M)
 find_package(X11)
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
@@ -43,14 +47,16 @@ function(configure_lecture TARGET)
     endif()
 
     target_link_libraries(${TARGET} Threads::Threads)
-    target_link_libraries(${TARGET} m)
+    if (HAVE_M)
+        target_include_directories(${TARGET} PUBLIC ${M_INCLUDES})
+        target_link_libraries(${TARGET} ${M_LIBRARIES})
+    endif()
 
     set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
     if (EXISTS ${ASSETS_DIR})
         add_custom_command(TARGET ${TARGET}
                 PRE_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "$<TARGET_FILE_DIR:${TARGET}>/assets"
-                VERBATIM)
+                COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/assets")
     endif()
 endfunction()
 
