@@ -38,16 +38,16 @@ int main() {
 
     // Load and compile shaders
     {
-        figure_vsd = load_text_file("./assets/hello_triangle.vs");
-        CHECK_TEXT_FILE_ERROR(figure_vsd, "./assets/hello_triangle.vs");
+        figure_vsd = load_text_file("assets/hello_triangle.vs");
+        CHECK_TEXT_FILE_ERROR(figure_vsd, "assets/hello_triangle.vs");
 
         figure_vs = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(figure_vs, 1, (const GLchar **) &figure_vsd, NULL);
         glCompileShader(figure_vs);
         CHECK_SHADER_COMPILE_ERROR(figure_vs);
 
-        figure_fsd = load_text_file("./assets/hello_triangle.fs");
-        CHECK_TEXT_FILE_ERROR(figure_fsd, "./assets/hello_triangle.fs");
+        figure_fsd = load_text_file("assets/hello_triangle.fs");
+        CHECK_TEXT_FILE_ERROR(figure_fsd, "assets/hello_triangle.fs");
 
         figure_fs = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(figure_fs, 1, (const GLchar **) &figure_fsd, NULL);

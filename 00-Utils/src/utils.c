@@ -17,7 +17,7 @@ char *load_text_file(const char *name) {
 
     char *data = calloc(sizeof(char), file_size);
     size_t read_size = fread(data, sizeof(char), file_size, file);
-    if (read_size != file_size) {
+    if (read_size == 0) {
         fclose(file);
         free(data);
         return NULL;
