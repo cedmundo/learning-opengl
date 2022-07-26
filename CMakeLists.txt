@@ -5,10 +5,9 @@ project(learning-opengl
         HOMEPAGE_URL "https://github.com/cedmundo/learning-opengl"
         LANGUAGES C)
 set(CMAKE_C_STANDARD 17)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/00-Utils/cmake" CACHE STRING "Modules for CMake" FORCE)
 
-include_directories(00-Utils/cmake)
 include(ExternalProject)
-
 
 # Dependencies
 find_package(M)
@@ -63,3 +62,4 @@ endfunction()
 # Actual lectures
 add_subdirectory(01-HelloTriangle)
 add_subdirectory(02-HelloShaders)
+add_subdirectory(03-Textures)
