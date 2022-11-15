@@ -22,7 +22,7 @@ struct tga_header {
     uint8_t id_len[1];
     uint8_t colormap_type[1];
     uint8_t data_type_code[1];
-    uint8_t colormap_spec[ 5];
+    uint8_t colormap_spec[5];
     uint8_t image_spec[10];
 };
 static_assert(sizeof(struct tga_header) == 18, "tga_header has padding");
