@@ -35,7 +35,7 @@ function(configure_lecture TARGET)
     target_include_directories(${TARGET} PUBLIC ${UTILS_INCLUDE_DIR})
     target_include_directories(${TARGET} PUBLIC ${GLFW_INCLUDE_DIR})
     target_link_directories(${TARGET} PUBLIC ${GLFW_LIBRARY_DIR})
-    target_link_libraries(${TARGET} LOUtils)
+    target_link_libraries(${TARGET} Common)
     target_link_libraries(${TARGET} glfw3)
     target_link_libraries(${TARGET} ${OPENGL_LIBRARY})
     target_link_libraries(${TARGET} ${CMAKE_DL_LIBS})
@@ -51,11 +51,17 @@ function(configure_lecture TARGET)
         target_link_libraries(${TARGET} ${M_LIBRARIES})
     endif()
 
+    if(CMAKE_GENERATOR MATCHES "Visual Studio")
+        set(TARGET_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>")
+    else()
+        set(TARGET_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+    endif()
+
     set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/assets)
     if (EXISTS ${ASSETS_DIR})
         add_custom_command(TARGET ${TARGET}
                 PRE_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/assets")
+                COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "${TARGET_BINARY_DIR}/assets")
     endif()
 endfunction()
 

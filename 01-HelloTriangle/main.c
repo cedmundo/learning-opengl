@@ -3,7 +3,7 @@
 //
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <lofw/utils.h>
+#include <common/utils.h>
 
 #define USE_GL_MODE GL_LINE // GL_LINE | GL_FILL
 

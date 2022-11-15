@@ -1,5 +1,5 @@
-set(HEADERS include/lofw/utils.h)
-set(SOURCES src/utils.c src/glad.c)
+set(HEADERS include/common/utils.h include/common/tga.h)
+set(SOURCES src/utils.c src/glad.c src/tga.c)
 
-add_library(LOUtils ${HEADERS} ${SOURCES})
-target_include_directories(LOUtils PUBLIC include)
+add_library(Common ${HEADERS} ${SOURCES})
+target_include_directories(Common PUBLIC include)
